@@ -18,8 +18,6 @@ module Graph
     let fromTriples (triples: Triple list): Graph =
 
         let subject (s, _, _) = s
-        let object (_, _, o) = o
-
         let nodeId = (function Subject.Uri x -> x | Subject.Blank x -> x) >> NodeId
         let nodeLabel = function Subject.Uri x -> Some x | Subject.Blank _ -> None
 
@@ -68,14 +66,5 @@ module Graph
                 match tryAsSubject o with
                 | Some s when not (subjects.ContainsKey s) -> Some (node s [])
                 | _ -> None)
-        // let objectNodes = // non-literal objects that are not also subjects
-        //     triples
-        //     |> List.filter (function (_, Predicate.Uri _, _) -> true | _ -> false)
-        //     |> List.map object
-        //     |> List.distinct
-        //     |> List.choose (fun o ->
-        //         match tryAsSubject o with
-        //         | Some s when not (subjects.ContainsKey s) -> Some (node s [])
-        //         | _ -> None)
 
         { Nodes = subjectNodes @ objectNodes; Edges = List.choose tryEdge triples }

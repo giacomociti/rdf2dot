@@ -4,16 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="input.ttl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <Compile Include="Graph.fs" />
-    <Compile Include="Dot.fs" />
     <Compile Include="Turtle.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <PackageReference Include="dotNetRDF" Version="2.5.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\rdf2dot.core\rdf2dot.core.fsproj" />
   </ItemGroup>
 </Project>
