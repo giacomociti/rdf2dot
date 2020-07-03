@@ -21,5 +21,5 @@ To make compact visualizations, literal properties and type definitions are coll
 Base URI and namespace prefixes, either in the input file or passed as input options, help shorten resource names:
 
 ```bash
-dotnet run rdf2dot "test.ttl" -base http://ex.org/ -ns :http://ex.org/property/ -ns class:http://ex.org/class/
+dotnet run rdf2dot "test.ttl" -b http://ex.org/ -n :http://ex.org/property/ class:http://ex.org/class/
 ```
