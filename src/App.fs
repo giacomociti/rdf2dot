@@ -28,31 +28,17 @@ let getObject (x: obj) =
 
 let triple (quad: obj) =
     getSubject quad?subject, getPredicate quad?predicate, getObject quad?object
-    
 
-[<ImportAll("d3-graphviz")>]
-let d3: obj = jsNative
-
-[<Import("Parser", from="n3")>]
-type Parser() =
-    member __.parse: string -> obj array = jsNative
-
-    
-let log x = 
-    console.log x    
-    x
-
-let getDot rdf =
-    Parser().parse(rdf)
-    |> log
+let getDot quads =
+    quads
     |> Array.map triple 
     |> Array.toList
-    |> log
     |> Graph.fromTriples
     |> Dot.fromGraph
 
 
+[<ImportAll("./Renderer.js")>]
+let renderer: obj = jsNative    
+
 let render(rdf, selection) =
-    d3?graphviz(selection)?renderDot(getDot rdf)
-   
-    
+    renderer?render(rdf, selection)

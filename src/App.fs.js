@@ -1,11 +1,9 @@
 import { fromTriples, Object$, Predicate, Subject } from "./rdf2dot.core/Graph.fs.js";
 import { interpolate, toText } from "./.fable/fable-library.3.2.9/String.js";
-import { some } from "./.fable/fable-library.3.2.9/Option.js";
 import { fromGraph } from "./rdf2dot.core/Dot.fs.js";
 import { ofArray } from "./.fable/fable-library.3.2.9/List.js";
 import { map } from "./.fable/fable-library.3.2.9/Array.js";
-import { Parser } from "n3";
-import * as d3_graphviz from "d3-graphviz";
+import * as Renderer from "./Renderer.js";
 
 export function getSubject(x) {
     const matchValue = x.termType;
@@ -58,16 +56,11 @@ export function triple(quad) {
     return [getSubject(quad.subject), getPredicate(quad.predicate), getObject(quad.object)];
 }
 
-export function log(x) {
-    console.log(some(x));
-    return x;
-}
-
-export function getDot(rdf) {
-    return fromGraph(fromTriples(log(ofArray(map((quad) => triple(quad), log((new Parser()).parse(rdf)))))));
+export function getDot(quads) {
+    return fromGraph(fromTriples(ofArray(map((quad) => triple(quad), quads))));
 }
 
 export function render(rdf, selection) {
-    return (d3_graphviz.graphviz(selection)).renderDot(getDot(rdf));
+    return Renderer.render(rdf, selection);
 }
 
