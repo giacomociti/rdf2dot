@@ -33,7 +33,7 @@ let fromGraph graph =
     let edges = edges graph |> Seq.map edgeToDot
 
     let sb = System.Text.StringBuilder()
-    let append = sb.AppendLine >> ignore
+    let append: string -> unit = sb.AppendLine >> ignore
     append "digraph {"
     append """  edge [colorscheme="paired12"]"""
     append ""
