@@ -504,3 +504,4 @@ healthchecksdb
 # End of https://www.gitignore.io/api/fsharp,linux,windows,macos,vim,emacs,visualstudio,visualstudiocode
 
 .ionide
+.vscode/settings.json

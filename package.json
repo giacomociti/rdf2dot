@@ -12,6 +12,8 @@
   },
   "version": "1.0.0",
   "dependencies": {
+    "@rdfjs/data-model": "^2.0.1",
+    "@rdfjs/prefix-map": "^0.1.0",
     "d3-graphviz": "^4.1.1",
     "n3": "^1.16.2"
   }
