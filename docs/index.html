@@ -9,11 +9,11 @@
 <body>    
     <script src="https://unpkg.com/@hpcc-js/wasm/dist/index.min.js" type="javascript/worker"></script>
     <textarea id="rdf" rows="8" cols="60">
-PREFIX c: <http://example.org/cartoons#>
+PREFIX : <http://ex.org/>
 
-c:Tom a c:Cat.
-c:Jerry a c:Mouse;
-        c:smarterThan c:Tom.  
+:P1 a :Person ;
+    :age 42 ;
+    :parent :P2 .
     </textarea>
     <br>
     <button class="my-button" onclick="run()">Render</button>   

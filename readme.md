@@ -1,14 +1,13 @@
-This is a .NET console application, written in F#, to convert RDF to the dot format of [GraphViz](https://www.graphviz.org/).
+A simple RDF visualization tool based on [GraphViz](https://www.graphviz.org/).
 
 The following RDF triples in turtle format:
 
 ```ttl
-    base <http://ex.org/>
-    prefix : <http://ex.org/property/>
+PREFIX : <http://ex.org/>
 
-    <person/P1> a <class/Person> ;
-        :age 42 ;
-        :parent <person/P2> .
+:P1 a :Person ;
+    :age 42 ;
+    :parent :P2 .
 ```
 
 are converted to a dot file that renders as the following SVG:
@@ -18,8 +17,5 @@ are converted to a dot file that renders as the following SVG:
 
 To make compact visualizations, literal properties and type definitions are collapsed with their subject.
 
-Base URI and namespace prefixes, either in the input file or passed as input options, help shorten resource names:
 
-```bash
-dotnet run rdf2dot "test.ttl" -b http://ex.org/ -n :http://ex.org/property/ class:http://ex.org/class/
-```
+This project (a quick hack with no pretenses) started as a .NET console application, written in F#. Thanks to [Fable](https://fable.io/), the same code now runs also in the browser and it's available online [here](https://giacomociti.github.io/rdf2dot/).

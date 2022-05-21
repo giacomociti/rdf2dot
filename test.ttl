@@ -1,6 +1,5 @@
-﻿base <http://ex.org/>
-prefix : <http://ex.org/property/>
+﻿PREFIX : <http://ex.org/>
 
-<person/P1> a <class/Person> ;
+:P1 a :Person ;
     :age 42 ;
-    :parent <person/P2> .
+    :parent :P2 .
