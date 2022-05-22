@@ -6,7 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="rdf_flyer.24" />
 </head>
-<body>    
+<body>
+    <!-- (A) LOAD FILE SAVER -->
+    <!-- https://cdnjs.com/libraries/FileSaver.js -->
+    <!-- https://github.com/eligrey/FileSaver.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
     <script src="https://unpkg.com/@hpcc-js/wasm/dist/index.min.js" type="javascript/worker"></script>
     <textarea id="rdf" rows="8" cols="60">
 PREFIX : <http://ex.org/>
@@ -16,7 +21,8 @@ PREFIX : <http://ex.org/>
     :parent :P2 .
     </textarea>
     <br>
-    <button class="my-button" onclick="run()">Render</button>   
+    <button class="my-button" onclick="run()">Render</button>
+    <button type="button" onclick="save();">Save</button>
     <br>
     <div id="graph" style="text-align: center;" /> 
     <script src="bundle.js"></script>
@@ -24,6 +30,11 @@ PREFIX : <http://ex.org/>
       function run() {
         var rdf = document.getElementById('rdf').value
         App.render(rdf, "#graph");
+      }
+      function save() {
+        var svg = document.getElementsByTagName('svg')[0]
+        var myFile = new File([svg.outerHTML], "rdf.svg", {type: "image/svg+xml"});
+        saveAs(myFile);
       }
     </script>
 </body>
