@@ -4,6 +4,24 @@ open Graph
     
 let fromGraph graph =
     let nodeToDot node =
+        // Braces, vertical bars and angle brackets must be escaped with a backslash character
+        let escape (fieldValue: string) = 
+            let quote = '"'.ToString()
+            fieldValue // ugly, to improve
+                .Replace("{", """\{""")
+                .Replace("}", """\}""")
+                .Replace("|", "\\|")
+                .Replace(quote, $"\\{quote}")
+                .Replace(" ", "\ ")
+                .Replace(">", "\\>")
+                .Replace("<", "\\<")
+
+        let formatFieldValue (x: string) =
+            if x.Length > 50 // if too long than take last part (probably the first part is a namespace)
+            then $"...{x.Substring(x.Length - 47)}"
+            else x
+            |> escape
+
         let attributes = 
             node.Attributes 
             |> List.sort
@@ -13,7 +31,9 @@ let fromGraph graph =
             match node.Label with
             | Some label -> label :: fields
             | None -> fields
+            |> List.map formatFieldValue
             |> String.concat "|"
+      
         match node.Id with NodeId n -> sprintf """ "%s" [shape=Mrecord label="{%s}"] """ n label
 
     let predicateColor = 
