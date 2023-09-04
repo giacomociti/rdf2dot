@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "rdf2dot": {
-      "commandName": "Project",
-      "commandLineArgs": "-h"
-    }
-  }
-}
