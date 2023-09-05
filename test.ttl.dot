@@ -1,8 +1,0 @@
-digraph {
-  edge [colorscheme="paired12"]
-
- ":P1" [shape=Mrecord label="{:P1|:Person|:age 42}"] 
- ":P2" [shape=Mrecord label="{:P2}"] 
-
-  ":P1" -> ":P2" [color="1", label=":parent"]
-}

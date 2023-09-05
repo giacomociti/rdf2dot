@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="182pt" height="148pt" viewBox="0.00 0.00 182.20 148.40" style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+<g id="graph0" class="graph" transform="translate(4,144.39999389648438) scale(1)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-144.4 178.2,-144.4 178.2,4 -4,4"></polygon>
+<!-- b0_sk_1 -->
+<g id="node1" class="node">
+<title>b0_sk_1</title>
+<g id="a_node1"><a xlink:title="http://example.org/bob#me">
+<path fill="none" stroke="black" d="M56.3,-103.9C56.3,-103.9 117.9,-103.9 117.9,-103.9 123.9,-103.9 129.9,-109.9 129.9,-115.9 129.9,-115.9 129.9,-127.9 129.9,-127.9 129.9,-133.9 123.9,-139.9 117.9,-139.9 117.9,-139.9 56.3,-139.9 56.3,-139.9 50.3,-139.9 44.3,-133.9 44.3,-127.9 44.3,-127.9 44.3,-115.9 44.3,-115.9 44.3,-109.9 50.3,-103.9 56.3,-103.9"></path>
+<text text-anchor="middle" x="87.1" y="-117.8" font-family="Times,serif" font-size="14.00">type: Person</text>
+</a>
+</g>
+</g>
+<!-- b0_sk_3 -->
+<g id="node2" class="node">
+<title>b0_sk_3</title>
+<g id="a_node2"><a xlink:title="http://www.wikidata.org/entity/Q12418">
+<path fill="none" stroke="black" d="M12,-0.5C12,-0.5 162.2,-0.5 162.2,-0.5 168.2,-0.5 174.2,-6.5 174.2,-12.5 174.2,-12.5 174.2,-38.1 174.2,-38.1 174.2,-44.1 168.2,-50.1 162.2,-50.1 162.2,-50.1 12,-50.1 12,-50.1 6,-50.1 0,-44.1 0,-38.1 0,-38.1 0,-12.5 0,-12.5 0,-6.5 6,-0.5 12,-0.5"></path>
+<text text-anchor="middle" x="87.1" y="-33.5" font-family="Times,serif" font-size="14.00">title: Mona Lisa</text>
+<polyline fill="none" stroke="black" points="0,-25.3 174.2,-25.3"></polyline>
+<text text-anchor="middle" x="87.1" y="-8.7" font-family="Times,serif" font-size="14.00">creator: Leonardo_da_Vinci</text>
+</a>
+</g>
+</g>
+<!-- b0_sk_1&#45;&gt;b0_sk_3 -->
+<g id="edge1" class="edge">
+<title>b0_sk_1-&gt;b0_sk_3</title>
+<g id="a_edge1"><a xlink:title="http://xmlns.com/foaf/0.1/topic_interest">
+<path fill="none" stroke="#000000" d="M87.1,-103.99C87.1,-91.96 87.1,-75.39 87.1,-60.64"></path>
+<polygon fill="#000000" stroke="#000000" points="90.6,-60.82 87.1,-50.82 83.6,-60.82 90.6,-60.82"></polygon>
+</a>
+</g>
+<text text-anchor="middle" x="125.2" y="-72.8" font-family="Times,serif" font-size="14.00">topic_interest</text>
+</g>
+</g>
+</svg>

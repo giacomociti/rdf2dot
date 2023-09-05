@@ -1,5 +1,12 @@
-﻿PREFIX : <http://ex.org/>
-
-:P1 a :Person ;
-    :age 42 ;
-    :parent :P2 .
+﻿BASE <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+ 
+<bob#me>
+    a foaf:Person ;
+    foaf:topic_interest wd:Q12418 .
+  
+wd:Q12418
+    dcterms:title "Mona Lisa" ;
+    dcterms:creator <http://dbpedia.org/resource/Leonardo_da_Vinci> .

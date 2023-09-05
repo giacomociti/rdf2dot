@@ -1,42 +1,136 @@
-<!doctype html>
 <html>
-<head>
-  <title>Rdf Viewer</title>
-  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="rdf_flyer.24" />
-</head>
-<body>
-    <!-- (A) LOAD FILE SAVER -->
-    <!-- https://cdnjs.com/libraries/FileSaver.js -->
-    <!-- https://github.com/eligrey/FileSaver.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://unpkg.com/@hpcc-js/wasm/dist/index.min.js" type="javascript/worker"></script>
-    <input id="file" type="file" accept=".ttl,.trig,.nt,.nq">
-    <br>
-    <button id="save">Save</button>
-    <br>
-    <div id="graph" style="text-align: center;" /> 
-    <script src="bundle.js"></script>
-    <script>
-      const fileInput = document.getElementById("file");
-      const saveButton = document.getElementById("save");
-      fileInput.addEventListener("change", () => {
-          const [file] = fileInput.files;
-          if (file) {
-              const reader = new FileReader();
-              reader.addEventListener("load", () => {
-                  console.log(reader.result);
-                  App.render(reader.result, "#graph");
-              });
-              reader.readAsText(file);
-          }
-      });
-      saveButton.addEventListener("click", () => {
-          const svg = document.getElementsByTagName('svg')[0]
-          const myFile = new File([svg.outerHTML], "rdf.svg", {type: "image/svg+xml"});
-          saveAs(myFile);
-      });    
-    </script>
-</body>
+    <head>
+        <title>Rdf Viewer</title>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="rdf_flyer.24" />
+    </head>
+    <body>
+        <h1>RDF data visualization</h1>
+        <p>Upload a file to visualize. Optionally customize visualization rules.</p>
+        <table>
+            <th>Upload RDF data file</th>
+            <th>Custom visualization rules</th>
+            <th>Show Diagram</th>
+            <th>Download SVG diagram</th>
+            <tr>
+                <td>
+                    <input id="file" type="file" accept=".ttl,.nt,.nq">
+                </td>
+                <td>
+                    <input id="rules" type="file" accept=".n3">
+                </td>
+                <td>
+                    <button id="show" disabled>Show</button>
+                </td>
+                <td>
+                    <button id="save" disabled>Save</button>
+                </td>
+            </tr>
+        </table>
+
+        <br>
+
+        <div id="graph" style="text-align: center;"></div>
+
+        <script src="https://d3js.org/d3.v7.js"></script>
+        <script src="https://unpkg.com/@hpcc-js/wasm@2/dist/graphviz.umd.js"></script>
+        <script src="https://unpkg.com/d3-graphviz@5/build/d3-graphviz.js"></script>
+
+        <!-- (A) LOAD FILE SAVER -->
+        <!-- https://cdnjs.com/libraries/FileSaver.js -->
+        <!-- https://github.com/eligrey/FileSaver.js -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+        
+        <script>
+            const show = (dot, graphId) => {
+               d3.select(graphId)
+                   .graphviz({useWorker: false})
+                   .renderDot(dot)
+           }
+       </script>
+
+
+        <script src="https://unpkg.com/n3/browser/n3.min.js"></script>
+
+        <script src="https://eyereasoner.github.io/eye-js/2/latest/index.js"></script>
+        <script>
+            const { SwiplEye, queryOnce } = eyereasoner
+            const createDiagram = async (data, rules) => {
+                const chunks = []
+                const Module = await SwiplEye({ print: x => { chunks.push(x) }, arguments: ['-q'] })
+                Module.FS.writeFile('data.ttl', data)
+                Module.FS.writeFile('rules.n3', rules)
+                // queryOnce(Module, 'main', ['--nope', '--quiet', './rules.n3', '--turtle', './data.ttl', '--pass-only-new'])
+                queryOnce(Module, 'main', ['--nope', '--quiet', './rules.n3', './data.ttl', '--pass-only-new'])
+                return chunks.join('\n')
+            }
+
+            const fetchText = async file => {
+                const response = await fetch(file)
+                const text = await response.text()
+                return text
+            }
+
+            const defaultRules = fetchText('default.n3')
+
+        </script>
+
+        <script src="./toDot.js"></script>
+        <script>
+            const convertToDot = toDot(window.N3.DataFactory)
+            
+            const fileInput = document.getElementById("file")
+            const rulesInput = document.getElementById("rules")
+            const showButton = document.getElementById("show")
+            const saveButton = document.getElementById("save")
+            const graph = document.getElementById("graph")
+
+            let customRules
+            rulesInput.addEventListener("change", () => {
+                const [file] = rulesInput.files;
+                if (file) {
+                    const reader = new FileReader();
+                    reader.addEventListener("load", () => {
+                        customRules = reader.result
+                    })
+                    reader.readAsText(file)
+                }
+                else {
+                    customRules = undefined
+                }
+            })
+
+            let inputData
+            fileInput.addEventListener("change", () => {
+                const [file] = fileInput.files;
+                if (file) {
+                    const reader = new FileReader();
+                    reader.addEventListener("load", async () => {
+                        inputData = reader.result
+                        showButton.removeAttribute("disabled")
+                    })
+                    reader.readAsText(file);
+                }
+            })
+
+            showButton.addEventListener("click", async () => {
+                const rules = customRules ?? await defaultRules
+                const diagramText = await createDiagram(inputData, rules)
+                const quads = new N3.Parser().parse(diagramText)
+                const dot = convertToDot(new N3.Store(quads))
+                console.log(dot)
+                
+                show(dot, '#graph') 
+                saveButton.removeAttribute("disabled")
+            })
+
+            saveButton.addEventListener("click", () => {
+                const svg = document.getElementsByTagName('svg')[0]
+                const myFile = new File([svg.outerHTML], "rdf.svg", {type: "image/svg+xml"})
+                saveAs(myFile)
+            });    
+        </script>
+
+    </body>
 </html>

@@ -3,19 +3,26 @@ A simple RDF visualization tool based on [GraphViz](https://www.graphviz.org/).
 The following RDF triples in turtle format:
 
 ```ttl
-PREFIX : <http://ex.org/>
-
-:P1 a :Person ;
-    :age 42 ;
-    :parent :P2 .
+BASE <http://example.org/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX wd: <http://www.wikidata.org/entity/>
+ 
+<bob#me>
+    a foaf:Person ;
+    foaf:topic_interest wd:Q12418 .
+  
+wd:Q12418
+    dcterms:title "Mona Lisa" ;
+    dcterms:creator <http://dbpedia.org/resource/Leonardo_da_Vinci> .
 ```
 
-are converted to a dot file that renders as the following SVG:
+are converted via the _dot_ format to the following SVG:
 
 
-![](test.ttl.dot.svg)
+![](test.svg)
 
-To make compact visualizations, literal properties and type definitions are collapsed with their subject.
+The default rules make compact visualizations (only the subjects of some triple become nodes). Custom visualization rules can be specified with [N3](https://w3c.github.io/N3/reports/20230703/) (see the documentation for details).
 
 
-This project (a quick hack with no pretenses) started as a .NET console application, written in F#. Thanks to [Fable](https://fable.io/), the same code now runs also in the browser and it's available online [here](https://giacomociti.github.io/rdf2dot/).
+Try it online [here](https://giacomociti.github.io/rdf2dot/).
