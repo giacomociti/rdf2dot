@@ -5,7 +5,7 @@
         <script src="https://d3js.org/d3.v7.js"></script>
         <script src="https://unpkg.com/@hpcc-js/wasm@2/dist/graphviz.umd.js"></script>
         <script src="https://unpkg.com/d3-graphviz@5/build/d3-graphviz.js"></script>
-        <script src="toDot.js"></script>
+        <script src="../toDot.js"></script>
 
         <script>
             const convertToDot = toDot(window.N3.DataFactory)
@@ -79,7 +79,7 @@
         <p>
             Using a small vocabulary of basic diagramming terms (node, link, label, shape, color, tooltip...) we can express a diagram in RDF.
             Converting such diagram descriptions from RDF to some diagramming DSL like <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> 
-            is not difficult (see <a href="toDot.js">toDot.js</a> which is the code actually used for this page).
+            is not difficult (see <a href="../toDot.js">toDot.js</a> which is the code actually used for this page).
         </p>       
         <p>With our vocabulary, we can describe a more compact version of the above graph:</p>
         <table>
@@ -145,9 +145,15 @@
             avoid loops (otherwise the rule would be applied also to the derived triples).
 
             A sufficient understanding of Notation 3 logic is needed, but it allows to create interesting diagrams.
+
+           
+        </p>
+        <p>
+            <a href="https://giacomociti.github.io/rdf2dot/">Here</a> you can find a page to create diagrams using
+            <a href="../default.n3">default rules</a>, with the option to provide your own.
         </p>
 
-       
+       <footer></footer>
     </body>
 </html>
 
