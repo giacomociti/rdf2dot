@@ -1,0 +1,18 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+
+{ 
+    ?s ?p ?o .
+    ?p log:uri ?label .
+    ?p log:notEqualTo v:source, v:target, v:label .
+    (?p ?o) log:notEqualTo (rdf:type v:Link) .
+}
+=>
+{
+    [] a v:Link ; 
+        v:source ?s ; 
+        v:target ?o ;
+        v:label ?label 
+}
+.

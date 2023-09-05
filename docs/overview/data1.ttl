@@ -1,0 +1,3 @@
+<urn:ann> <urn:name> "Ann" .
+<urn:ann> <urn:livesIn> <urn:bern> .
+<urn:bern> a <urn:City> .

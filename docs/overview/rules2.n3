@@ -1,0 +1,12 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+
+{ ?s a <urn:City> ; log:localName ?name } => 
+{ ?s a v:Node ; v:label ?name ; v:shape "rectangle" } .
+
+{ ?s <urn:name> ?o . (?name xsd:string) log:dtlit ?o } =>
+{ ?s a v:Node ; v:label ?name } .
+
+{ ?s <urn:livesIn> ?o . <urn:livesIn> log:uri ?tooltip } =>
+{ [] a v:Link ; v:source ?s ; v:target ?o ; v:label "lives in" ; v:tooltip ?tooltip } .
