@@ -16,15 +16,17 @@ const toDot = DataFactory => dataset => {
       [shape.value, "shape"],
       [tooltip.value, "tooltip"]
   ])
+
+  const escape = text => text.replaceAll('"','\\"')
   
   const nodes = Array.from(dataset.match(null, rdfType, node)).map(x => {
       const attrs = []
       for (const quad of dataset.match(x.subject)) {
           if (attributes.has(quad.predicate.value)) {
-              attrs.push(`"${attributes.get(quad.predicate.value)}"="${quad.object.value}"`)
+              attrs.push(`${attributes.get(quad.predicate.value)}="${escape(quad.object.value)}"`)
           }
       }
-      return `"${x.subject.value}" [${attrs.join(',')}]`
+      return `"${escape(x.subject.value)}" [${attrs.join(',')}]`
   })
   
   const links = Array.from(dataset.match(null, rdfType, link)).map(x => {
@@ -33,10 +35,10 @@ const toDot = DataFactory => dataset => {
       const attrs = []
       for (const quad of dataset.match(x.subject)) {
           if (attributes.has(quad.predicate.value)) {
-              attrs.push(`"${attributes.get(quad.predicate.value)}"="${quad.object.value}"`)
+              attrs.push(`${attributes.get(quad.predicate.value)}="${escape(quad.object.value)}"`)
           }
       }
-      return `"${src.object.value}" -> "${tgt.object.value}" [${attrs.join(',')}]`
+      return `"${escape(src.object.value)}" -> "${escape(tgt.object.value)}" [${attrs.join(',')}]`
   })
       
   return `digraph {

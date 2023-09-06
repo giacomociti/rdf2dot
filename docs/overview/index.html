@@ -1,53 +1,19 @@
 <html>
+    <head>
+        <title>Rdf Visualization - Overview</title>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="../rdf_flyer.24" />
+    </head>
     <body>
         <script src="https://unpkg.com/n3/browser/n3.min.js"></script>
         <script src="https://eyereasoner.github.io/eye-js/2/latest/index.js"></script>
         <script src="https://d3js.org/d3.v7.js"></script>
         <script src="https://unpkg.com/@hpcc-js/wasm@2/dist/graphviz.umd.js"></script>
         <script src="https://unpkg.com/d3-graphviz@5/build/d3-graphviz.js"></script>
-        <script src="../toDot.js"></script>
+        <script src="../code/toDot.js"></script>
+        <script src="../code/utils.js"></script>
 
-        <script>
-            const convertToDot = toDot(window.N3.DataFactory)
-
-            const fetchText = async file => {
-                const response = await fetch(file)
-                const text = await response.text()
-                return text
-            }
-
-            const load = async (file, element) => {
-                const text = await fetchText(file)
-                document.getElementById(element).innerText = text
-            }
-    
-            const run = async (dataFile, ruleFile, graphId) => {
-                const [data, rules] = await Promise.all([dataFile, ruleFile].map(fetchText))
-                await runText(data, rules, graphId)
-            }
-
-            const runText = async (data, rules, graphId) => {
-               const { SwiplEye, queryOnce } = eyereasoner
-               const chunks = []
-               const Module = await SwiplEye({ print: x => { chunks.push(x) }, arguments: ['-q'] })
-               Module.FS.writeFile('data.ttl', data)
-               Module.FS.writeFile('rules.n3', rules)
-               queryOnce(Module, 'main', ['--nope', '--quiet', './rules.n3', '--turtle', './data.ttl', '--pass-only-new']);
-               const result = chunks.join('\n')
-               console.log(result)
-               await show(result, graphId)
-           }
-
-            const show = async (diagramText, graphId) => {
-                const quads = new N3.Parser().parse(diagramText)
-                const dot = await convertToDot(new N3.Store(quads))
-                console.log(dot)
-                d3.select(graphId)
-                    .graphviz({useWorker: false})
-                    .renderDot(dot)
-            }
-        
-        </script>
         <h1>Diagrams for RDF data</h1>
         <p>
             RDF data naturally represent graphs, and visualizing them is straightforward with diagramming tools like <a href="https://www.graphviz.org/">Graphviz</a>.
@@ -61,7 +27,7 @@
             </tr>
         </table>
         <script>load("data1.ttl", "data1")</script>
-        <script>run("data1.ttl", "rules1.n3", "#graph1")</script>
+        <script>showFromFiles("data1.ttl", "./rules1.n3", "#graph1")</script>
         
         <p>But such diagrams quickly become messy for non-trivial data, unless we can tweak them a little bit.</p>
         <p>
@@ -79,7 +45,7 @@
         <p>
             Using a small vocabulary of basic diagramming terms (node, link, label, shape, color, tooltip...) we can express a diagram in RDF.
             Converting such diagram descriptions from RDF to some diagramming DSL like <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> 
-            is not difficult (see <a href="../toDot.js">toDot.js</a> which is the code actually used for this page).
+            is not difficult (see <a href="../code/toDot.js">toDot.js</a> which is the code actually used for this page).
         </p>       
         <p>With our vocabulary, we can describe a more compact version of the above graph:</p>
         <table>
@@ -89,7 +55,7 @@
             </tr>
         </table>
         <script>load("diagram2.ttl", "diagram2")</script>
-        <script>fetchText("diagram2.ttl").then(x => show(x, "#graph2"))</script>
+        <script>showDiagramFile("diagram2.ttl", "#graph2")</script>
 
         <p>The label for the <code>ann</code> node is the name instead of the URI. The shape for the city node is rectangular, 
             and its label is only the last part of the URI. The label of the link is also customized, 
@@ -137,7 +103,7 @@
             representation. In fact the very first diagram was obtained with a simple general-purpose rule:
         </p>
         <pre id="rules1"></pre>
-        <script>load("rules1.n3", "rules1")</script>
+        <script>load("./rules1.n3", "rules1")</script>
         
         <p>
             It is possible to create and compose both general and specific rules.
@@ -150,7 +116,7 @@
         </p>
         <p>
             <a href="https://giacomociti.github.io/rdf2dot/">Here</a> you can find a page to create diagrams using
-            <a href="../default.n3">default rules</a>, with the option to provide your own.
+            <a href="../rules/default.n3">default rules</a>, with the option to provide your own.
         </p>
 
        <footer></footer>

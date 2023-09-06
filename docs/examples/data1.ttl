@@ -1,0 +1,8 @@
+@prefix : <http://example/org/> .
+
+:p1 a :Person ;
+    :name "Ann";
+    :livesIn _:b1 .
+
+_:b1 :containedIn :uk ;
+    :name "London"@en , "Londra"@it .

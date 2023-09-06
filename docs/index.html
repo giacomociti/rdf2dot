@@ -7,31 +7,34 @@
     </head>
     <body>
         <h1>RDF data visualization</h1>
-        <p>Choose a file to visualize. Optionally customize visualization rules (see the <a href="./overview/index.html">overview</a> for an introduction).</p>
-        <table>
-            <th>RDF data</th>
-            <th>Custom rules</th>
-            <th>Diagram</th>
-            <th>SVG</th>
-            <tr>
-                <td>
-                    <input id="file" type="file" accept=".ttl,.nt,.nq">
-                </td>
-                <td>
-                    <input id="rules" type="file" accept=".n3">
-                </td>
-                <td>
-                    <button id="show" disabled>Show</button>
-                </td>
-                <td>
-                    <button id="save" disabled>Save</button>
-                </td>
-            </tr>
-        </table>
+        <p>Choose an RDF data file and press the <em>Show</em> button. </p>
+        <small>
+            Optionally customize visualization rules by choosing an available option or providing a custom file (see the <a href="./overview/index.html">overview</a> for an introduction).
+        </small>
+        <!-- <p> RDF data </p> -->
+        
+        <p></p>
+        <label for="file">RDF data</label>
+        <input id="file" type="file" accept=".ttl,.nt,.nq">
+        <p></p>
 
+        <label for="selectRules">Use available rules</label>
+        <select id="selectRules">
+            <option value="./rules/default.n3">Default</option>
+            <option value="./rules/basic.n3">Basic</option>
+        </select>
+        <br>
+        <label for="rules">or use custom rules</label>
+        <input id="rules" type="file" accept=".n3">
+
+        <p></p>
+        <button id="show" disabled>Show</button>
+        <button id="save" disabled>Save</button>
         <br>
 
         <div id="graph" style="text-align: center;"></div>
+
+   
 
         <script src="https://d3js.org/d3.v7.js"></script>
         <script src="https://unpkg.com/@hpcc-js/wasm@2/dist/graphviz.umd.js"></script>
@@ -72,16 +75,16 @@
                 return text
             }
 
-            const defaultRules = fetchText('default.n3')
-
+            
         </script>
 
-        <script src="./toDot.js"></script>
+        <script src="./code/toDot.js"></script>
         <script>
             const convertToDot = toDot(window.N3.DataFactory)
             
             const fileInput = document.getElementById("file")
             const rulesInput = document.getElementById("rules")
+            const selectRules = document.getElementById("selectRules")
             const showButton = document.getElementById("show")
             const saveButton = document.getElementById("save")
             const graph = document.getElementById("graph")
@@ -115,7 +118,7 @@
             })
 
             showButton.addEventListener("click", async () => {
-                const rules = customRules ?? await defaultRules
+                const rules = customRules ?? await fetchText(selectRules.value)
                 const diagramText = await createDiagram(inputData, rules)
                 const quads = new N3.Parser().parse(diagramText)
                 const dot = convertToDot(new N3.Store(quads))

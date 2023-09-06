@@ -1,0 +1,49 @@
+<html>
+    <head>
+        <title>Rdf Visualization Rules - Examples</title>
+        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="shortcut icon" href="../rdf_flyer.24" />
+    </head>
+    <body>
+        <script src="https://unpkg.com/n3/browser/n3.min.js"></script>
+        <script src="https://eyereasoner.github.io/eye-js/2/latest/index.js"></script>
+        <script src="https://d3js.org/d3.v7.js"></script>
+        <script src="https://unpkg.com/@hpcc-js/wasm@2/dist/graphviz.umd.js"></script>
+        <script src="https://unpkg.com/d3-graphviz@5/build/d3-graphviz.js"></script>
+        <script src="../code/toDot.js"></script>
+        <script src="../code/utils.js"></script>
+
+        <h1>Rdf Visualization Rules - Examples</h1>
+        <p>
+            A brief showcase of the main visualization rules and some hints to create custom ones.
+        </p>
+        
+        <ul>
+            <li><a href="../rules/basic.n3">Basic</a></li>
+            <li><a href="../rules/default.n3">Default</a></li>
+        </ul>
+ 
+        <p>Given the following example dataset:</p>
+        <pre id="data1"></pre>
+        <script>load("data1.ttl", "data1")</script>
+
+        <p>let's see how it is rendered with some general purpose rules:</p>
+
+        <h3>basic</h3>
+        With the <em>basic</em> rules, every triple is shown as a link between its subject and object.
+        The link label is the local name obtained from the property URI, which is available as tooltip.
+        Literal nodes have rectangular shape and the tooltip is either the data type or the language tag.
+        Blank nodes are empty circles and regular URI nodes have the local name as label and the full URI as tooltip.
+        This kind of diagram contains all the information of the dataset, but it is suitable only for very small datasets.
+        <pre id="basic1"></pre>
+        <script>showFromFiles("data1.ttl", "../rules/basic.n3", "#basic1")</script>
+
+        <h3>default</h3>
+        The <em>default</em> rules make compact visualizations: only the subjects of some triple become nodes, 
+        hence literal values are embedded in the subject node label.
+        <pre id="default1"></pre>
+        <script>showFromFiles("data1.ttl", "../rules/default.n3", "#default1")</script>
+        
+    </body>
+</html>

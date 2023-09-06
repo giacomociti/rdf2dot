@@ -1,0 +1,78 @@
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+
+{ 
+    ?s ?p ?o .
+    ?p log:uri ?tooltip .
+    ?p log:localName ?label .
+    ?p log:notEqualTo v:source, v:target, v:label, v:shape, v:tooltip, v:term .
+    (?p ?o) log:notEqualTo (rdf:type v:Link) .
+    (?p ?o) log:notEqualTo (rdf:type v:Node) .
+
+    (?s) log:skolem ?source .
+    (?o) log:skolem ?target .
+}
+=>
+{
+    ?source a v:Node ; v:term ?s .
+    ?target a v:Node ; v:term ?o .
+    [] a v:Link ; 
+        v:source ?source ; 
+        v:target ?target ;
+        v:label ?label ;
+        v:tooltip ?tooltip .
+}
+.
+
+{  
+    ?n a v:Node ; v:term ?uri .
+    ?uri log:rawType log:Other .
+    ?uri log:uri ?tooltip ;
+         log:localName ?label .
+}
+=> 
+{
+    ?n v:label ?label ;
+        v:tooltip ?tooltip .
+} .
+
+{  
+    ?n a v:Node ; v:term ?literal .
+    ?literal log:rawType log:Literal .
+    (?label ?type) log:dtlit ?literal .
+    ?type log:notEqualTo rdf:langString .
+    ?type log:uri ?dataType
+}
+=> 
+{
+    ?n v:label ?label ;
+        v:shape "rectangle" ;
+        v:tooltip ?dataType .
+} .
+
+{  
+    ?n a v:Node ; v:term ?literal .
+    ?literal log:rawType log:Literal .
+    (?label rdf:langString) log:dtlit ?literal .
+    (?text ?lang) log:langlit ?literal
+}
+=> 
+{
+    ?n v:label ?text ;
+        v:shape "rectangle" ;
+        v:tooltip ?lang .
+} .
+
+
+{
+    ?blankType list:in (log:LabeledBlankNode log:UnlabeledBlankNode) .
+    ?n a v:Node ; v:term ?blank .
+    ?blank log:rawType ?blankType 
+}
+=> 
+{
+    ?n v:label "" ;
+       v:shape "circle"
+} .
