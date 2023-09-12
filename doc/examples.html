@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rdf Visualization Rules - Examples</title>
+  </head>
+  <body>
+    <h1>Rdf Visualization Rules - Examples</h1>
+    <p>
+        A brief showcase (work in progress) of the main visualization rules and some hints to create custom ones.
+    </p>
+    
+    <p>Given the following example dataset:</p>
+    <pre id="data1"></pre>
+
+    <p>let's see how it is rendered with some general purpose rules:</p>
+
+    <h3>basic</h3>
+    <p>
+      With the <em>basic</em> rules, every triple is shown as a link between its subject and object.
+      The link label is the local name obtained from the property URI, which is available as tooltip.
+      Literal nodes have rectangular shape and the tooltip is either the data type or the language tag.
+      Blank nodes are empty circles and regular URI nodes have the local name as label and the full URI as tooltip.
+      This kind of diagram contains all the information of the dataset, but it is suitable only for very small ones.  
+    </p>
+    <div id="basic1"></div>
+    
+    <h3>default</h3>
+    <p>
+      The <em>default</em> rules make compact visualizations: only the subjects of some triple become nodes, 
+      hence literal values are embedded in the subject node label.
+    </p>
+    <div id="default1"></div>
+    
+    <a href="./overview.html">overview</a>
+
+    <script type="module" src="./examples.js"></script>
+  </body>
+</html>

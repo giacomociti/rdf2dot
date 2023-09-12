@@ -1,30 +1,30 @@
-@prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix v: <http://view/> .
 
 { 
     ?s ?p ?o .
-    ?p log:uri ?tooltip .
-    ?p log:localName ?label .
-    ?p log:notEqualTo v:source, v:target, v:label, v:shape, v:tooltip, v:term .
-    (?p ?o) log:notEqualTo (rdf:type v:Link) .
-    (?p ?o) log:notEqualTo (rdf:type v:Node) .
-
-    (?s) log:skolem ?source .
-    (?o) log:skolem ?target .
+      # to avoid loops, skip subjects that are nodes or links
+    ( ?x { ?s a v:Link } () ) log:collectAllIn [] .
+    ( ?x { ?s a v:Node } () ) log:collectAllIn [] .
+    ?s log:skolem ?source .
+    ?o log:skolem ?target .
+    ?p log:localName ?label ; log:uri ?tooltip
 }
 =>
 {
     ?source a v:Node ; v:term ?s .
     ?target a v:Node ; v:term ?o .
-    [] a v:Link ; 
-        v:source ?source ; 
-        v:target ?target ;
+    [] a v:Link ;
         v:label ?label ;
-        v:tooltip ?tooltip .
+        v:tooltip ?tooltip ;
+        v:term ?p ;
+        v:source ?source ;
+        v:target ?target ;
 }
 .
+
 
 {  
     ?n a v:Node ; v:term ?uri .
