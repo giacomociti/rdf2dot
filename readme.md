@@ -22,7 +22,7 @@ are converted via the _dot_ format to the following SVG:
 
 ![](test.svg)
 
-The default rules make compact visualizations (only the subjects of some triple become nodes). Custom visualization rules can be specified with [N3](https://w3c.github.io/N3/reports/20230703/) (see the [documentation](https://giacomociti.github.io/rdf2dot/overview/) for details).
+The default rules make compact visualizations (only the subjects of some triple become nodes). Custom visualization rules can be specified with [N3](https://w3c.github.io/N3/reports/20230703/) (see the [documentation](https://giacomociti.github.io/rdf2dot/doc/overview.html) for details).
 
 
 Try it online [here](https://giacomociti.github.io/rdf2dot/).
