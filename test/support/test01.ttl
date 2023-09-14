@@ -1,0 +1,14 @@
+@prefix v: <http://view/>.
+
+<urn:ann> a v:Node ;
+    v:label "Ann" .
+
+<urn:bern> a v:Node ;
+    v:shape "rectangle" ;
+    v:label "bern" .
+
+[] a v:Link ;
+    v:source <urn:ann> ;
+    v:target <urn:bern> ;
+    v:label "lives in" ;
+    v:tooltip "urn:livesIn" .

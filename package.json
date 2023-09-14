@@ -6,10 +6,13 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
   "devDependencies": {
-    "vite": "^4.4.5"
+    "approvals": "^6.2.2",
+    "vite": "^4.4.5",
+    "vitest": "^0.34.4"
   },
   "dependencies": {
     "@viz-js/viz": "^3.1.0",
