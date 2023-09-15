@@ -1,0 +1,62 @@
+@prefix : <http://example/org/> .
+@prefix v: <http://view/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+
+:p1 a :Person ;
+    :name "Ann";
+    :livesIn _:b1 .
+
+_:b1 :containedIn :uk ;
+    :name "London"@en , "Londra"@it .
+
+{
+
+    ?p1 a v:Node ; v:term :p1 ; v:label "p1" ; v:tooltip "http://example/org/p1" .
+    ?b1 a v:Node ; v:shape "circle" ; v:label "".
+
+    [] a v:Link ;
+        v:source ?p1 ;
+        v:target [ a v:Node ; v:term :Person ; v:label "Person" ; v:tooltip "http://example/org/Person" ] ;
+        v:term rdf:type ;
+        v:label "type" ;
+        v:tooltip "http://www.w3.org/1999/02/22-rdf-syntax-ns#type".
+
+    [] a v:Link ;
+        v:source ?p1 ;
+        v:target [ a v:Node ; v:term "Ann" ; v:label "Ann" ; v:tooltip "http://www.w3.org/2001/XMLSchema#string" ] ;
+        v:term :name ;
+        v:label "name" ;
+        v:tooltip "http://example/org/name" .
+
+    [] a v:Link ;
+        v:source ?p1 ;
+        v:target ?b1 ;
+        v:term :livesIn ;
+        v:label "livesIn" ;
+        v:tooltip "http://example/org/livesIn" .
+
+    [] a v:Link ;
+        v:source ?b1 ;
+        v:target [ a v:Node ; v:term :uk ; v:label "uk" ; v:tooltip "http://example/org/uk" ] ;
+        v:term :containedIn ;
+        v:label "containedIn" ;
+        v:tooltip "http://example/org/containedIn" .
+
+    [] a v:Link ;
+        v:source ?b1 ;
+        v:target [ a v:Node ; v:term "London"@en ; v:label "London" ; v:tooltip "en" ] ;
+        v:term :name ;
+        v:label "name" ;
+        v:tooltip "http://example/org/name" .
+
+
+    [] a v:Link ;
+        v:source ?b1 ;
+        v:target [ a v:Node ; v:term "Londra"@it ; v:label "Londra" ; v:tooltip "it" ] ;
+         v:term :name ;
+        v:label "name" ;
+        v:tooltip "http://example/org/name" .
+
+
+} => { [] a earl:Pass } .
