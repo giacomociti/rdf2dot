@@ -13,3 +13,8 @@
     v:target <urn:bern> ;
     attr:label "lives in" ;
     attr:tooltip "urn:livesIn" .
+
+v:graph attr:rankdir "LR" .
+v:node attr:color "red" .
+v:edge attr:fontcolor "green" ;
+    attr:arrowhead "empty" .

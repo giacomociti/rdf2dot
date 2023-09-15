@@ -23,6 +23,15 @@
     rdfs:label "target" ;
     rdfs:comment "The target node of and edge." .
 
+<graph> rdfs:label "graph" ;
+    rdfs:comment "Resource whose attributes apply to the graph" .
+
+<node> rdfs:label "node" ;
+    rdfs:comment "Resource whose attributes apply to all nodes in the graph" .
+
+<edge> rdfs:label "edge" ;
+    rdfs:comment "Resource whose attributes apply to all edges in the graph" .
+
 attr:label a rdf:Property .
 attr:shape a rdf:Property .
 attr:color a rdf:Property .

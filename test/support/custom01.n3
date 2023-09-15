@@ -1,0 +1,42 @@
+@prefix : <http://example/org/> .
+@prefix v: <http://view/> .
+@prefix attr:  <http://view/dot/attribute/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+
+# data
+:p1 :knows :p2 , :p3 .
+
+
+# rules
+{} => {
+    v:graph attr:rankdir "LR" .
+    v:node attr:color "red" .
+    v:edge attr:fontcolor "green" .
+}
+.
+
+{ 
+    ?p1 :knows ?p2 .
+} 
+=> 
+{
+    ?p1 a v:Node .
+    ?p2 a v:Node .
+    [] a v:Edge ; v:source ?p1  ; v:target ?p2 .
+}
+.
+
+# expectations
+{
+    v:graph attr:rankdir "LR" .
+    v:node attr:color "red" .
+    v:edge attr:fontcolor "green" .
+
+    :p1 a v:Node .
+    :p2 a v:Node .
+    :p2 a v:Node .
+    [] a v:Edge ; v:source ?p1 ; v:target ?p2 .
+    [] a v:Edge ; v:source ?p1 ; v:target ?p3 .
+}
+=> { [] a earl:Pass } .
