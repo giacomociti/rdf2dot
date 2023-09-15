@@ -2,6 +2,7 @@ import applyRules from './lib/applyRules'
 import createSVG from "./lib/createSVG"
 import rulesBasic from './rules/basic.n3?raw'
 import rulesDefault from './rules/default.n3?raw'
+import { saveAs } from 'file-saver'
 
 const fileInput = document.getElementById("file")
 const rulesInput = document.getElementById("rules")

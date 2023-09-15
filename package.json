@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@viz-js/viz": "^3.1.0",
-    "eyereasoner": "^6.6.7"
+    "eyereasoner": "^6.6.7",
+    "file-saver": "^2.0.5"
   }
 }
