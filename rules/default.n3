@@ -5,12 +5,13 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
 
 # all the subjects of some triple become nodes
 {
   ?s ?p ?o .
-  # to avoid loops, skip subjects that are nodes or links
-  ( ?x { ?s a v:Link } () ) log:collectAllIn [] .
+  # to avoid loops, skip subjects that are nodes or edges
+  ( ?x { ?s a v:Edge } () ) log:collectAllIn [] .
   ( ?x { ?s a v:Node } () ) log:collectAllIn [] .
 }
 =>
@@ -19,7 +20,7 @@
     v:term ?s
 }.
 
-# all properties connecting two nodes become links
+# all properties connecting two nodes become edges
 {     
   ?s ?p ?o .
   ?source a v:Node ; v:term ?s .
@@ -27,7 +28,7 @@
 }
 =>
 {
-  [] a v:Link ;      
+  [] a v:Edge ;      
      v:source ?source ;
      v:target ?target ;
      v:term ?p ;
@@ -39,20 +40,20 @@
 }
 =>
 {
-    ?n v:tooltip ?tooltip
+    ?n attr:tooltip ?tooltip
 }.
 
-# links use local name as label and URI as tooltop
+# edges use local name as label and URI as tooltop
 {
-  ?l a v:Link ; 
+  ?l a v:Edge ; 
     v:term ?p .
   ?p log:localName ?label ;
     log:uri ?tooltip .
 }
 => 
 {
-  ?l v:label ?label ;
-    v:tooltip ?tooltip .
+  ?l attr:label ?label ;
+    attr:tooltip ?tooltip .
 }
 .
 
@@ -107,18 +108,18 @@
 }
 =>
 {
-    ?s v:shape "Mrecord" .
-    ?s v:label ?label
+    ?s attr:shape "Mrecord" .
+    ?s attr:label ?label
 }
 .
 
 {
-    ( ?p { [] a v:Link ; v:term ?p } ?ps ) log:collectAllIn [] .
+    ( ?p { [] a v:Edge ; v:term ?p } ?ps ) log:collectAllIn [] .
     ?ps list:iterate (?i ?prop) .
     (?i 1) math:sum ?color .
     ?l v:term ?prop .
 }
 =>
 {
-    ?l v:color ?color
+    ?l attr:color ?color
 }.

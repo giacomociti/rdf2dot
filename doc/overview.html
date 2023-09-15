@@ -23,9 +23,9 @@
         <p>But such diagrams quickly become messy for non-trivial data, unless we can tweak them a little bit.</p>
         <p>
             To have decent-looking diagrams, we inevitably have to cope with long URIs, possibly keeping them as tooltips but using something else for labels.
-            To have fewer links, some literal properties may be ignored, and others may be embedded in the label for their subject. 
+            To have fewer edges, some literal properties may be ignored, and others may be embedded in the label for their subject. 
             The same embedding may sometimes be useful for object properties (like <code>rdf:type</code> declarations).
-            Link labels may be omitted and colors may help to at least distinguish links that represent different predicates.
+            Edge labels may be omitted and colors may help to at least distinguish those that represent different predicates.
             Node shapes and colors may represent the type, the value of some other property, or even a combination.
         </p>
         <p>
@@ -34,7 +34,7 @@
 
         <h3>Diagramming Vocabulary</h3>
         <p>
-            Using a small vocabulary of basic diagramming terms (node, link, label, shape, color, tooltip...) we can express a diagram in RDF.
+            Using a small vocabulary of basic diagramming terms (node, edge, label, shape, color, tooltip...) we can express a diagram in RDF.
             Converting such diagram descriptions from RDF to some diagramming DSL like <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> 
             is not difficult.
         </p>       
@@ -47,7 +47,7 @@
         </table>
       
         <p>The label for the <code>ann</code> node is the name instead of the URI. The shape for the city node is rectangular, 
-            and its label is the last part of the URI. The label of the link is also customized, 
+            and its label is the last part of the URI. The label of the edge is also customized, 
             but the full property URI is available as a tooltip over the arrow.
         </p>
         <p>
@@ -81,7 +81,7 @@
             (the text part of the literal term is parsed by the <code>log:dtlit</code> built-in).
         </li>
         <li>
-            The last rule creates links for the <code>urn:livesIn</code> property, with a customized label
+            The last rule creates edges for the <code>urn:livesIn</code> property, with a customized label
             and the tooltip obtained from the URI (converted to string by the <code>log:uri</code> built-in).
         </li>
         <p>

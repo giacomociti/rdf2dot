@@ -1,0 +1,30 @@
+@base <http://view/>. # to be decided
+@prefix attr: <dot/attribute/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<Node> a rdfs:Class ; 
+    rdfs:label "Node" ;
+    rdfs:comment "Nodes (aka vertexes) in a graph diagram." .
+
+<Edge> a rdfs:Class ; 
+    rdfs:label "Edge" ;
+    rdfs:comment "Edges (aka links, arcs or arrows) in a graph diagram." .
+
+<source> a rdf:Property ;
+    rdfs:domain <Edge> ;
+    rdfs:range <Node> ;
+    rdfs:label "source" ;
+    rdfs:comment "The source node of and edge." .
+
+<target> a rdf:Property ;
+    rdfs:domain <Edge> ;
+    rdfs:range <Node> ;
+    rdfs:label "target" ;
+    rdfs:comment "The target node of and edge." .
+
+attr:label a rdf:Property .
+attr:shape a rdf:Property .
+attr:color a rdf:Property .
+attr:tooltip a rdf:Property .
+# plus all the other attributes defined in https://www.graphviz.org/doc/info/attrs.html

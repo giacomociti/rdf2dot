@@ -1,14 +1,15 @@
 @prefix v: <http://view/>.
+@prefix attr: <http://view/dot/attribute/> .
 
 <urn:ann> a v:Node ;
-    v:label "Ann" .
+    attr:label "Ann" .
 
 <urn:bern> a v:Node ;
-    v:shape "rectangle" ;
-    v:label "bern" .
+    attr:shape "rectangle" ;
+    attr:label "bern" .
 
-[] a v:Link ;
+[] a v:Edge ;
     v:source <urn:ann> ;
     v:target <urn:bern> ;
-    v:label "lives in" ;
-    v:tooltip "urn:livesIn" .
+    attr:label "lives in" ;
+    attr:tooltip "urn:livesIn" .

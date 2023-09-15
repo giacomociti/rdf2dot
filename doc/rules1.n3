@@ -1,18 +1,19 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
 
 { 
     ?s ?p ?o .
     ?p log:uri ?label .
-    ?p log:notEqualTo v:source, v:target, v:label .
-    (?p ?o) log:notEqualTo (rdf:type v:Link) .
+    ?p log:notEqualTo v:source, v:target, attr:label .
+    (?p ?o) log:notEqualTo (rdf:type v:Edge) .
 }
 =>
 {
-    [] a v:Link ; 
+    [] a v:Edge ; 
         v:source ?s ; 
         v:target ?o ;
-        v:label ?label 
+        attr:label ?label 
 }
 .
