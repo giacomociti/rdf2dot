@@ -1,0 +1,63 @@
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
+@prefix schema: <http://schema.org/> .
+@prefix vl: <https://version.link/> .
+
+{} => { v:graph attr:rankdir "LR" } .
+
+
+{ ?v a vl:Version ; schema:identifier ?identifier }
+=>
+{
+    ?v a v:Node ; attr:label ?identifier .
+}
+.
+
+{ 
+    ?v vl:successor ?succ . ?succ schema:startDate ?date . (?d ?t) log:dtlit ?date .
+}
+=>
+{
+    [] a v:Edge ; v:source ?v ; v:target ?succ ; attr:label ?d
+}.
+
+{ ?v a vl:Deprecated } => { ?v attr:color "red" } .
+
+
+# collect language literal properties as node fields
+{ 
+    ?s a vl:Version .
+    ?s ?p ?o .
+    (?fieldValue ?lang) log:langlit ?o . # ensure is literal
+    ?p log:localName ?fieldName .
+    ( "<TR><TD>%s (%s)</TD><TD>%s</TD></TR>" ?fieldName ?lang ?fieldValue) string:format ?field
+} 
+=> 
+{ 
+    ?s v:field ?field ;
+} .
+
+# if a node has some fields, shape it as a record with the fields as a label
+{
+    ?s a v:Node .
+    ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
+    ?fs log:notEqualTo () .
+    (?fs "|") string:join ?joined .
+    ( "< <TABLE>%s</TABLE> >" ?joined) string:format ?label
+}
+=>
+{
+    ?s attr:shape "plaintext" .
+    ?s attr:label ?label
+}
+.
+
+# { ?v a vl:Version ; schema:parentOrganization ?parent }
+# =>
+# {
+#     [] a v:Edge ; v:source ?v ; v:target ?parent
+# }.
