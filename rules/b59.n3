@@ -1,0 +1,90 @@
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix op: <http://barnard59.zazuko.com/operations/>.
+@prefix temp: <http://org/temp/>.
+
+# colors...
+temp:pipeline temp:colors ("blue" "red" "green" "orange" "yellow" "pink") .
+
+# each pipeline has a color
+{
+    (?p {?p a p:Pipeline} ?ps) log:collectAllIn [] .
+    ?ps list:iterate (?index ?item) .
+    temp:pipeline temp:colors ?colors .
+    (?colors ?index) list:memberAt ?color .
+} 
+=> 
+{
+    ?item a v:Node ; attr:color ?color .
+}.
+
+# use local name as label
+{ ?p a p:Pipeline; log:localName ?name } => { ?p attr:label ?name } .
+
+# fist step in a pipeline has link with same color
+{
+    ?p a p:Pipeline; attr:color ?color; p:steps [ p:stepList [list:first ?first] ].
+} 
+=>
+{
+    ?first a v:Node ; attr:shape "box" .
+    [] a v:Edge; v:source ?p; v:target ?first; attr:color ?color
+}
+.
+
+# each step in a pipeline has link with same color
+{
+    ?p a p:Pipeline; attr:color ?color; p:steps [ p:stepList ?steps ] .
+    ?steps list:iterate (?i ?step) .
+    (?i 1) math:sum ?pos .
+    (?steps ?pos) list:memberAt ?next .
+} 
+=>
+{
+    ?next a v:Node ; attr:shape "box" .
+    [] a v:Edge; v:source ?step; v:target ?next; attr:color ?color .
+}
+.
+
+# step label based on its implementation
+{ 
+    ?s a p:Step; code:implementedBy [ code:link ?code ] .
+    ?code log:uri ?label .
+}
+=>
+{ 
+    ?s attr:label ?label
+}
+.
+
+# link arguments that are sub-pipelines
+{
+    ?n code:arguments [list:member ?arg] .
+    ?arg a p:Pipeline
+}
+=>
+{
+    [] a v:Edge; v:source ?n; v:target ?arg; attr:arrowhead "inv"; attr:style "dashed".
+}
+.
+
+# link arguments that are variables
+{
+    ?n code:arguments [list:member ?arg] .
+    (?v p:VariableName) log:dtlit ?arg
+}
+=>
+{
+    [] a v:Edge; v:source ?n; v:target ?v; attr:arrowhead "inv"; attr:style "dotted".
+}
+.
+
+
+
