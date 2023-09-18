@@ -95,7 +95,12 @@ temp:pipeline temp:colors ("blue" "red" "green" "orange" "yellow" "pink") .
     (?v ?typ) log:dtlit ?arg .
     ?typ log:localName ?t .
 
-    ( '<TR><TD>%s (%s)</TD></TR>' ?v ?t) string:format ?field .
+    (?v
+        ("&" "<" ">" '"') 
+        ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escaped .
+
+    ( '<TR><TD>%s (%s)</TD></TR>' ?escaped ?t) string:format ?field .
 
 }
 =>
@@ -107,10 +112,15 @@ temp:pipeline temp:colors ("blue" "red" "green" "orange" "yellow" "pink") .
 # collect named literal arguments
 {
     ?n code:arguments [code:name ?name; code:value ?value] .
-     (?v ?typ) log:dtlit ?value .
+    (?v ?typ) log:dtlit ?value .
     ?typ log:localName ?t .
 
-     ( "<TR><TD><I>%s</I></TD><TD>%s (%s)</TD></TR>" ?name ?v ?t) string:format ?field .# todo include ?name
+    (?v
+        ("&" "<" ">" '"') 
+        ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escaped .
+
+    ( "<TR><TD><I>%s</I></TD><TD>%s (%s)</TD></TR>" ?name ?escaped ?t) string:format ?field .# todo include ?name
 }
 =>
 {
