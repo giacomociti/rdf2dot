@@ -10,22 +10,19 @@
 {} => { v:graph attr:rankdir "LR" } .
 
 
-{ ?v a vl:Version ; schema:identifier ?identifier }
-=>
-{
-    ?v a v:Node ; attr:label ?identifier .
-}
-.
+{ ?v a vl:Version } => { ?v a v:Node }.
+{ ?v a vl:Deprecated } => { ?v attr:color "red" } .
 
 { 
-    ?v vl:successor ?succ . ?succ schema:startDate ?date . (?d ?t) log:dtlit ?date .
+    ?v vl:successor ?succ . ?succ schema:startDate ?date . 
+    (?d ?t) log:dtlit ?date .
 }
 =>
 {
     [] a v:Edge ; v:source ?v ; v:target ?succ ; attr:label ?d
 }.
 
-{ ?v a vl:Deprecated } => { ?v attr:color "red" } .
+
 
 
 # collect language literal properties as node fields
@@ -33,21 +30,37 @@
     ?s a vl:Version .
     ?s ?p ?o .
     (?fieldValue ?lang) log:langlit ?o . # ensure is literal
+
+    (   ?fieldValue
+        ("&" "<" ">" '"') 
+        ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escapedValue .
+
     ?p log:localName ?fieldName .
-    ( "<TR><TD>%s (%s)</TD><TD>%s</TD></TR>" ?fieldName ?lang ?fieldValue) string:format ?field
+    ( "<TR><TD><I>%s (%s)</I></TD><TD>%s</TD></TR>" ?fieldName ?lang ?escapedValue) string:format ?field
 } 
 => 
 { 
     ?s v:field ?field ;
 } .
 
-# if a node has some fields, shape it as a record with the fields as a label
+{ 
+    ?v a vl:Version ; schema:parentOrganization ?parent. 
+    ?parent log:uri ?parentUri .
+     ( "<TR><TD><I>parentOrganization</I></TD><TD>%s</TD></TR>" ?parentUri) string:format ?field
+}
+=>
+{
+    ?v v:field ?field
+}.
+
+# if a node has some fields, shape it as a table with the fields as rows
 {
     ?s a v:Node .
     ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
     ?fs log:notEqualTo () .
-    (?fs "|") string:join ?joined .
-    ( "< <TABLE>%s</TABLE> >" ?joined) string:format ?label
+    (?fs "\n") string:join ?joined .
+    ( '< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n%s\n</TABLE> >' ?joined) string:format ?label
 }
 =>
 {
@@ -56,8 +69,3 @@
 }
 .
 
-# { ?v a vl:Version ; schema:parentOrganization ?parent }
-# =>
-# {
-#     [] a v:Edge ; v:source ?v ; v:target ?parent
-# }.

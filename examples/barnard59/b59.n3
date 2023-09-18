@@ -75,16 +75,39 @@ temp:pipeline temp:colors ("blue" "red" "green" "orange" "yellow" "pink") .
 }
 .
 
-# link arguments that are variables
+# link arguments that are literals
 {
     ?n code:arguments [list:member ?arg] .
-    (?v p:VariableName) log:dtlit ?arg
+    (?v ?typ) log:dtlit ?arg .
+    ?typ log:localName ?t .
+    ("%s (%s)" ?v ?t) string:format ?target .
 }
 =>
 {
-    [] a v:Edge; v:source ?n; v:target ?v; attr:arrowhead "inv"; attr:style "dotted".
+    [] a v:Edge; v:source ?n; v:target ?target; attr:arrowhead "inv"; attr:style "dotted".
 }
 .
 
+# link named pipeline arguments
+{
+    ?n code:arguments [code:name ?name; code:value ?value] .
+    ?value a p:Pipeline .
+}
+=>
+{
+    [] a v:Edge; v:source ?n; v:target ?value; attr:label ?name; attr:arrowhead "inv"; attr:style "dotted".
+}
+.
 
-
+# link named literal arguments
+{
+    ?n code:arguments [code:name ?name; code:value ?value] .
+    (?v ?typ) log:dtlit ?value .
+    ?typ log:localName ?t .
+    ("%s (%s)" ?v ?t) string:format ?target .
+}
+=>
+{
+    [] a v:Edge; v:source ?n; v:target ?target; attr:label ?name; attr:arrowhead "inv"; attr:style "dotted".
+}
+.

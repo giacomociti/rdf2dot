@@ -1,0 +1,31 @@
+@prefix schema: <http://schema.org/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix vl: <https://version.link/> .
+
+<https://ld.admin.ch/ou/20014810/2023-01-01> a vl:Version , vl:Deprecated ;
+   schema:name "Zentrale Kanzlei"@de , "Chancellerie centrale"@fr , "Cancelleria centrale"@it ;
+   schema:parentOrganization <https://ld.admin.ch/ou/20014805> ;
+   schema:endDate "2023-09-08"^^<http://www.w3.org/2001/XMLSchema#date> ;
+   schema:startDate "2023-01-01"^^<http://www.w3.org/2001/XMLSchema#date> ;
+   vl:identity <https://ld.admin.ch/ou/20014810> ;
+   vl:successor <https://ld.admin.ch/ou/20014810/2023-09-09> ;
+   vl:identityIdentifier "20014810" ;
+   vl:inVersionedIdentitySet <https://ld.admin.ch/ou> .
+<https://ld.admin.ch/ou/20014810/2023-09-09> a vl:Version , vl:Deprecated ;
+   schema:name "Zentrale Kanzlei"@de , "Chancellerie centrale"@fr , "Cancelleria centrale"@it ;
+   schema:parentOrganization <https://ld.admin.ch/ou/20014805> ;
+   schema:endDate "2023-09-10"^^<http://www.w3.org/2001/XMLSchema#date> ;
+   schema:startDate "2023-09-09"^^<http://www.w3.org/2001/XMLSchema#date> ;
+   vl:identity <https://ld.admin.ch/ou/20014810> ;
+   vl:successor <https://ld.admin.ch/ou/20014810/2023-09-18> ;
+   vl:identityIdentifier "20014810" ;
+   vl:inVersionedIdentitySet <https://ld.admin.ch/ou> ;
+   vl:predecessor <https://ld.admin.ch/ou/20014810/2023-01-01> .
+<https://ld.admin.ch/ou/20014810/2023-09-18> a vl:Version ;
+   schema:name "Chancellerie centrale"@fr , "Cancelleria centrale"@it , "Zentrale Kanzlei & Scancenter"@de ;
+   schema:parentOrganization <https://ld.admin.ch/ou/20052477> ;
+   schema:startDate "2023-09-18"^^<http://www.w3.org/2001/XMLSchema#date> ;
+   vl:identity <https://ld.admin.ch/ou/20014810> ;
+   vl:identityIdentifier "20014810" ;
+   vl:inVersionedIdentitySet <https://ld.admin.ch/ou> ;
+   vl:predecessor <https://ld.admin.ch/ou/20014810/2023-09-09> .

@@ -1,0 +1,13 @@
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX schema: <http://schema.org/>
+PREFIX vl: <https://version.link/>
+
+DESCRIBE ?v
+FROM <https://lindas.admin.ch/fch/orgs>
+WHERE {
+    VALUES ?identity { 
+        <https://ld.admin.ch/ou/20014810> 
+        # <https://ld.admin.ch/ou/20030951>
+    }
+    ?v a vl:Version ; vl:identity ?identity
+}
