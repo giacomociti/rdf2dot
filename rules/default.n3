@@ -63,7 +63,13 @@
     ?s ?p ?o .
     (?fieldValue ?dataType) log:dtlit ?o . # ensure is literal
     ?p log:localName ?fieldName .
-    ( "%s: %s" ?fieldName ?fieldValue) string:format ?field
+
+    (   ?fieldValue
+        ("&" "<" ">" '"') 
+        ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escapedValue .
+
+    ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?escapedValue) string:format ?field
 } 
 => 
 { 
@@ -91,24 +97,26 @@
     (?po {?o ?po ?oo } ()) log:collectAllIn [] .
     ?p log:localName ?fieldName .
     ?n a v:Node ; v:term ?s .
-    ( "%s: %s" ?fieldName ?fieldValue) string:format ?field
+    # ( "%s: %s" ?fieldName ?fieldValue) string:format ?field
+    # todo escape?
+    ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?fieldValue) string:format ?field
 }
 =>
 {
     ?n v:field ?field ;
 }.
 
-# if a node has some fields, shape it as a record with the fields as a label
+# if a node has some fields, label it with a table with the fields as rows
 {
     ?s a v:Node .
     ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
     ?fs log:notEqualTo () .
-    (?fs "|") string:join ?joined .
-    ( "{%s}" ?joined) string:format ?label
+    (?fs "\n") string:join ?joined .
+    ( '< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n%s\n</TABLE> >' ?joined) string:format ?label
 }
 =>
 {
-    ?s attr:shape "Mrecord" .
+    ?s attr:shape "plaintext" .
     ?s attr:label ?label
 }
 .
