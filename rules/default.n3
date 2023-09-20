@@ -34,22 +34,26 @@
      v:term ?p ;
 }.
 
-# node tooltips are URIs
+# node tooltips and URLs
 { 
-    ?n a v:Node ; v:term [ log:uri ?tooltip ]
+    ?n a v:Node ; v:term ?term .
+    ?term log:rawType [ log:notEqualTo log:LabeledBlankNode  , log:UnlabeledBlankNode ] .
+    ?term  log:uri ?uri .
 }
 =>
 {
-    ?n attr:tooltip ?tooltip
+    ?n attr:tooltip ?uri ; attr:URL ?uri
 }.
 
-# edges use local name as label and URI as tooltop
+
+
+# edge labels, tooltips and URLs
 {
-  ?e a v:Edge ; v:term [ log:localName ?label ; log:uri ?tooltip ]
+  ?e a v:Edge ; v:term [ log:localName ?name ; log:uri ?uri ]
 }
 => 
 {
-  ?e attr:label ?label ; attr:tooltip ?tooltip .
+  ?e attr:label ?name ; attr:tooltip ?name ; attr:labelURL ?uri .
 }
 .
 
