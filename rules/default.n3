@@ -11,13 +11,13 @@
 {
   ?s ?p ?o .
   # to avoid loops, skip subjects that are nodes or edges
-  ( ?x { ?s a v:Edge } () ) log:collectAllIn [] .
-  ( ?x { ?s a v:Node } () ) log:collectAllIn [] .
+  [] log:notIncludes { ?s a v:Node } .
+  [] log:notIncludes { ?s a v:Edge } .
+  ?s log:notEqualTo v:graph, v:edge , v:node .
 }
 =>
 {
-  [] a v:Node ;
-    v:term ?s
+  [] a v:Node ; v:term ?s
 }.
 
 # all properties connecting two nodes become edges
@@ -34,9 +34,9 @@
      v:term ?p ;
 }.
 
+# node tooltips are URIs
 { 
-    ?n a v:Node ; v:term ?s .
-    ?s log:uri ?tooltip .
+    ?n a v:Node ; v:term [ log:uri ?tooltip ]
 }
 =>
 {
@@ -45,22 +45,17 @@
 
 # edges use local name as label and URI as tooltop
 {
-  ?l a v:Edge ; 
-    v:term ?p .
-  ?p log:localName ?label ;
-    log:uri ?tooltip .
+  ?e a v:Edge ; v:term [ log:localName ?label ; log:uri ?tooltip ]
 }
 => 
 {
-  ?l attr:label ?label ;
-    attr:tooltip ?tooltip .
+  ?e attr:label ?label ; attr:tooltip ?tooltip .
 }
 .
 
 # collect literal properties as node fields
 { 
-    ?n a v:Node ; v:term ?s .
-    ?s ?p ?o .
+    ?n a v:Node ; v:term [ ?p ?o ] .
     (?fieldValue ?dataType) log:dtlit ?o . # ensure is literal
     ?p log:localName ?fieldName .
 
@@ -91,22 +86,26 @@
 
 # collect fields for uri properties with objects which are not nodes
 {
-    ?s ?p ?o .
-    ?o log:uri ?u .
-    ?o log:localName ?fieldValue .
-    (?po {?o ?po ?oo } ()) log:collectAllIn [] .
+    ?n a v:Node ; v:term [ ?p ?o ] .
+    ?o log:uri [] .
+    [] log:notIncludes { ?o [] [] } .
     ?p log:localName ?fieldName .
-    ?n a v:Node ; v:term ?s .
-    # ( "%s: %s" ?fieldName ?fieldValue) string:format ?field
-    # todo escape?
-    ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?fieldValue) string:format ?field
+    ?o log:localName ?fieldValue .
+   
+    (   ?fieldValue
+        ("&" "<" ">" '"')
+        ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escapedValue .
+
+    ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?escapedValue) string:format ?field
 }
 =>
 {
     ?n v:field ?field ;
-}.
+}
+.
 
-# if a node has some fields, label it with a table with the fields as rows
+# if a node has fields, its label is a table with the fields as rows
 {
     ?s a v:Node .
     ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
@@ -116,18 +115,45 @@
 }
 =>
 {
-    ?s attr:shape "plaintext" .
-    ?s attr:label ?label
+    ?s attr:shape "plaintext" ; attr:label ?label
 }
 .
 
+
+
+# lists (may be improved linking nodes from field ports)
+{ ?s ?p ?o . ?o log:rawType rdf:List } => { [] a v:Node ; v:term ?o } .
+
 {
-    ( ?p { [] a v:Edge ; v:term ?p } ?ps ) log:collectAllIn [] .
+    ?n a v:Node ; v:term ?list .
+    ?list log:rawType rdf:List .
+    ?list list:iterate (?i ?item) .
+
+    ("%s" ?item) string:format ?fieldValue .
+    (   ?fieldValue
+        ("&" "<" ">" '"') 
+        ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escapedValue .
+
+    ( '<TR><TD PORT="%s">%s</TD></TR>' ?i ?escapedValue) string:format ?field
+}
+=> 
+{
+    ?n v:field ?field
+}
+.
+
+# edge coloring
+{
+    (?p { [] a v:Edge ; v:term ?p } ?ps) log:collectAllIn [] .
     ?ps list:iterate (?i ?prop) .
     (?i 1) math:sum ?color .
-    ?l v:term ?prop .
+    ?edge v:term ?prop .
 }
 =>
 {
-    ?l attr:color ?color
-}.
+    ?edge attr:color ?color
+}
+.
+
+{ } => { v:edge attr:colorscheme "paired12" } .
