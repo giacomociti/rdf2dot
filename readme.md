@@ -3,18 +3,22 @@ A simple RDF visualization tool based on [GraphViz](https://www.graphviz.org/).
 The following RDF triples in turtle format:
 
 ```ttl
-BASE <http://example.org/>
-PREFIX foaf: <http://xmlns.com/foaf/0.1/>
-PREFIX dcterms: <http://purl.org/dc/terms/>
-PREFIX wd: <http://www.wikidata.org/entity/>
- 
-<bob#me>
-    a foaf:Person ;
-    foaf:topic_interest wd:Q12418 .
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix wd: <http://www.wikidata.org/entity/> .
+@prefix dbo: <https://dbpedia.org/ontology/> .
+@prefix dbpedia: <http://dbpedia.org/resource/> .
   
 wd:Q12418
     dcterms:title "Mona Lisa" ;
-    dcterms:creator <http://dbpedia.org/resource/Leonardo_da_Vinci> .
+    dcterms:creator dbpedia:Leonardo_da_Vinci .
+
+wd:Q128910
+    dcterms:title "The Last Supper" ;
+    dcterms:creator dbpedia:Leonardo_da_Vinci .
+
+dbpedia:Leonardo_da_Vinci
+    dbo:birthName "Leonardo da Vinci" ;
+    dbo:birthPlace dbpedia:Republic_of_Florence .
 ```
 
 are converted via the _dot_ format to the following SVG:

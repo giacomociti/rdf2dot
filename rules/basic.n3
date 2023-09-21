@@ -1,3 +1,4 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
@@ -9,8 +10,8 @@
       # to avoid loops, skip subjects that are nodes or edges
     ( ?x { ?s a v:Edge } () ) log:collectAllIn [] .
     ( ?x { ?s a v:Node } () ) log:collectAllIn [] .
-    ?s log:skolem ?source .
-    ?o log:skolem ?target .
+    (?s) log:skolem ?source .
+    (?o) log:skolem ?target .
     ?p log:localName ?label ; log:uri ?tooltip
 }
 =>
@@ -77,3 +78,19 @@
     ?n attr:label "" ;
        attr:shape "circle"
 } .
+
+{
+	?n a v:Node ; v:term ?list .
+    ?list log:rawType rdf:List .
+  	?list list:first ?first .
+    ?list list:rest ?rest .
+}
+=>
+{
+    ?n attr:label "rdf:List" .
+	?list :first ?first .
+    ?list :rest ?rest .
+}
+.
+
+{ ?s v:term () } => { ?s attr:label "rdf:nil" } .
