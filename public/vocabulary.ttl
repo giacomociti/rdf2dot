@@ -15,13 +15,37 @@
     rdfs:domain <Edge> ;
     rdfs:range <Node> ;
     rdfs:label "source" ;
-    rdfs:comment "The source node of and edge." .
+    rdfs:comment "The source (aka tail) node of an edge." .
 
 <target> a rdf:Property ;
     rdfs:domain <Edge> ;
     rdfs:range <Node> ;
     rdfs:label "target" ;
-    rdfs:comment "The target node of and edge." .
+    rdfs:comment "The target (aka head) node of an edge." .
+
+<sourcePort> a rdf:Property ;
+    rdfs:domain <Edge> ;
+    rdfs:range rdfs:Literal ;
+    rdfs:label "source port" ;
+    rdfs:comment "Indicates where on the source node to attach the tail of the edge." .
+
+<sourceCompass> a rdf:Property ;
+    rdfs:domain <Edge> ;
+    rdfs:range rdfs:Literal ;
+    rdfs:label "source compass point" ;
+    rdfs:comment "Compass point of source node/port." .
+
+<targetPort> a rdf:Property ;
+    rdfs:domain <Edge> ;
+    rdfs:range rdfs:Literal ;
+    rdfs:label "target port" ;
+    rdfs:comment "Indicates where on the target node to attach the head of the edge." .
+
+<targetCompass> a rdf:Property ;
+    rdfs:domain <Edge> ;
+    rdfs:range rdfs:Literal ;
+    rdfs:label "target compass point" ;
+    rdfs:comment "Compass point of target node/port." .
 
 <graph> rdfs:label "graph" ;
     rdfs:comment "Resource whose attributes apply to the graph" .

@@ -125,7 +125,7 @@
 
 
 
-# lists (may be improved linking nodes from field ports)
+# lists
 { ?s ?p ?o . ?o log:rawType rdf:List } => { [] a v:Node ; v:term ?o } .
 
 {
@@ -144,6 +144,19 @@
 => 
 {
     ?n v:field ?field
+}
+.
+
+{
+    ?source a v:Node ; v:term ?list .
+    ?list log:rawType rdf:List .
+    ?list list:iterate (?i ?item) .
+    ?target a v:Node ; v:term ?item .
+}
+=> 
+{
+    [] a v:Edge ; v:source ?source ; v:sourcePort ?i ; v:target ?target ; 
+    
 }
 .
 
