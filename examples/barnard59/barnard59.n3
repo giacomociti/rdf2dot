@@ -1,0 +1,154 @@
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
+@prefix code: <https://code.described.at/>.
+@prefix p: <https://pipeline.described.at/>.
+@prefix op: <http://barnard59.zazuko.com/operations/>.
+@prefix temp: <http://org/temp/>.
+
+# colors, see https://graphviz.org/doc/info/colors.html for more
+temp:pipeline temp:colors (
+    "antiquewhite3" "azure4" "aqua" "aquamarine" "azure" 
+    "bisque" "blue" "blueviolet" "brown" "burlywood" 
+    "cadetblue" "chartreuse" "chocolate" "cornflowerblue" "cyan"
+    "darkgray" "darkgreen" "darkmagenta" "darkolivegreen" "darkorange"
+) .
+
+# each pipeline has a color
+{
+    temp:pipeline temp:colors ?colors .
+    (?p {?p a p:Pipeline} ?pipelines) log:collectAllIn [] .
+    ?pipelines list:iterate (?index ?pipeline) .
+    ?colors list:iterate (?index ?color) .
+} 
+=> 
+{
+    ?pipeline a v:Node ; attr:color ?color ; attr:shape "box" .
+}.
+
+# fist step in a pipeline is linked with same color
+{
+    ?p a p:Pipeline; attr:color ?color; p:steps [ p:stepList [ list:first ?firstStep ] ] .
+} 
+=>
+{
+    ?firstStep a v:Node .
+    [] a v:Edge; v:source ?p; v:target ?firstStep; attr:color ?color .
+}
+.
+
+# all steps in a pipeline are linked with same color
+{
+    ?p a p:Pipeline; attr:color ?color; p:steps [ p:stepList ?steps ] .
+    ?steps list:iterate (?i ?step) .
+    (?i 1) math:sum ?pos .
+    (?steps ?pos) list:memberAt ?next .
+} 
+=>
+{
+    ?next a v:Node .
+    [] a v:Edge; v:source ?step; v:target ?next; attr:color ?color .
+}
+.
+
+# use local name as label
+{ ?n a v:Node; log:rawType log:Other ; log:localName ?name } => { ?n attr:label ?name } .
+
+# simplified syntax
+{ 
+    [] a p:Pipeline; p:steps [ p:stepList [ list:member ?step ] ] .
+    [] log:notIncludes { ?step a p:Pipeline } .
+    [] log:notIncludes { ?step a p:Step } .
+    
+    ?step ?operation ?arguments .
+    ?operation log:notEqualTo code:arguments .
+    ?arguments log:rawType rdf:List .
+    ?operation log:uri ?uri .
+    (?uri "http://barnard59.zazuko.com/operations/" "") string:replace ?label .
+} 
+=> 
+{ 
+    ?step a p:Step ;
+        code:implementedBy [ code:link ?operation ] ;
+        code:arguments ?arguments ;
+        attr:label ?label . 
+} .
+
+
+
+# link arguments that are sub-pipelines
+{
+    ?n code:arguments [ list:member ?arg ] .
+    ?arg a p:Pipeline .
+}
+=>
+{
+    [] a v:Edge; v:source ?n; v:target ?arg; attr:arrowhead "inv"; attr:style "dashed".
+}
+.
+
+# link named arguments that are sub-pipelines
+{
+    ?n code:arguments [ code:name ?name; code:value ?value ] .
+    ?value a p:Pipeline .
+}
+=>
+{
+    [] a v:Edge; v:source ?n; v:target ?value; attr:label ?name; attr:arrowhead "inv"; attr:style "dashed".
+}
+.
+
+
+# collect text for literal arguments
+{
+    ?n code:arguments [ list:member ?arg ] .
+    (?literal ?type) log:dtlit ?arg .
+    ?type log:localName ?typeName .
+     ("%s (%s)" ?literal ?typeName) string:format ?argument .
+}
+=>
+{
+    ?n temp:arg ?argument
+}
+.
+
+# collect text for literal named arguments
+{
+    ?n code:arguments [ code:name ?name; code:value ?value ] .
+    (?literal ?type) log:dtlit ?value .
+    ?type log:localName ?typeName .
+     ("%s: %s (%s)" ?name ?literal ?typeName) string:format ?argument .
+}
+=>
+{
+    ?n temp:arg ?argument
+}
+.
+
+# collect text for code arguments
+{
+    ?n code:arguments [ list:member [ code:link [ log:uri ?uri ] ] ] .
+    ("%s" ?uri) string:format ?argument . # needed?
+}
+=>
+{
+    ?n temp:arg ?argument
+}
+.
+
+# set tooltip
+{
+    ?step code:implementedBy [ code:link [ log:uri ?uri ] ] .
+    (?arg { ?step temp:arg ?arg } ?args) log:collectAllIn [] .
+    (?args "\n\t\t") string:join ?joined .
+    (?uri "\n\t\t" ?joined) string:concatenation ?tooltip .
+}
+=>
+{
+    ?step attr:tooltip ?tooltip
+}
+.
