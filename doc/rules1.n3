@@ -6,8 +6,7 @@
 { 
     ?s ?p ?o .
     ?p log:uri ?label .
-    ?p log:notEqualTo v:source, v:target, attr:label .
-    (?p ?o) log:notEqualTo (rdf:type v:Edge) .
+    ?p log:notEqualTo v:hasEdge , v:source, v:target, attr:label .
 }
 =>
 {

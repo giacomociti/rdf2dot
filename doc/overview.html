@@ -33,11 +33,11 @@
 
         <h3>Diagramming Vocabulary</h3>
         <p>
-            Using a small <a href="/rdf2dot/vocabulary.ttl">vocabulary</a> of basic diagramming terms (node, edge, label, shape, color, tooltip...) we can express a diagram in RDF.
-            Converting such diagram descriptions from RDF to some diagramming DSL like <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> 
-            is not difficult.
+            Using a small vocabulary of basic diagramming terms (node, edge, label, shape, color, tooltip...) we can express a diagram in RDF.
+            It's not difficult to convert such diagram descriptions from RDF to some diagramming DSL.
         </p>       
-        <p>With our vocabulary, we can describe a more compact version of the above graph:</p>
+        <p>With our <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>, based on the <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> language,
+            we can describe a more compact version of the above graph:</p>
         <table>
             <tr>
                 <td><pre id="diagram2"></pre></td>
@@ -47,7 +47,7 @@
       
         <p>The label for the <code>ann</code> node is the name instead of the URI. The shape for the city node is rectangular, 
             and its label is the last part of the URI. The label of the edge is also customized, 
-            but the full property URI is available as a tooltip over the arrow.
+            but the full predicate URI is available as a tooltip over the arrow.
         </p>
         <p>
             Thus we can construct a customized diagram for our little dataset. But if we were to create the diagram description manually, it would be better to use directly the <em>dot</em> language which is designed for that purpose.
