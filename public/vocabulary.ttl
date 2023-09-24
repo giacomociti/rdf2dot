@@ -17,7 +17,7 @@
 
 <Edge> a rdfs:Class ; 
     rdfs:label "Edge" ;
-    rdfs:comment "Edges (aka links, arcs or arrows) in a graph diagram." .
+    rdfs:comment "Edges (aka links or arcs) in a graph diagram." .
 
 <hasNode> a rdf:Property ;
     rdfs:domain <Graph> ;
@@ -83,7 +83,7 @@
     rdfs:comment "object with attributes for the edges in the graph" .
 
 
-# domain includes Graph, Node, Edge and the range of graph, node and edge
+# domain includes Graph, Node, Edge and the range of graphAttributes, nodeAttributes and edgeAttributes
 attr:label a rdf:Property .
 attr:shape a rdf:Property .
 attr:color a rdf:Property .
