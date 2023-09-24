@@ -9,35 +9,33 @@
 
 # all the subjects of some triple become nodes
 {
-  ?s ?p ?o .
-  # to avoid loops, skip subjects that are nodes or edges
-  [] log:notIncludes { ?s a v:Node } .
-  [] log:notIncludes { ?s a v:Edge } .
-  ?s log:notEqualTo v:graph, v:edge , v:node .
+    ?s ?p ?o .
+    # to avoid loops
+    ?p log:namespace ?ns .
+    v: log:uri [ log:notEqualTo ?ns ] .
+    attr: log:uri [ log:notEqualTo ?ns ] .
 }
 =>
 {
-  [] a v:Node ; v:term ?s
+    v:digraph v:hasNode [ v:term ?s ] .
 }.
 
 # all properties connecting two nodes become edges
 {     
-  ?s ?p ?o .
-  ?source a v:Node ; v:term ?s .
-  ?target a v:Node ; v:term ?o .
+    ?s ?p ?o .
+    ?source v:term ?s .
+    ?target v:term ?o .
 }
 =>
 {
-  [] a v:Edge ;      
-     v:source ?source ;
-     v:target ?target ;
-     v:term ?p ;
+    v:digraph v:hasEdge [ v:source ?source ; v:target ?target ; v:term ?p ] .
 }.
 
 # node tooltips and URLs
 { 
-    ?n a v:Node ; v:term ?term .
-    ?term log:rawType [ log:notEqualTo log:LabeledBlankNode  , log:UnlabeledBlankNode ] .
+    v:digraph v:hasNode ?n .
+    ?n v:term ?term .
+    ?term log:rawType [ log:notEqualTo log:LabeledBlankNode , log:UnlabeledBlankNode ] .
     ?term  log:uri ?uri .
 }
 =>
@@ -49,17 +47,19 @@
 
 # edge labels, tooltips and URLs
 {
-  ?e a v:Edge ; v:term [ log:localName ?name ; log:uri ?uri ]
+    v:digraph v:hasEdge ?e .
+    ?e v:term [ log:localName ?name ; log:uri ?uri ]
 }
 => 
 {
-  ?e attr:label ?name ; attr:tooltip ?name ; attr:labelURL ?uri .
+    ?e attr:label ?name ; attr:tooltip ?name ; attr:labelURL ?uri .
 }
 .
 
 # collect literal properties as node fields
 { 
-    ?n a v:Node ; v:term [ ?p ?o ] .
+    v:digraph v:hasNode ?n .
+    ?n v:term [ ?p ?o ] .
     (?fieldValue ?dataType) log:dtlit ?o . # ensure is literal
     ?p log:localName ?fieldName .
 
@@ -75,22 +75,11 @@
     ?n v:field ?field .
 } .
 
-# # collect language literal properties as node fields
-# { 
-#     ?n a v:Node ; v:term ?s .
-#     ?s ?p ?o .
-#     (?fieldValue ?lang) log:langlit ?o . # ensure is literal
-#     ?p log:localName ?fieldName .
-#     ( "%s (%s): %s" ?fieldName ?lang ?fieldValue) string:format ?field
-# } 
-# => 
-# { 
-#     ?n v:field ?field ;
-# } .
 
 # collect fields for uri properties with objects which are not nodes
 {
-    ?n a v:Node ; v:term [ ?p ?o ] .
+    v:digraph v:hasNode ?n .
+    ?n v:term [ ?p ?o ] .
     ?o log:uri [] .
     [] log:notIncludes { ?o [] [] } .
     ?p log:localName ?fieldName .
@@ -111,7 +100,7 @@
 
 # if a node has fields, its label is a table with the fields as rows
 {
-    ?s a v:Node .
+    v:digraph v:hasNode ?s .
     ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
     ?fs log:notEqualTo () .
     (?fs "\n") string:join ?joined .
@@ -126,10 +115,11 @@
 
 
 # lists
-{ ?s ?p ?o . ?o log:rawType rdf:List } => { [] a v:Node ; v:term ?o } .
+{ ?s ?p ?o . ?o log:rawType rdf:List } => { v:digraph v:hasNode [ v:term ?o ] } .
 
 {
-    ?n a v:Node ; v:term ?list .
+    v:digraph v:hasNode ?n .
+    ?n v:term ?list .
     ?list log:rawType rdf:List .
     ?list list:iterate (?i ?item) .
 
@@ -148,21 +138,22 @@
 .
 
 {
-    ?source a v:Node ; v:term ?list .
+    v:digraph v:hasNode ?source .
+    ?source v:term ?list .
     ?list log:rawType rdf:List .
     ?list list:iterate (?i ?item) .
-    ?target a v:Node ; v:term ?item .
+    v:digraph v:hasNode ?target .
+    ?target v:term ?item .
 }
 => 
 {
-    [] a v:Edge ; v:source ?source ; v:sourcePort ?i ; v:target ?target ; 
-    
+    v:digraph v:hasEdge [ v:source ?source ; v:sourcePort ?i ; v:target ?target ] .    
 }
 .
 
 # edge coloring
 {
-    (?p { [] a v:Edge ; v:term ?p } ?ps) log:collectAllIn [] .
+    (?p { v:digraph v:hasEdge [ v:term ?p ] } ?ps) log:collectAllIn [] .
     ?ps list:iterate (?i ?prop) .
     (?i 1) math:sum ?color .
     ?edge v:term ?prop .
@@ -173,4 +164,4 @@
 }
 .
 
-{ } => { v:edge attr:colorscheme "paired12" } .
+{ } => { v:digraph v:edgeAttributes [ attr:colorscheme "paired12" ]  } .

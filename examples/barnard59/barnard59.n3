@@ -27,7 +27,8 @@ temp:pipeline temp:colors (
 } 
 => 
 {
-    ?pipeline a v:Node ; attr:color ?color ; attr:shape "box" .
+    v:digraph v:hasNode ?pipeline.
+    ?pipeline attr:color ?color ; attr:shape "box" .
 }.
 
 # fist step in a pipeline is linked with same color
@@ -36,8 +37,8 @@ temp:pipeline temp:colors (
 } 
 =>
 {
-    ?firstStep a v:Node .
-    [] a v:Edge; v:source ?p; v:target ?firstStep; attr:color ?color .
+    v:digraph v:hasNode ?firstStep ;
+        v:hasEdge [ v:source ?p; v:target ?firstStep; attr:color ?color ] .
 }
 .
 
@@ -50,13 +51,18 @@ temp:pipeline temp:colors (
 } 
 =>
 {
-    ?next a v:Node .
-    [] a v:Edge; v:source ?step; v:target ?next; attr:color ?color .
+    v:digraph v:hasNode ?next ;
+        v:hasEdge [ v:source ?step; v:target ?next; attr:color ?color ] .
 }
 .
 
 # use local name as label
-{ ?n a v:Node; log:rawType log:Other ; log:localName ?name } => { ?n attr:label ?name } .
+{ 
+    v:digraph v:hasNode ?n . 
+    ?n log:rawType log:Other ; log:localName ?name 
+} 
+=> 
+{ ?n attr:label ?name } .
 
 # simplified syntax
 { 
@@ -87,7 +93,8 @@ temp:pipeline temp:colors (
 }
 =>
 {
-    [] a v:Edge; v:source ?n; v:target ?arg; attr:arrowhead "inv"; attr:style "dashed".
+    v:digraph v:hasEdge 
+        [ v:source ?n; v:target ?arg; attr:arrowhead "inv"; attr:style "dashed" ] 
 }
 .
 
@@ -96,9 +103,10 @@ temp:pipeline temp:colors (
     ?n code:arguments [ code:name ?name; code:value ?value ] .
     ?value a p:Pipeline .
 }
-=>
+=> 
 {
-    [] a v:Edge; v:source ?n; v:target ?value; attr:label ?name; attr:arrowhead "inv"; attr:style "dashed".
+     v:digraph v:hasEdge
+        [ v:source ?n; v:target ?value; attr:label ?name; attr:arrowhead "inv"; attr:style "dashed" ]
 }
 .
 

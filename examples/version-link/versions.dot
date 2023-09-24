@@ -1,8 +1,8 @@
 digraph {
-  graph [rankdir="LR"]
-  
-  
-  "https://ld.admin.ch/ou/20014810/2023-01-01" [color="red",label=< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
+    graph [rankdir="LR"]
+    
+    
+    "https://ld.admin.ch/ou/20014810/2023-01-01" [color="red",label=< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">
 <TR><TD><I>name (de)</I></TD><TD>Zentrale Kanzlei</TD></TR>
 <TR><TD><I>name (fr)</I></TD><TD>Chancellerie centrale</TD></TR>
 <TR><TD><I>name (it)</I></TD><TD>Cancelleria centrale</TD></TR>
@@ -20,6 +20,6 @@ digraph {
 <TR><TD><I>name (de)</I></TD><TD>Zentrale Kanzlei &amp; Scancenter</TD></TR>
 <TR><TD><I>parentOrganization</I></TD><TD>https://ld.admin.ch/ou/20052477</TD></TR>
 </TABLE> >,shape="plaintext"]
-  "https://ld.admin.ch/ou/20014810/2023-01-01" -> "https://ld.admin.ch/ou/20014810/2023-09-09" [label="2023-09-09"]
+    "https://ld.admin.ch/ou/20014810/2023-01-01" -> "https://ld.admin.ch/ou/20014810/2023-09-09" [label="2023-09-09"]
 	"https://ld.admin.ch/ou/20014810/2023-09-09" -> "https://ld.admin.ch/ou/20014810/2023-09-18" [label="2023-09-18"]
 }

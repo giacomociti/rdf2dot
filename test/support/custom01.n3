@@ -10,9 +10,9 @@
 
 # rules
 {} => {
-    v:graph attr:rankdir "LR" .
-    v:node attr:color "red" .
-    v:edge attr:fontcolor "green" .
+    v:digraph v:graphAttributes [ attr:rankdir "LR" ] .
+    v:digraph v:nodettributes [  attr:color "red" ] .
+    v:digraph v:edgeAttributes [  attr:fontcolor "green" ] .
 }
 .
 
@@ -21,22 +21,19 @@
 } 
 => 
 {
-    ?p1 a v:Node .
-    ?p2 a v:Node .
-    [] a v:Edge ; v:source ?p1  ; v:target ?p2 .
+    v:digraph v:hasNode ?p1 , ?p2 ;
+        v:hasEdge [ v:source ?p1 ; v:target ?p2 ] .
 }
 .
 
 # expectations
 {
-    v:graph attr:rankdir "LR" .
-    v:node attr:color "red" .
-    v:edge attr:fontcolor "green" .
+    v:digraph v:graphAttributes [ attr:rankdir "LR" ] .
+    v:digraph v:nodettributes [  attr:color "red" ] .
+    v:digraph v:edgeAttributes [  attr:fontcolor "green" ] .
 
-    :p1 a v:Node .
-    :p2 a v:Node .
-    :p2 a v:Node .
-    [] a v:Edge ; v:source ?p1 ; v:target ?p2 .
-    [] a v:Edge ; v:source ?p1 ; v:target ?p3 .
+    v:digraph v:hasNode :p1 , :p2 , :p3 ;
+        v:hasEdge [ v:source :p1 ; v:target :p2 ] ;
+        v:hasEdge [ v:source :p1 ; v:target :p3 ] .
 }
 => { [] a earl:Pass } .

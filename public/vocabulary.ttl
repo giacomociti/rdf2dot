@@ -3,6 +3,14 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
+<digraph> a <Graph> ;
+    rdfs:label "digraph" ;
+    rdfs:comment "The main (directed) graph in a diagram." .
+
+<Graph> a rdfs:Class ; 
+    rdfs:label "Graph" ;
+    rdfs:comment "Graphs and sub-graphs in a diagram." .
+
 <Node> a rdfs:Class ; 
     rdfs:label "Node" ;
     rdfs:comment "Nodes (aka vertexes) in a graph diagram." .
@@ -10,6 +18,18 @@
 <Edge> a rdfs:Class ; 
     rdfs:label "Edge" ;
     rdfs:comment "Edges (aka links, arcs or arrows) in a graph diagram." .
+
+<hasNode> a rdf:Property ;
+    rdfs:domain <Graph> ;
+    rdfs:range <Node> ;
+    rdfs:label "has node" ;
+    rdfs:comment "Inclusion of a node in a graph." .
+
+<hasEdge> a rdf:Property ;
+    rdfs:domain <Graph> ;
+    rdfs:range <Edge> ;
+    rdfs:label "has edge" ;
+    rdfs:comment "Inclusion of an edge in a graph." .
 
 <source> a rdf:Property ;
     rdfs:domain <Edge> ;
@@ -47,15 +67,23 @@
     rdfs:label "target compass point" ;
     rdfs:comment "Compass point of target node/port." .
 
-<graph> rdfs:label "graph" ;
-    rdfs:comment "Resource whose attributes apply to the graph" .
+<graphAttributes> a rdf:Property ;
+    rdfs:domain <Graph> ;
+    rdfs:label "graph" ;
+    rdfs:comment "object with attributes for the graph" .
 
-<node> rdfs:label "node" ;
-    rdfs:comment "Resource whose attributes apply to all nodes in the graph" .
+<nodeAttributes> a rdf:Property ;
+    rdfs:domain <Graph> ;
+    rdfs:label "node" ;
+    rdfs:comment "object with attributes for the nodes in the graph" .
 
-<edge> rdfs:label "edge" ;
-    rdfs:comment "Resource whose attributes apply to all edges in the graph" .
+<edgeAttributes> a rdf:Property ;
+    rdfs:domain <Graph> ;
+    rdfs:label "edge" ;
+    rdfs:comment "object with attributes for the edges in the graph" .
 
+
+# domain includes Graph, Node, Edge and the range of graph, node and edge
 attr:label a rdf:Property .
 attr:shape a rdf:Property .
 attr:color a rdf:Property .

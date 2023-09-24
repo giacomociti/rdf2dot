@@ -11,9 +11,10 @@
 }
 =>
 {
-    [] a v:Edge ; 
-        v:source ?s ; 
+    v:digraph v:hasEdge [
+        v:source ?s ;
         v:target ?o ;
-        attr:label ?label 
+        attr:label ?label
+    ]
 }
 .

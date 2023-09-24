@@ -7,29 +7,32 @@
 
 { 
     ?s ?p ?o .
-      # to avoid loops, skip subjects that are nodes or edges
-    ( ?x { ?s a v:Edge } () ) log:collectAllIn [] .
-    ( ?x { ?s a v:Node } () ) log:collectAllIn [] .
+      # to avoid loops
+    ?p log:namespace ?ns .
+    v: log:uri [ log:notEqualTo ?ns ] .
+    attr: log:uri [ log:notEqualTo ?ns ] .
     (?s) log:skolem ?source .
     (?o) log:skolem ?target .
     ?p log:localName ?label ; log:uri ?tooltip
 }
 =>
 {
-    ?source a v:Node ; v:term ?s .
-    ?target a v:Node ; v:term ?o .
-    [] a v:Edge ;
+    ?source v:term ?s .
+    ?target v:term ?o .
+    v:digraph v:hasNode ?source , ?target .
+    v:digraph v:hasEdge [
         attr:label ?label ;
         attr:tooltip ?tooltip ;
         v:term ?p ;
         v:source ?source ;
         v:target ?target ;
+    ]
 }
 .
 
-
 {  
-    ?n a v:Node ; v:term ?uri .
+    v:digraph v:hasNode ?n .
+    ?n v:term ?uri .
     ?uri log:rawType log:Other .
     ?uri log:uri ?tooltip ;
          log:localName ?label .
@@ -41,7 +44,8 @@
 } .
 
 {  
-    ?n a v:Node ; v:term ?literal .
+    v:digraph v:hasNode ?n .
+    ?n v:term ?literal .
     ?literal log:rawType log:Literal .
     (?label ?type) log:dtlit ?literal .
     ?type log:notEqualTo rdf:langString .
@@ -55,7 +59,8 @@
 } .
 
 {  
-    ?n a v:Node ; v:term ?literal .
+    v:digraph v:hasNode ?n .
+    ?n v:term ?literal .
     ?literal log:rawType log:Literal .
     (?label rdf:langString) log:dtlit ?literal .
     (?text ?lang) log:langlit ?literal
@@ -70,7 +75,8 @@
 
 {
     ?blankType list:in (log:LabeledBlankNode log:UnlabeledBlankNode) .
-    ?n a v:Node ; v:term ?blank .
+    v:digraph v:hasNode ?n .
+    ?n v:term ?blank .
     ?blank log:rawType ?blankType 
 }
 => 
@@ -80,7 +86,8 @@
 } .
 
 {
-	?n a v:Node ; v:term ?list .
+    v:digraph v:hasNode ?n .
+	?n v:term ?list .
     ?list log:rawType rdf:List .
   	?list list:first ?first .
     ?list list:rest ?rest .

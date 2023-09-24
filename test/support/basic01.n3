@@ -12,50 +12,57 @@ _:b1 :containedIn :uk ;
     :name "London"@en , "Londra"@it .
 
 {
+   
+    ?p1 v:term :p1 ; attr:label "p1" ; attr:tooltip "http://example/org/p1" .
+    ?b1 v:term _:b1 ; attr:shape "circle" ; attr:label "".
+    ?ann v:term "Ann" ; attr:label "Ann" .
+    ?person v:term :Person ; attr:label "Person" ; attr:tooltip "http://example/org/Person" .
+    ?uk v:term :uk ; attr:label "uk" ; attr:tooltip "http://example/org/uk" .
+    ?london v:term "London"@en ; attr:label "London" ; attr:tooltip "en" .
+    ?londra v:term "Londra"@it ; attr:label "Londra" ; attr:tooltip "it" .
 
-    ?p1 a v:Node ; v:term :p1 ; attr:label "p1" ; attr:tooltip "http://example/org/p1" .
-    ?b1 a v:Node ; attr:shape "circle" ; attr:label "".
+    v:digraph v:hasNode ?p1 , ?b1 , ?ann , ?person , ?uk , ?london , ?londra .
 
-    [] a v:Edge ;
+    v:digraph v:hasEdge [
         v:source ?p1 ;
-        v:target [ a v:Node ; v:term :Person ; attr:label "Person" ; attr:tooltip "http://example/org/Person" ] ;
+        v:target ?person ;
         v:term rdf:type ;
         attr:label "type" ;
-        attr:tooltip "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" .
+        attr:tooltip "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ] .
 
-    [] a v:Edge ;
+    v:digraph v:hasEdge [
         v:source ?p1 ;
-        v:target [ a v:Node ; v:term "Ann" ; attr:label "Ann" ; attr:tooltip "http://www.w3.org/2001/XMLSchema#string" ] ;
+        v:target ?ann ;
         v:term :name ;
         attr:label "name" ;
-        attr:tooltip "http://example/org/name" .
+        attr:tooltip "http://example/org/name" ] .
 
-    [] a v:Edge ;
+    v:digraph v:hasEdge [
         v:source ?p1 ;
         v:target ?b1 ;
         v:term :livesIn ;
         attr:label "livesIn" ;
-        attr:tooltip "http://example/org/livesIn" .
+        attr:tooltip "http://example/org/livesIn" ] .
 
-    [] a v:Edge ;
+    v:digraph v:hasEdge [
         v:source ?b1 ;
-        v:target [ a v:Node ; v:term :uk ; attr:label "uk" ; attr:tooltip "http://example/org/uk" ] ;
+        v:target ?uk ;
         v:term :containedIn ;
         attr:label "containedIn" ;
-        attr:tooltip "http://example/org/containedIn" .
+        attr:tooltip "http://example/org/containedIn" ].
 
-    [] a v:Edge ;
+    v:digraph v:hasEdge [
         v:source ?b1 ;
-        v:target [ a v:Node ; v:term "London"@en ; attr:label "London" ; attr:tooltip "en" ] ;
+        v:target ?london ;
         v:term :name ;
         attr:label "name" ;
-        attr:tooltip "http://example/org/name" .
+        attr:tooltip "http://example/org/name" ] .
 
-    [] a v:Edge ;
+    v:digraph v:hasEdge [
         v:source ?b1 ;
-        v:target [ a v:Node ; v:term "Londra"@it ; attr:label "Londra" ; attr:tooltip "it" ] ;
+        v:target ?londra ;
         v:term :name ;
         attr:label "name" ;
-        attr:tooltip "http://example/org/name" .
+        attr:tooltip "http://example/org/name" ] .
 
 } => { [] a earl:Pass } .

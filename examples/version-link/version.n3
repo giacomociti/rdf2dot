@@ -7,10 +7,10 @@
 @prefix schema: <http://schema.org/> .
 @prefix vl: <https://version.link/> .
 
-{} => { v:graph attr:rankdir "LR" } .
+{} => { v:digraph v:graphAttributes [ attr:rankdir "LR" ] } .
 
 
-{ ?v a vl:Version } => { ?v a v:Node }.
+{ ?v a vl:Version } => { v:digraph v:hasNode ?v } .
 { ?v a vl:Deprecated } => { ?v attr:color "red" } .
 
 { 
@@ -19,7 +19,7 @@
 }
 =>
 {
-    [] a v:Edge ; v:source ?v ; v:target ?succ ; attr:label ?d
+    v:digraph v:hasEdge [ v:source ?v ; v:target ?succ ; attr:label ?d ]
 }.
 
 
@@ -56,7 +56,7 @@
 
 # if a node has some fields, shape it as a table with the fields as rows
 {
-    ?s a v:Node .
+    v:digraph v:hasNode ?s .
     ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
     ?fs log:notEqualTo () .
     (?fs "\n") string:join ?joined .

@@ -1,8 +1,8 @@
 digraph {
-  graph [rankdir="LR"]
-  node [color="red"]
-  edge [fontcolor="green",arrowhead="empty"]
-  "urn:ann" [label="Ann"]
+    graph [rankdir="LR"]
+    node [color="red"]
+    edge [fontcolor="green",arrowhead="empty"]
+    "urn:ann" [label="Ann"]
 	"urn:bern" [label="bern",shape="rectangle"]
-  "urn:ann" -> "urn:bern" [label="lives in",tooltip="urn:livesIn"]
+    "urn:ann" -> "urn:bern" [label="lives in",tooltip="urn:livesIn"]
 }

@@ -1,20 +1,24 @@
 @prefix v: <http://view/>.
 @prefix attr:  <http://view/dot/attribute/>.
 
-<urn:ann> a v:Node ;
+<urn:ann>
     attr:label "Ann" .
 
-<urn:bern> a v:Node ;
+<urn:bern>
     attr:shape "rectangle" ;
     attr:label "bern" .
 
-[] a v:Edge ;
-    v:source <urn:ann> ;
-    v:target <urn:bern> ;
-    attr:label "lives in" ;
-    attr:tooltip "urn:livesIn" .
-
-v:graph attr:rankdir "LR" .
-v:node attr:color "red" .
-v:edge attr:fontcolor "green" ;
-    attr:arrowhead "empty" .
+v:digraph
+    v:graphAttributes [ attr:rankdir "LR" ] ;
+    v:nodeAttributes [ attr:color "red"] ;
+    v:edgeAttributes [ 
+        attr:fontcolor "green" ;
+        attr:arrowhead "empty" ;
+    ] ;
+    v:hasNode <urn:ann> , <urn:bern> ;
+    v:hasEdge [
+        v:source <urn:ann> ;
+        v:target <urn:bern> ;
+        attr:label "lives in" ;
+        attr:tooltip "urn:livesIn" ;
+    ] .
