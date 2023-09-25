@@ -12,15 +12,19 @@
         A brief showcase (work in progress) of the main visualization rules and some hints to create custom ones.
     </p>
     
-    <p>Given the following example dataset:</p>
-    <pre id="data1"></pre>
+    <h2>General purpose rules</h2>
 
-    <p>let's see how it is rendered with some general purpose rules:</p>
+    <p> Two <a href="../index.html">available</a> general purpose rulesets 
+      are <a href="https://github.com/giacomociti/rdf2dot/blob/master/rules/basic.n3">basic</a> 
+      and <a href="https://github.com/giacomociti/rdf2dot/blob/master/rules/default.n3">default</a>. 
+      Let's see how they render the following example dataset:
+    </p>
+    <pre id="data1"></pre>
 
     <h3>basic</h3>
     <p>
       With the <em>basic</em> rules, every triple is shown as a link between its subject and object.
-      The edge label is the local name obtained from the property URI, which is available as tooltip.
+      The edge label is the local name obtained from the predicate URI, which is available as tooltip.
       Literal nodes have rectangular shape and the tooltip is either the data type or the language tag.
       Blank nodes are empty circles and regular URI nodes have the local name as label and the full URI as tooltip.
       This kind of diagram contains all the information of the dataset, but it is suitable only for very small ones.  
@@ -33,7 +37,26 @@
       hence literal values are embedded in the subject node label.
     </p>
     <div id="default1"></div>
-    
+
+    <h2>Domain specific rules</h2>
+
+    <h3>Pipelines</h3>
+    <p>
+      The <a href="https://github.com/zazuko/barnard59">barnard59</a> toolkit allows defining ETL pipelines in RDF.
+      Pipeline definitions can be <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/pipeline1.ttl">complex</a>, and 
+      <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/barnard59.n3">custom visualization rules</a> 
+      can help understanding them.
+    </p>
+    <div id="pipeline1"></div>
+    <p>
+      Pipelines are represented as rectangular nodes, each with a distinct color. The steps of a pipeline are connected by edges 
+      with the same color of the pipeline. This helps to follow the workflow even in the presence of steps shared by multiple 
+      pipelines, like <em>mergeInputsStep</em> in the example. The tooltip of each step contains implementation details, like 
+      the code module called and its arguments. Some steps have sub-pipelines among their arguments, like <em>mergeInputsStep</em>
+      which takes as input <em>mergeInputsPipeline</em> and, in turn, <em>transformStep</em> which takes as input <em>transformPipeline</em>.
+      In these cases, a strange inverted arrow is used to suggest that the data produced by the sub-pipeline feed the calling step.
+    </p>
+
     <a href="./overview.html">overview</a>
 
     <script type="module" src="./examples.js"></script>

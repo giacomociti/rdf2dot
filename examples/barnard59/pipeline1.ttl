@@ -1,0 +1,106 @@
+@base <http://ld.admin.ch/pipeline/metadata/> .
+@prefix code: <https://code.described.at/> .
+@prefix p: <https://pipeline.described.at/> .
+
+_:variables p:variable
+  [ a p:Variable; p:name "inputDirMetadata"; p:value "metadata/*.ttl" ] ,
+  [ a p:Variable; p:name "graph"; p:value "https://lindas.admin.ch/meta" ] .
+
+<mainCreateFile> a p:Pipeline, p:Readable;
+  p:variables _:variables ;
+  p:steps [
+    p:stepList (<mergeInputsStep> <serialize>)
+  ].
+
+<mainUpload> a p:Pipeline;
+  p:variables _:variables;
+  p:steps [
+    p:stepList (<mergeInputsStep> <setGraph> <upload>)
+  ].
+
+<mergeInputsStep> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base/concat.js#object> ;
+    a code:EcmaScriptModule ] ;
+  code:arguments (<mergeInputsPipeline>) .
+
+<mergeInputsPipeline> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps [
+    p:stepList
+    ( <readDirMetadata> <transformStep> <metadataTimestamp> <appendTimeQuads>)
+  ].
+
+<appendTimeQuads>
+  a                  p:Step ;
+  code:implementedBy [ a         code:EcmaScriptModule ;
+                       code:link <file:../time/timeStep.js#appendQuads> ] .
+
+<readDirMetadata> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base/glob.js#default> ;
+    a code:EcmaScriptModule
+  ];
+  code:arguments [
+    code:name  "pattern" ;
+    code:value "inputDirMetadata"^^p:VariableName
+  ] .
+
+<transformStep> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-base/forEach.js#default> ;
+    a code:EcmaScriptModule
+  ] ;
+  code:arguments ( <transformPipeline> "file"^^code:EcmaScriptModule ) .
+
+<transformPipeline> a p:Pipeline, p:ReadableObjectMode ;
+  p:steps [
+    p:stepList (<readFile> <parse>)
+  ].
+
+<readFile> a p:Step ;
+  code:implementedBy [
+    code:link <node:fs#createReadStream> ;
+    a code:EcmaScriptModule ] ;
+  code:arguments  ("${file}"^^code:EcmaScriptTemplateLiteral).
+
+<metadataTimestamp> a p:Step;
+   code:implementedBy [
+                        a code:EcmaScriptModule;
+                        code:link <node:barnard59-base#map>
+                      ];
+                     code:arguments([ a code:EcmaScriptModule;
+                                      code:link <file:../common/timestamp.js#dateModified>;
+                     ]).
+
+<parse> a p:Step ;
+  code:implementedBy [
+    code:link <node:barnard59-formats/n3.js#parse> ;
+    a code:EcmaScriptModule
+  ] .
+
+<serialize> a p:Step;
+  code:implementedBy [
+    code:link <node:barnard59-formats/ntriples.js#serialize> ;
+    a code:EcmaScriptModule
+  ].
+
+<setGraph> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-rdf/setGraph.js#default>
+  ];
+  code:arguments ( "graph"^^p:VariableName ).
+
+<upload> a p:Step;
+  code:implementedBy [ a code:EcmaScriptModule;
+    code:link <node:barnard59-graph-store/put.js#default>
+  ];
+  code:arguments [
+    code:name "endpoint";
+    code:value "endpoint"^^p:VariableName
+  ], [
+    code:name "user";
+    code:value "user"^^p:VariableName
+  ], [
+    code:name "password";
+    code:value "password"^^p:VariableName
+  ].
