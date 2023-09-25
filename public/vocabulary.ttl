@@ -31,6 +31,12 @@
     rdfs:label "has edge" ;
     rdfs:comment "Inclusion of an edge in a graph." .
 
+<subgraph> a rdf:Property ;
+    rdfs:domain <Graph> ;
+    rdfs:range <Graph> ;
+    rdfs:label "has subgraph" ;
+    rdfs:comment "Inclusion of a subgraph in a graph." .
+
 <source> a rdf:Property ;
     rdfs:domain <Edge> ;
     rdfs:range <Node> ;
@@ -46,7 +52,7 @@
 <sourcePort> a rdf:Property ;
     rdfs:domain <Edge> ;
     rdfs:range rdfs:Literal ;
-    rdfs:label "source port" ;
+    rdfs:label "source port name" ;
     rdfs:comment "Indicates where on the source node to attach the tail of the edge." .
 
 <sourceCompass> a rdf:Property ;
@@ -58,7 +64,7 @@
 <targetPort> a rdf:Property ;
     rdfs:domain <Edge> ;
     rdfs:range rdfs:Literal ;
-    rdfs:label "target port" ;
+    rdfs:label "target port name" ;
     rdfs:comment "Indicates where on the target node to attach the head of the edge." .
 
 <targetCompass> a rdf:Property ;
@@ -69,17 +75,17 @@
 
 <graphAttributes> a rdf:Property ;
     rdfs:domain <Graph> ;
-    rdfs:label "graph" ;
+    rdfs:label "graph attributes" ;
     rdfs:comment "object with attributes for the graph" .
 
 <nodeAttributes> a rdf:Property ;
     rdfs:domain <Graph> ;
-    rdfs:label "node" ;
+    rdfs:label "node attributes" ;
     rdfs:comment "object with attributes for the nodes in the graph" .
 
 <edgeAttributes> a rdf:Property ;
     rdfs:domain <Graph> ;
-    rdfs:label "edge" ;
+    rdfs:label "edge attributes" ;
     rdfs:comment "object with attributes for the edges in the graph" .
 
 

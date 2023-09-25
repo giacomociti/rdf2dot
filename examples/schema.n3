@@ -1,0 +1,51 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix attr: <http://view/dot/attribute/> .
+@prefix v: <http://view/> .
+
+{ 
+    ?property a rdf:Property ;
+         rdfs:label ?label ;
+         rdfs:comment ?comment ;
+         rdfs:domain ?domain ;
+         rdfs:range ?range .
+    ?domain a rdfs:Class .
+    ?range a rdfs:Class .
+}
+=>
+{
+    v:digraph v:hasEdge ?property .
+    ?property 
+        attr:label ?label ;
+        attr:labeltooltip ?comment ;   
+        v:source ?domain ;
+        v:target ?range ;
+}
+.
+
+{
+    ?class a rdfs:Class ;
+        rdfs:label ?classLabel ;
+        rdfs:comment ?comment .
+    ('<TR><TD><B>%s</B></TD></TR>' ?classLabel) string:format ?classRow .
+    (?propertyRow {
+        [] a rdf:Property ;
+            rdfs:label ?propertyLabel ;
+            rdfs:domain ?class ;
+            rdfs:range rdfs:Literal .
+        ('<TR><TD ALIGN="LEFT">%s</TD></TR>' ?propertyLabel) string:format ?propertyRow .
+    } ?propertyRows) log:collectAllIn [] .
+
+    (?propertyRows '\n') string:join ?rows .
+    ('<<TABLE CELLBORDER="0"> %s\n%s </TABLE>>' ?classRow ?rows) string:format ?htmlLabel .
+}
+=>
+{
+    v:digraph v:hasNode ?class .
+    ?class attr:shape 'plaintext' ;
+        attr:tooltip ?comment ;
+        attr:label ?htmlLabel .
+} .

@@ -1,29 +1,30 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <title>Rdf Visualization Rules - Examples</title>
+    <title>Rdf Visualization Rules</title>
     <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="/rdf_flyer.24" />
   </head>
   <body>
-    <h1>Rdf Visualization Rules - Examples</h1>
+    <h1>Rdf Visualization Rules</h1>
     <p>
-        A brief showcase (work in progress) of the main visualization rules and some hints to create custom ones.
+        This is a brief showcase (work in progress) of visualization rules, with links to their definitions.
+        See the <a href="./overview.html">overview</a> for an introduction.
     </p>
     
     <h2>General purpose rules</h2>
 
     <p> Two <a href="../index.html">available</a> general purpose rulesets 
-      are <a href="https://github.com/giacomociti/rdf2dot/blob/master/rules/basic.n3">basic</a> 
-      and <a href="https://github.com/giacomociti/rdf2dot/blob/master/rules/default.n3">default</a>. 
+      are <em>basic</em> and <em>default</em>. 
       Let's see how they render the following example dataset:
     </p>
     <pre id="data1"></pre>
 
     <h3>basic</h3>
     <p>
-      With the <em>basic</em> rules, every triple is shown as a link between its subject and object.
+      With the <a href="https://github.com/giacomociti/rdf2dot/blob/master/rules/basic.n3">basic</a> rules, 
+      every triple is shown as a link between its subject and object.
       The edge label is the local name obtained from the predicate URI, which is available as tooltip.
       Literal nodes have rectangular shape and the tooltip is either the data type or the language tag.
       Blank nodes are empty circles and regular URI nodes have the local name as label and the full URI as tooltip.
@@ -33,12 +34,32 @@
     
     <h3>default</h3>
     <p>
-      The <em>default</em> rules make compact visualizations: only the subjects of some triple become nodes, 
+      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/rules/default.n3">default</a> rules 
+      make compact visualizations: only the subjects of some triple become nodes, 
       hence literal values are embedded in the subject node label.
     </p>
     <div id="default1"></div>
 
     <h2>Domain specific rules</h2>
+
+    <h3>Vocabulary</h3>
+    <p>
+      As a first example of custom rules we can draw a diagram for our own <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>:
+    </p>
+    <div id="vocabulary1"></div>
+    <p>
+      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/schema.n3">rules</a> used here may be usable 
+      (or at least a good starting point) also to draw other vocabularies, but there are a few assumptions, made for simplicity, 
+      that may not hold in other cases (like the existence of a single label and comment for each class and property).
+      There are excellent ontology visualization tools out there, our modest purpose is to look at custom visualization rules.
+      </p>
+      <p>
+      The focus is on class definitions (that become nodes) and definitions of properties whose domain is one of the classes. 
+      If also the range is one of the classes, the property is shown as an edge between the two classes. If the range is literal,
+      the property is embedded in the label of its domain class. This label is created as an
+      <a href="https://graphviz.org/doc/info/shapes.html#html">HTML-like table</a> with the aid 
+      of a few <a href="https://github.com/eyereasoner/Notation3-By-Example">N3 built-ins</a>.
+    </p>
 
     <h3>Pipelines</h3>
     <p>
@@ -57,7 +78,7 @@
       In these cases, a strange inverted arrow is used to suggest that the data produced by the sub-pipeline feed the calling step.
     </p>
 
-    <a href="./overview.html">overview</a>
+    
 
     <script type="module" src="./examples.js"></script>
   </body>
