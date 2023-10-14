@@ -60,7 +60,8 @@
 { 
     v:digraph v:hasNode ?n .
     ?n v:term [ ?p ?o ] .
-    (?fieldValue ?dataType) log:dtlit ?o . # ensure is literal
+    ?o log:rawType log:Literal .
+    (?fieldValue ?dataType) log:dtlit ?o .
     ?p log:localName ?fieldName .
 
     (   ?fieldValue
