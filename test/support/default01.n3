@@ -1,0 +1,37 @@
+@prefix : <http://example/org/> .
+@prefix v: <http://view/> .
+@prefix attr:  <http://view/dot/attribute/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+
+# data
+:p1 :knows :p2 , :p3 .
+:p2 :name "alice" .
+
+
+# rules
+{
+    v:digraph 
+        v:edgeAttributes [ attr:colorscheme "paired12" ] ;
+        v:hasNode ?p1, ?p2 ;
+        v:hasEdge [ 
+            v:source ?p1 ; 
+            v:target ?p2 ;
+            attr:label "knows" ;
+            attr:tooltip "knows" ;
+            attr:labelURL "http://example/org/knows" ;
+            attr:color 1 ;
+    ] .
+        
+    ?p1 
+        attr:tooltip "http://example/org/p1" ;
+        attr:URL "http://example/org/p1" ;
+        attr:shape "plaintext" ;
+        attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD><I>knows</I></TD><TD>p3</TD></TR>\n</TABLE> >".
+    ?p2 
+        attr:tooltip "http://example/org/p2" ;
+        attr:URL "http://example/org/p2" ;
+        attr:shape "plaintext" ;
+        attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD><I>name</I></TD><TD>alice</TD></TR>\n</TABLE> >".
+}
+=> { [] a earl:Pass } .

@@ -1,0 +1,31 @@
+@prefix : <http://example/org/> .
+@prefix v: <http://view/> .
+@prefix attr:  <http://view/dot/attribute/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix earl: <http://www.w3.org/ns/earl#> .
+
+# data
+:p1 :items (1 :two :three) .
+:two :name "two" .
+
+
+# rules
+{
+    v:digraph v:hasNode ?list , ?two .
+   
+    ?list attr:label '< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD PORT=\"0\">1</TD></TR>\n<TR><TD PORT=\"1\">&lt;http://example/org/two&gt;</TD></TR>\n<TR><TD PORT=\"2\">&lt;http://example/org/three&gt;</TD></TR>\n</TABLE> >' .
+    ?two attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD><I>name</I></TD><TD>two</TD></TR>\n</TABLE> >".
+   
+    v:digraph v:hasEdge 
+    [
+        attr:label "items" ;
+        v:target ?list
+    ] , [
+        v:source ?list ;
+        v:sourcePort 1 ;
+        v:target [ attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD><I>name</I></TD><TD>two</TD></TR>\n</TABLE> >" ]
+    ] .
+
+   
+}
+=> { [] a earl:Pass } .
