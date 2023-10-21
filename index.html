@@ -8,27 +8,36 @@
     </head>
     <body>
         <h1>RDF data visualization</h1>
-        <p>Choose an RDF data file and press the <em>Show</em> button. </p>
-        <small>
-            Optionally customize visualization by choosing available rules or providing custom ones (see the <a href="./doc/overview.html">overview</a> for an introduction).
-        </small>
-
-        <p></p>
+        
         <label for="file">RDF data</label>
         <input id="file" type="file" accept=".ttl,.nt,.nq">
-        <p></p>
+        <style>
+            rdf-editor {
+                border: 1px solid black;
+                width: 500px;
+                height: 150px;
+            }
+
+            .resizable-content {
+                min-height: 30px;
+                min-width: 30px;
+                resize: both;
+                overflow: auto;
+            }
+        </style>
+        <rdf-editor class="resizable-content" id="data" format="application/trig"></rdf-editor>
 
         <label for="selectRules">Use available rules</label>
         <select id="selectRules"></select>
         <br>
         <label for="rules">or use custom rules</label>
         <input id="rules" type="file" accept=".n3">
-
-        <p></p>
-        <button id="show" disabled>Show</button>
+        
+        <p><small>see the <a href="./doc/overview.html">overview</a> for an introduction</small></p>
+        
+        <button id="show">Show</button>
         <button id="save" disabled>Save</button>
         <br>
-
         <div id="graph" style="text-align: center;"></div>
 
         <script type="module" src="./index.js"></script>
