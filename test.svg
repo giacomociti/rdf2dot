@@ -1,14 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="278pt" height="149pt" viewBox="0.00 0.00 278.17 148.80">
-<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 144.8)">
-<polygon fill="white" stroke="none" points="-4,4 -4,-144.8 274.17,-144.8 274.17,4 -4,4"></polygon>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="276pt" height="187pt" viewBox="0.00 0.00 276.00 186.80">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 182.8)">
+<polygon fill="white" stroke="none" points="-4,4 -4,-182.8 272,-182.8 272,4 -4,4"></polygon>
 <!-- b0_sk_0 -->
 <g id="node1" class="node">
 <title>b0_sk_0</title>
 <g id="a_node1"><a xlink:href="http://www.wikidata.org/entity/Q12418" xlink:title="http://www.wikidata.org/entity/Q12418">
-<polygon fill="none" stroke="black" points="8,-111.4 8,-134.2 35.77,-134.2 35.77,-111.4 8,-111.4"></polygon>
-<text text-anchor="start" x="11" y="-119.6" font-family="Times,serif" font-style="italic" font-size="14.00">title</text>
-<polygon fill="none" stroke="black" points="35.77,-111.4 35.77,-134.2 102.04,-134.2 102.04,-111.4 35.77,-111.4"></polygon>
-<text text-anchor="start" x="38.77" y="-118.6" font-family="Times,serif" font-size="14.00">Mona Lisa</text>
+<polygon fill="none" stroke="black" points="8,-152.8 8,-174.8 101,-174.8 101,-152.8 8,-152.8"></polygon>
+<text text-anchor="start" x="31.94" y="-159.2" font-family="Times,serif" font-size="14.00">Q12418</text>
+<polygon fill="none" stroke="black" points="8,-130.8 8,-152.8 35,-152.8 35,-130.8 8,-130.8"></polygon>
+<text text-anchor="start" x="10.61" y="-138.2" font-family="Times,serif" font-style="italic" font-size="14.00">title</text>
+<polygon fill="none" stroke="black" points="35,-130.8 35,-152.8 101,-152.8 101,-130.8 35,-130.8"></polygon>
+<text text-anchor="start" x="37.87" y="-137.2" font-family="Times,serif" font-size="14.00">Mona Lisa</text>
 </a>
 </g>
 </g>
@@ -16,14 +18,16 @@
 <g id="node3" class="node">
 <title>b0_sk_2</title>
 <g id="a_node3"><a xlink:href="http://dbpedia.org/resource/Leonardo_da_Vinci" xlink:title="http://dbpedia.org/resource/Leonardo_da_Vinci">
-<polygon fill="none" stroke="black" points="29.02,-26 29.02,-48 94.02,-48 94.02,-26 29.02,-26"></polygon>
-<text text-anchor="start" x="31.57" y="-33.4" font-family="Times,serif" font-style="italic" font-size="14.00">birthName</text>
-<polygon fill="none" stroke="black" points="94.02,-26 94.02,-48 225.02,-48 225.02,-26 94.02,-26"></polygon>
-<text text-anchor="start" x="107.04" y="-32.4" font-family="Times,serif" font-size="14.00">Leonardo da Vinci</text>
-<polygon fill="none" stroke="black" points="29.02,-4 29.02,-26 94.02,-26 94.02,-4 29.02,-4"></polygon>
-<text text-anchor="start" x="31.97" y="-11.4" font-family="Times,serif" font-style="italic" font-size="14.00">birthPlace</text>
-<polygon fill="none" stroke="black" points="94.02,-4 94.02,-26 225.02,-26 225.02,-4 94.02,-4"></polygon>
-<text text-anchor="start" x="96.93" y="-10.4" font-family="Times,serif" font-size="14.00">Republic_of_Florence</text>
+<polygon fill="none" stroke="black" points="27.5,-48 27.5,-70 223.5,-70 223.5,-48 27.5,-48"></polygon>
+<text text-anchor="start" x="69.52" y="-54.4" font-family="Times,serif" font-size="14.00">Leonardo_da_Vinci</text>
+<polygon fill="none" stroke="black" points="27.5,-26 27.5,-48 92.5,-48 92.5,-26 27.5,-26"></polygon>
+<text text-anchor="start" x="30.06" y="-33.4" font-family="Times,serif" font-style="italic" font-size="14.00">birthName</text>
+<polygon fill="none" stroke="black" points="92.5,-26 92.5,-48 223.5,-48 223.5,-26 92.5,-26"></polygon>
+<text text-anchor="start" x="105.52" y="-32.4" font-family="Times,serif" font-size="14.00">Leonardo da Vinci</text>
+<polygon fill="none" stroke="black" points="27.5,-4 27.5,-26 92.5,-26 92.5,-4 27.5,-4"></polygon>
+<text text-anchor="start" x="30.45" y="-11.4" font-family="Times,serif" font-style="italic" font-size="14.00">birthPlace</text>
+<polygon fill="none" stroke="black" points="92.5,-4 92.5,-26 223.5,-26 223.5,-4 92.5,-4"></polygon>
+<text text-anchor="start" x="95.41" y="-10.4" font-family="Times,serif" font-size="14.00">Republic_of_Florence</text>
 </a>
 </g>
 </g>
@@ -31,12 +35,12 @@
 <g id="edge1" class="edge">
 <title>b0_sk_0-&gt;b0_sk_2</title>
 <g id="a_edge1"><a xlink:title="creator">
-<path fill="none" stroke="#1f78b4" d="M67.89,-104.85C77.29,-92.48 90.34,-75.3 101.79,-60.22"></path>
-<polygon fill="#1f78b4" stroke="#1f78b4" points="105.04,-62.72 108.3,-52.64 99.47,-58.49 105.04,-62.72"></polygon>
+<path fill="none" stroke="#1f78b4" d="M70.08,-126.83C78.13,-113.93 88.19,-97.8 97.53,-82.84"></path>
+<polygon fill="#1f78b4" stroke="#1f78b4" points="100.9,-85.05 103.22,-74.71 94.96,-81.34 100.9,-85.05"></polygon>
 </a>
 </g>
 <g id="a_edge1-label"><a xlink:href="http://purl.org/dc/terms/creator" xlink:title="creator">
-<text text-anchor="middle" x="113.45" y="-74.2" font-family="Times,serif" font-size="14.00">creator</text>
+<text text-anchor="middle" x="109.93" y="-96.2" font-family="Times,serif" font-size="14.00">creator</text>
 </a>
 </g>
 </g>
@@ -44,10 +48,12 @@
 <g id="node2" class="node">
 <title>b0_sk_1</title>
 <g id="a_node2"><a xlink:href="http://www.wikidata.org/entity/Q128910" xlink:title="http://www.wikidata.org/entity/Q128910">
-<polygon fill="none" stroke="black" points="135.87,-111.4 135.87,-134.2 163.64,-134.2 163.64,-111.4 135.87,-111.4"></polygon>
-<text text-anchor="start" x="138.87" y="-119.6" font-family="Times,serif" font-style="italic" font-size="14.00">title</text>
-<polygon fill="none" stroke="black" points="163.64,-111.4 163.64,-134.2 262.17,-134.2 262.17,-111.4 163.64,-111.4"></polygon>
-<text text-anchor="start" x="166.64" y="-118.6" font-family="Times,serif" font-size="14.00">The Last Supper</text>
+<polygon fill="none" stroke="black" points="135,-152.8 135,-174.8 260,-174.8 260,-152.8 135,-152.8"></polygon>
+<text text-anchor="start" x="171.44" y="-159.2" font-family="Times,serif" font-size="14.00">Q128910</text>
+<polygon fill="none" stroke="black" points="135,-130.8 135,-152.8 162,-152.8 162,-130.8 135,-130.8"></polygon>
+<text text-anchor="start" x="137.61" y="-138.2" font-family="Times,serif" font-style="italic" font-size="14.00">title</text>
+<polygon fill="none" stroke="black" points="162,-130.8 162,-152.8 260,-152.8 260,-130.8 162,-130.8"></polygon>
+<text text-anchor="start" x="164.73" y="-137.2" font-family="Times,serif" font-size="14.00">The Last Supper</text>
 </a>
 </g>
 </g>
@@ -55,12 +61,12 @@
 <g id="edge2" class="edge">
 <title>b0_sk_1-&gt;b0_sk_2</title>
 <g id="a_edge2"><a xlink:title="creator">
-<path fill="none" stroke="#1f78b4" d="M186.15,-104.85C176.75,-92.48 163.7,-75.3 152.25,-60.22"></path>
-<polygon fill="#1f78b4" stroke="#1f78b4" points="154.57,-58.49 145.74,-52.64 149,-62.72 154.57,-58.49"></polygon>
+<path fill="none" stroke="#1f78b4" d="M181.7,-126.83C173.54,-113.93 163.34,-97.8 153.87,-82.84"></path>
+<polygon fill="#1f78b4" stroke="#1f78b4" points="156.4,-81.29 148.09,-74.71 150.48,-85.03 156.4,-81.29"></polygon>
 </a>
 </g>
 <g id="a_edge2-label"><a xlink:href="http://purl.org/dc/terms/creator" xlink:title="creator">
-<text text-anchor="middle" x="190.45" y="-74.2" font-family="Times,serif" font-size="14.00">creator</text>
+<text text-anchor="middle" x="188.93" y="-96.2" font-family="Times,serif" font-size="14.00">creator</text>
 </a>
 </g>
 </g>

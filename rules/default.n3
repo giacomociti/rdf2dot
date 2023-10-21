@@ -36,11 +36,14 @@
     v:digraph v:hasNode ?n .
     ?n v:term ?term .
     ?term log:rawType [ log:notEqualTo log:LabeledBlankNode , log:UnlabeledBlankNode ] .
-    ?term  log:uri ?uri .
+    ?term log:uri ?uri .
+    ?term log:localName ?localName .
+    ('<TR><TD ALIGN="CENTER" COLSPAN="2">%s</TD></TR>' ?localName) string:format ?field
 }
 =>
 {
-    ?n attr:tooltip ?uri ; attr:URL ?uri
+    ?n attr:tooltip ?uri ; attr:URL ?uri .
+    ?n v:field ?field .
 }.
 
 
@@ -63,12 +66,7 @@
     ?o log:rawType log:Literal .
     (?fieldValue ?dataType) log:dtlit ?o .
     ?p log:localName ?fieldName .
-
-    (   ?fieldValue
-        ("&" "<" ">" '"') 
-        ("&amp;" "&lt;" "&gt;" "&quot;")
-    ) string:replaceAll ?escapedValue .
-
+    ?fieldValue v:escape ?escapedValue .
     ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?escapedValue) string:format ?field
 } 
 => 
@@ -85,12 +83,7 @@
     [] log:notIncludes { ?o [] [] } .
     ?p log:localName ?fieldName .
     ?o log:localName ?fieldValue .
-   
-    (   ?fieldValue
-        ("&" "<" ">" '"')
-        ("&amp;" "&lt;" "&gt;" "&quot;")
-    ) string:replaceAll ?escapedValue .
-
+    ?fieldValue v:escape ?escapedValue .
     ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?escapedValue) string:format ?field
 }
 =>
@@ -125,10 +118,7 @@
     ?list list:iterate (?i ?item) .
 
     ("%s" ?item) string:format ?fieldValue .
-    (   ?fieldValue
-        ("&" "<" ">" '"') 
-        ("&amp;" "&lt;" "&gt;" "&quot;")
-    ) string:replaceAll ?escapedValue .
+    ?fieldValue v:escape ?escapedValue .
 
     ( '<TR><TD PORT="%s">%s</TD></TR>' ?i ?escapedValue) string:format ?field
 }
@@ -166,3 +156,10 @@
 .
 
 { } => { v:digraph v:edgeAttributes [ attr:colorscheme "paired12" ]  } .
+
+{ ?text v:escape ?escaped } <= {
+    (?text
+    ("&" "<" ">" '"') 
+    ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escaped .
+} .

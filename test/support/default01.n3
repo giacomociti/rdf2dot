@@ -27,11 +27,11 @@
         attr:tooltip "http://example/org/p1" ;
         attr:URL "http://example/org/p1" ;
         attr:shape "plaintext" ;
-        attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD><I>knows</I></TD><TD>p3</TD></TR>\n</TABLE> >".
+        attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD ALIGN=\"CENTER\" COLSPAN=\"2\">p1</TD></TR>\n<TR><TD><I>knows</I></TD><TD>p3</TD></TR>\n</TABLE> >".
     ?p2 
         attr:tooltip "http://example/org/p2" ;
         attr:URL "http://example/org/p2" ;
         attr:shape "plaintext" ;
-        attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD><I>name</I></TD><TD>alice</TD></TR>\n</TABLE> >".
+        attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD ALIGN=\"CENTER\" COLSPAN=\"2\">p2</TD></TR>\n<TR><TD><I>name</I></TD><TD>alice</TD></TR>\n</TABLE> >".
 }
 => { [] a earl:Pass } .
