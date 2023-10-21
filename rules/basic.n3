@@ -13,7 +13,7 @@
     attr: log:uri [ log:notEqualTo ?ns ] .
     (?s) log:skolem ?source .
     (?o) log:skolem ?target .
-    ?p log:localName ?label ; log:uri ?tooltip
+    ?p log:localName ?label ; log:uri ?predicateURI
 }
 =>
 {
@@ -22,7 +22,8 @@
     v:digraph v:hasNode ?source , ?target .
     v:digraph v:hasEdge [
         attr:label ?label ;
-        attr:tooltip ?tooltip ;
+        attr:tooltip ?predicateURI ;
+        attr:labelURL ?predicateURI ;
         v:term ?p ;
         v:source ?source ;
         v:target ?target ;
@@ -32,15 +33,18 @@
 
 {  
     v:digraph v:hasNode ?n .
-    ?n v:term ?uri .
-    ?uri log:rawType log:Other .
-    ?uri log:uri ?tooltip ;
-         log:localName ?label .
+    ?n v:term [
+        log:rawType log:Other ;
+        log:uri ?uri ;
+        log:localName ?label ;
+    ] .
+
 }
 => 
 {
     ?n attr:label ?label ;
-        attr:tooltip ?tooltip .
+        attr:URL ?uri ;
+        attr:tooltip ?uri .
 } .
 
 {  
