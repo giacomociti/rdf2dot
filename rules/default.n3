@@ -17,8 +17,9 @@
 }
 =>
 {
-    v:digraph v:hasNode [ v:term ?s ] .
-}.
+    v:digraph v:hasNode [ v:term ?s ]
+}
+.
 
 # all properties connecting two nodes become edges
 {     
@@ -29,24 +30,25 @@
 }
 =>
 {
-    v:digraph v:hasEdge [ v:source ?source ; v:target ?target ; v:term ?p ] .
-}.
+    v:digraph v:hasEdge [ v:source ?source ; v:target ?target ; v:term ?p ]
+}
+.
 
-# node tooltips and URLs
+# node header, tooltips and URL
 { 
     v:digraph v:hasNode ?n .
-    ?n v:term ?term .
-    ?term log:rawType [ log:notEqualTo log:LabeledBlankNode , log:UnlabeledBlankNode ] .
-    ?term log:uri ?uri .
-    ?term log:localName ?localName .
-    ('<TR><TD ALIGN="CENTER" COLSPAN="2">%s</TD></TR>' ?localName) string:format ?field
+    ?n v:term [
+        log:rawType [ log:notEqualTo log:LabeledBlankNode , log:UnlabeledBlankNode ] ;
+        log:uri ?uri ;
+        v:text ?text ;
+    ] .
+    ('<TR><TD ALIGN="CENTER" COLSPAN="2">%s</TD></TR>' ?text) string:format ?header .
 }
 =>
 {
-    ?n attr:tooltip ?uri ; attr:URL ?uri .
-    ?n v:field ?field .
-}.
-
+    ?n v:header ?header ; attr:URL ?uri ; attr:tooltip ?uri 
+}
+.
 
 
 # edge labels, tooltips and URLs
@@ -56,57 +58,52 @@
 }
 => 
 {
-    ?e attr:label ?name ; attr:tooltip ?name ; attr:labelURL ?uri .
+    ?e attr:label ?name ; attr:tooltip ?name ; attr:labelURL ?uri
 }
 .
 
-# collect literal properties as node fields
-{ 
-    v:digraph v:hasNode ?n .
-    ?n v:term [ ?p ?o ] .
-    ?o log:rawType log:Literal .
-    (?fieldValue ?dataType) log:dtlit ?o .
-    ?p log:localName ?fieldName .
-    ?fieldValue v:escape ?escapedValue .
-    ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?escapedValue) string:format ?field
-} 
-=> 
-{ 
-    ?n v:field ?field .
-} .
 
-
-# collect fields for uri properties with objects which are not nodes
+# collect fields for properties with objects which are not nodes
 {
     v:digraph v:hasNode ?n .
     ?n v:term [ ?p ?o ] .
-    ?o log:uri [] .
     [] log:notIncludes { ?o [] [] } .
     ?p log:localName ?fieldName .
-    ?o log:localName ?fieldValue .
+    ?o v:text ?fieldValue .
     ?fieldValue v:escape ?escapedValue .
     ( "<TR><TD><I>%s</I></TD><TD>%s</TD></TR>" ?fieldName ?escapedValue) string:format ?field
 }
 =>
 {
-    ?n v:field ?field ;
+    ?n v:field ?field
 }
 .
 
-# if a node has fields, its label is a table with the fields as rows
+# node shape and label
 {
-    v:digraph v:hasNode ?s .
-    ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
-    ?fs log:notEqualTo () .
-    (?fs "\n") string:join ?joined .
-    ( '< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n%s\n</TABLE> >' ?joined) string:format ?label
+    v:digraph v:hasNode ?n .
+    ( ?h { ?n v:header ?h } ?hs ) log:collectAllIn [] .
+    ( ?f { ?n v:field ?f } ?fs ) log:collectAllIn [] .
+    (?hs ?fs) list:append ?all .
+    (?all "\n") string:join ?joined .
+
+    (
+       { ?joined log:equalTo '' } # blank node without fields
+       { 
+        ?shape log:equalTo "box" .
+        ?label log:equalTo ''. 
+       } 
+       { 
+        ?shape log:equalTo "plaintext" .
+        ( '< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n%s\n</TABLE> >' ?joined) string:format ?label .
+       }
+    ) log:ifThenElseIn [] .
 }
 =>
 {
-    ?s attr:shape "plaintext" ; attr:label ?label
+    ?n attr:shape ?shape ; attr:label ?label
 }
 .
-
 
 
 # lists
@@ -117,10 +114,8 @@
     ?n v:term ?list .
     ?list log:rawType rdf:List .
     ?list list:iterate (?i ?item) .
-
-    ("%s" ?item) string:format ?fieldValue .
+    ?item v:text ?fieldValue .
     ?fieldValue v:escape ?escapedValue .
-
     ( '<TR><TD PORT="%s">%s</TD></TR>' ?i ?escapedValue) string:format ?field
 }
 => 
@@ -164,3 +159,8 @@
     ("&amp;" "&lt;" "&gt;" "&quot;")
     ) string:replaceAll ?escaped .
 } .
+
+
+{ ?node v:text " " } <= { ?node log:rawType [ list:in (log:LabeledBlankNode log:UnlabeledBlankNode)] } .
+{ ?node v:text ?localName } <= { ?node log:rawType log:Other ; log:localName ?localName } .
+{ ?node v:text ?text } <= { ?node log:rawType log:Literal . (?text ?dataType) log:dtlit ?node } .
