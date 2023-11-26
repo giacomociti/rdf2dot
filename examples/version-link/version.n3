@@ -1,3 +1,5 @@
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
@@ -6,66 +8,156 @@
 @prefix attr: <http://view/dot/attribute/> .
 @prefix schema: <http://schema.org/> .
 @prefix vl: <https://version.link/> .
+@prefix aux: <http://aux/> .
+
+schema:name a aux:VersionedProperty ; rdfs:range rdf:langString .
+schema:alternateName a aux:VersionedProperty ; rdfs:range rdf:langString .
+schema:parentOrganization a aux:VersionedProperty ; rdfs:range xsd:anyURI .
+vl:identity a aux:VersionedProperty ; rdfs:range xsd:anyURI .
+schema:startDate a aux:Property ; rdfs:range rdfs:Literal .
+schema:endDate a aux:Property ; rdfs:range rdfs:Literal .
+
+{ ?p a aux:VersionedProperty } => { ?p a aux:Property } .
 
 {} => { v:digraph v:graphAttributes [ attr:rankdir "LR" ] } .
 
+{ [] vl:identity ?identity } => { 
+    v:digraph v:subgraph ?identity .
+    ?identity attr:rank "same" ; attr:rankdir "LR" ; attr:style "filled"; .
+    
+} .
 
-{ ?v a vl:Version } => { v:digraph v:hasNode ?v } .
+{ ?v a vl:Version ; vl:identity ?i } => { ?i v:hasNode ?v } .
 { ?v a vl:Deprecated } => { ?v attr:color "red" } .
 
-{ 
-    ?v vl:successor ?succ . ?succ schema:startDate ?date . 
-    (?d ?t) log:dtlit ?date .
-}
-=>
-{
-    v:digraph v:hasEdge [ v:source ?v ; v:target ?succ ; attr:label ?d ]
-}.
 
-
+{ ?text aux:escape ?escaped } <= {
+    (?text
+    ("&" "<" ">" '"') 
+    ("&amp;" "&lt;" "&gt;" "&quot;")
+    ) string:replaceAll ?escaped .
+} .
 
 
 # collect language literal properties as node fields
 { 
-    ?s a vl:Version .
     ?s ?p ?o .
-    (?fieldValue ?lang) log:langlit ?o . # ensure is literal
-
-    (   ?fieldValue
-        ("&" "<" ">" '"') 
-        ("&amp;" "&lt;" "&gt;" "&quot;")
-    ) string:replaceAll ?escapedValue .
-
-    ?p log:localName ?fieldName .
-    ( "<TR><TD><I>%s (%s)</I></TD><TD>%s</TD></TR>" ?fieldName ?lang ?escapedValue) string:format ?field
+    ?s a vl:Version .
+    ?p a aux:Property ; rdfs:range rdf:langString ; log:localName ?fieldName .
+    (?fieldValue ?lang) log:langlit ?o . 
+    ('%s (%s)' ?fieldName ?lang) string:format ?fullName .
+    ('%s_%s' ?fieldName ?lang) string:format ?portName .
+    ?fieldValue aux:escape ?escapedValue .
+    ( '<TR><TD PORT="name_%s" ALIGN="LEFT"><I>%s</I></TD><TD PORT="val_%s" ALIGN="LEFT">%s</TD></TR>' ?portName ?fullName ?portName ?escapedValue) string:format ?field
 } 
 => 
 { 
-    ?s v:field ?field ;
+    ?s aux:field ?field ;
 } .
 
+# collect literal properties as node fields
 { 
-    ?v a vl:Version ; schema:parentOrganization ?parent. 
-    ?parent log:uri ?parentUri .
-     ( "<TR><TD><I>parentOrganization</I></TD><TD>%s</TD></TR>" ?parentUri) string:format ?field
+    ?s ?p ?o .
+    ?s a vl:Version .
+    ?p a aux:Property ; rdfs:range rdfs:Literal ; log:localName ?fieldName .
+    (?fieldValue ?type) log:dtlit ?o .
+   
+    ?fieldValue aux:escape ?escapedValue .
+    ( '<TR><TD PORT="name_%s" ALIGN="LEFT"><I>%s</I></TD><TD PORT="val_%s" ALIGN="LEFT">%s</TD></TR>' ?fieldName ?fieldName ?fieldName ?escapedValue) string:format ?field
+} 
+=> 
+{ 
+    ?s aux:field ?field ;
+} .
+
+# collect URI properties as fields
+{ 
+    ?s ?p ?o .
+    ?s a vl:Version .
+    ?p a aux:Property ; rdfs:range xsd:anyURI ; log:localName ?fieldName .
+    ?o log:uri ?uri .
+    ( '<TR><TD PORT="name_%s" ALIGN="LEFT"><I>%s</I></TD><TD PORT="val_%s" ALIGN="LEFT">%s</TD></TR>' ?fieldName ?fieldName ?fieldName ?uri) string:format  ?field
 }
 =>
 {
-    ?v v:field ?field
+    ?s aux:field ?field
+}.
+
+
+{
+    ?v1 vl:successor ?v2 ; vl:identity  ?identity .
+    ?p a aux:VersionedProperty ; rdfs:range rdf:langString ; log:localName ?fieldName .
+    ?v1 ?p ?o1 .
+    ?v2 ?p ?o2 .
+
+    (?fieldValue1 ?lang) log:langlit ?o1 .
+    (?fieldValue2 ?lang) log:langlit ?o2 .
+
+   (
+       { ?fieldValue1 log:equalTo ?fieldValue2 }
+       { ?color log:equalTo "darkturquoise" . ?tooltip log:equalTo 'unchanged' }
+       { ?color log:equalTo "orange" . ?tooltip log:equalTo 'changed' }
+    ) log:ifThenElseIn ?SCOPE .
+
+
+    ('val_%s_%s' ?fieldName ?lang) string:format ?sourcePort .
+    ('name_%s_%s' ?fieldName ?lang) string:format ?targetPort .
+}
+=>
+{
+    ?identity v:hasEdge [
+        v:source ?v1 ;
+        v:target ?v2 ;
+        v:sourcePort ?sourcePort ;
+        v:targetPort ?targetPort ;
+        attr:color ?color ;
+        attr:tooltip ?tooltip ;
+    ]
+}.
+
+{
+    ?v1 vl:successor ?v2 ; vl:identity  ?identity .
+    ?p a aux:VersionedProperty ; rdfs:range xsd:anyURI ; log:localName ?fieldName .
+    ?v1 ?p ?o1 .
+    ?v2 ?p ?o2 .
+
+   (
+       { ?o1 log:equalTo ?o2 }
+       { ?color log:equalTo "darkturquoise" . ?tooltip log:equalTo 'unchanged' }
+       { ?color log:equalTo "orange" . ?tooltip log:equalTo 'changed' }
+    ) log:ifThenElseIn ?SCOPE .
+
+
+    ('val_%s' ?fieldName) string:format ?sourcePort .
+    ('name_%s' ?fieldName) string:format ?targetPort .
+}
+=>
+{
+    ?identity v:hasEdge [
+        v:source ?v1 ;
+        v:target ?v2 ;
+        v:sourcePort ?sourcePort ;
+        v:targetPort ?targetPort ;
+        attr:color ?color ;
+        attr:tooltip ?tooltip ;
+    ]
 }.
 
 # if a node has some fields, shape it as a table with the fields as rows
 {
-    v:digraph v:hasNode ?s .
-    ( ?f { ?s v:field ?f } ?fs ) log:collectAllIn [] .
+    [] v:hasNode ?s .
+    ( ?f { ?s aux:field ?f } ?fs ) log:collectAllIn [] .
     ?fs log:notEqualTo () .
-    (?fs "\n") string:join ?joined .
+    ?fs list:sort ?sortedFields .
+    (?sortedFields "\n") string:join ?joined .
     ( '< <TABLE BORDER="0" CELLBORDER="1" CELLSPACING="0">\n%s\n</TABLE> >' ?joined) string:format ?label
 }
 =>
 {
-    ?s attr:shape "plaintext" .
-    ?s attr:label ?label
+    ?s attr:URL ?s ;
+        attr:shape "plaintext" ;
+        attr:tooltip 'click to browse this version' ;
+        attr:label ?label .
 }
 .
 
