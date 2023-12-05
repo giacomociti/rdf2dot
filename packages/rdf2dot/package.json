@@ -15,8 +15,12 @@
     "type": "git",
     "url": "git+https://github.com/giacomociti/rdf2dot.git"
   },
+  "keywords": [
+    "rdf",
+    "graphviz"
+  ],
   "author": "Giacomo Citi",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/giacomociti/rdf2dot/issues"
   },
