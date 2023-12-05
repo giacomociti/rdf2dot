@@ -1,5 +1,5 @@
 {
-  "name": "rdf2dot",
+  "name": "rdf2dot-root",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vitest run && vite build",
+    "build": "vitest run && vite build && cp ./packages/rdf2dot/vocabulary.ttl ./dist/vocabulary.ttl",
     "preview": "vite preview",
     "test": "vitest"
   },
@@ -22,5 +22,8 @@
     "@viz-js/viz": "^3.1.0",
     "eyereasoner": "^10.2.0",
     "file-saver": "^2.0.5"
-  }
+  },
+  "workspaces": [
+    "packages/rdf2dot"
+  ]
 }

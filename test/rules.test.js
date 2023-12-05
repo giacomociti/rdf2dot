@@ -26,7 +26,7 @@ test('custom rules', async () => {
     expect(isSuccess(result)).toEqual(true)
 })
 
-const basicRules = fs.readFileSync(path.resolve(dirname, '..', 'rules', 'basic.n3'))
+const basicRules = fs.readFileSync(path.resolve(dirname, '..', 'packages', 'rdf2dot', 'rules', 'basic.n3'))
 test('basic rules', async () => {
     const testName = 'basic01'
     const test = support(`${testName}.n3`)
@@ -36,7 +36,7 @@ test('basic rules', async () => {
     expect(isSuccess(result)).toEqual(true)
 })
 
-const defaultRules = fs.readFileSync(path.resolve(dirname, '..', 'rules', 'default.n3'))
+const defaultRules = fs.readFileSync(path.resolve(dirname, '..', 'packages', 'rdf2dot', 'rules', 'default.n3'))
 const testNames = ['default01', 'default02']
 for (const testName of testNames) {
     test(testName, async () => {

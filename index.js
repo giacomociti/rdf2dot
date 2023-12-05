@@ -1,7 +1,7 @@
 import applyRules from './lib/applyRules'
 import createSVG from "./lib/createSVG"
-import rulesBasic from './rules/basic.n3?raw'
-import rulesDefault from './rules/default.n3?raw'
+import rulesBasic from './packages/rdf2dot/rules/basic.n3?raw'
+import rulesDefault from './packages/rdf2dot/rules/default.n3?raw'
 import { saveAs } from 'file-saver'
 import '@rdfjs-elements/rdf-editor'
 
