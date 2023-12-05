@@ -1,0 +1,28 @@
+{
+  "name": "rdf2dot",
+  "type": "module",
+  "version": "0.1.0",
+  "description": "creates Graphviz diagrams from RDF",
+  "main": "index.js",
+  "dependencies": {
+    "n3": "^1.17.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giacomociti/rdf2dot.git"
+  },
+  "keywords": [
+    "rdf",
+    "graphviz"
+  ],
+  "author": "Giacomo Citi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/giacomociti/rdf2dot/issues"
+  },
+  "homepage": "https://github.com/giacomociti/rdf2dot#readme"
+}

@@ -39,12 +39,11 @@ const toDot = diagramText => {
         const format = formatFunctions.get(attributeName) ?? quoteEscaped
         result.push(`${attributeName}=${format(quad.object.value)}`)
       }
-     
     }
     return result
   }
 
-  function * nodes (g ) { 
+  function * nodes (g) { 
     for (const quad of dataset.match(g, hasNode)) {
       const attrs = getAttributes(quad.object)
       yield `${quoteEscaped(quad.object.value)} [${attrs.join(',')}]`
