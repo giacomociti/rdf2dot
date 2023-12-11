@@ -1,6 +1,10 @@
+[![NPM Version](https://img.shields.io/npm/v/rdf2dot.svg?style=flat)](https://npm.im/rdf2dot)
+
 A simple RDF visualization tool based on [GraphViz](https://www.graphviz.org/).
 
-The following RDF triples in turtle format:
+Diagram descriptions are derived with [N3](https://w3c.github.io/N3/reports/20230703/) rules and converted to [dot](https://www.graphviz.org/doc/info/lang.html) notation.
+
+The default rules make compact visualizations (only the subjects of some triple become nodes):
 
 ```ttl
 @prefix dcterms: <http://purl.org/dc/terms/> .
@@ -21,12 +25,12 @@ dbpedia:Leonardo_da_Vinci
     dbo:birthPlace dbpedia:Republic_of_Florence .
 ```
 
-are converted via the _dot_ format to the following SVG:
+
 
 
 ![](test.svg)
 
-The default rules make compact visualizations (only the subjects of some triple become nodes). Custom visualization rules can be specified with [N3](https://w3c.github.io/N3/reports/20230703/) (see the [documentation](https://giacomociti.github.io/rdf2dot/doc/overview.html) for details).
+Visualization rules can be customized (see the [documentation](https://giacomociti.github.io/rdf2dot/doc/overview.html) for details).
 
 
 Try it online [here](https://giacomociti.github.io/rdf2dot/).
