@@ -1,6 +1,6 @@
 import fs from 'fs'
-import applyRules from '../lib/applyRules.js'
-import toDot from '../lib/toDot.js'
+import applyRules from '../../../lib/applyRules.js'
+import toDot from '../index.js'
 
 const files = process.argv.slice(2)
 const rules = files.map(x => fs.readFileSync(x).toString())
