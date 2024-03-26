@@ -20,10 +20,15 @@ let svg
 
 const showGraph = async (data, rules) => {
     graph.innerHTML = 'creating diagram...'
-    const diagramText = await applyRules(data, rules)
-    svg = await createSVG(diagramText)
-    graph.innerHTML = ''
-    graph.appendChild(svg)
+    try {
+        const diagramText = await applyRules(data, rules)
+        svg = await createSVG(diagramText)
+        graph.innerHTML = ''
+        graph.appendChild(svg)
+    }
+    catch (e) {
+        graph.innerHTML = e
+    }
 }
 
 
