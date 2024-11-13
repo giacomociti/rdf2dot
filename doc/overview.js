@@ -2,7 +2,7 @@ import data1 from './data1.ttl?raw'
 import rules1 from './rules1.n3?raw'
 import rules2 from './rules2.n3?raw'
 import diagram2 from './diagram2.ttl?raw'
-import '../packages/rdf2dot-lit/index.js'
+import '../packages/rdf2dot-lit/custom.js'
 
 document.getElementById('data1').textContent = data1
 document.getElementById('rules1').textContent = rules1

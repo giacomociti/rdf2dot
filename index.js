@@ -2,7 +2,7 @@ import rulesBasic from './packages/rdf2dot/rules/basic.n3?raw'
 import rulesDefault from './packages/rdf2dot/rules/default.n3?raw'
 import { saveAs } from 'file-saver'
 import '@rdfjs-elements/rdf-editor'
-import './packages/rdf2dot-lit/index.js'
+import './packages/rdf2dot-lit/custom.js'
 
 const fileInput = document.getElementById("file")
 const rulesInput = document.getElementById("rules")
