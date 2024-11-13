@@ -1,9 +1,8 @@
-import applyRules from './lib/applyRules'
-import createSVG from "./lib/createSVG"
 import rulesBasic from './packages/rdf2dot/rules/basic.n3?raw'
 import rulesDefault from './packages/rdf2dot/rules/default.n3?raw'
 import { saveAs } from 'file-saver'
 import '@rdfjs-elements/rdf-editor'
+import './packages/rdf2dot-lit/index.js'
 
 const fileInput = document.getElementById("file")
 const rulesInput = document.getElementById("rules")
@@ -15,22 +14,6 @@ const data = document.getElementById("data")
 
 selectRules.add(new Option('default', rulesDefault))
 selectRules.add(new Option('basic', rulesBasic))
-
-let svg
-
-const showGraph = async (data, rules) => {
-    graph.innerHTML = 'creating diagram...'
-    try {
-        const diagramText = await applyRules(data, rules)
-        svg = await createSVG(diagramText)
-        graph.innerHTML = ''
-        graph.appendChild(svg)
-    }
-    catch (e) {
-        graph.innerHTML = e
-    }
-}
-
 
 let customRules
 rulesInput.addEventListener("change", () => {
@@ -59,10 +42,11 @@ fileInput.addEventListener("change", () => {
 })
 
 showButton.addEventListener("click", async () => {
-    await showGraph(data.value, customRules ?? selectRules.value)
+    graph.rules = customRules ?? selectRules.value
+    graph.data = data.value
     saveButton.removeAttribute("disabled")
 })
 
 saveButton.addEventListener("click", () => {
-    saveAs(new File([svg.outerHTML], "rdf.svg", {type: "image/svg+xml"}))
+    saveAs(new File([graph.svg.outerHTML], "rdf.svg", {type: "image/svg+xml"}))
 })

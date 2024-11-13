@@ -1,0 +1,16 @@
+{
+  "name": "rdf2dot-lit",
+  "version": "1.0.0",
+  "description": "web component for RDF visualization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@viz-js/viz": "^3.9.0",
+    "eyereasoner": "^16.26.6",
+    "lit": "^3.2.0"
+  }
+}
