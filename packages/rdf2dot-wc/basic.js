@@ -1,4 +1,4 @@
-import {Rdf2DotCustom} from './custom.js'
+import {Rdf2DotCustom} from './index.js'
 import visualizationRules from '../../packages/rdf2dot/rules/basic.n3?raw'
 
 export class Rdf2DotBasic extends Rdf2DotCustom {
@@ -11,4 +11,4 @@ export class Rdf2DotBasic extends Rdf2DotCustom {
   }
 }
 
-customElements.define("rdf2dot-basic", Rdf2DotBasic);
+customElements.define("rdf2dot-basic", Rdf2DotBasic)

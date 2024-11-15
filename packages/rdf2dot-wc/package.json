@@ -1,8 +1,9 @@
 {
-  "name": "rdf2dot-lit",
+  "name": "rdf2dot-wc",
   "version": "1.0.0",
   "description": "web component for RDF visualization",
   "main": "index.js",
+  "module": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

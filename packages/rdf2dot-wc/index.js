@@ -1,5 +1,4 @@
-import {instance} from '@viz-js/viz';
-// import visualizationRules from '../../examples/visualization.n3?raw'
+import {instance} from '@viz-js/viz'
 
 export class Rdf2DotCustom extends HTMLElement {
 
@@ -54,4 +53,4 @@ export class Rdf2DotCustom extends HTMLElement {
   }
 }
 
-customElements.define("rdf2dot-custom", Rdf2DotCustom);
+customElements.define("rdf2dot-custom", Rdf2DotCustom)

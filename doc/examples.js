@@ -3,8 +3,8 @@ import schema from '../examples/schema.n3?raw'
 import vocabulary1 from '../packages/rdf2dot/vocabulary.ttl?raw'
 import barnard59 from '../examples/barnard59/barnard59.n3?raw'
 import pipeline1 from '../examples/barnard59/pipeline1.ttl?raw'
-import '../packages/rdf2dot-lit/custom.js'
-import '../packages/rdf2dot-lit/default.js'
+import '../packages/rdf2dot-wc/index.js'
+import '../packages/rdf2dot-wc/default.js'
 
 const showGraph = async (data, rules, graph) => {
     const element = document.getElementById(graph)
