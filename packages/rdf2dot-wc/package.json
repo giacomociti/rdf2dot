@@ -1,16 +1,29 @@
 {
   "name": "rdf2dot-wc",
-  "version": "1.0.0",
+  "version": "0.1.2",
   "description": "web component for RDF visualization",
+  "type": "module",
   "main": "index.js",
   "module": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "@viz-js/viz": "^3.9.0",
     "eyereasoner": "^16.26.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/giacomociti/rdf2dot.git"
+  },
+  "keywords": [
+    "rdf",
+    "graphviz"
+  ],
+  "author": "Giacomo Citi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/giacomociti/rdf2dot/issues"
+  },
+  "homepage": "https://github.com/giacomociti/rdf2dot#readme"
 }
