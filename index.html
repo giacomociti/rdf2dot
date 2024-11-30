@@ -5,41 +5,89 @@
         <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="/rdf_flyer.24" />
-    </head>
-    <body>
-        <h1>RDF data visualization</h1>
-        
-        <label for="file">RDF data</label>
-        <input id="file" type="file" accept=".ttl,.nt,.nq">
         <style>
+            body {
+                font-family: Helvetica Neue,sans-serif;
+            }
+            h1 {
+                text-align: center;
+            }
             rdf-editor {
                 border: 1px solid black;
                 width: 500px;
                 height: 150px;
             }
-
             .resizable-content {
                 min-height: 30px;
                 min-width: 30px;
                 resize: both;
                 overflow: auto;
+            }       
+            .editor-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 10px; /* Optional: Adds space between the editors */
+            }
+            .hidden {
+                display: none;
+            }
+            .section {
+                margin-bottom: 20px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            .collapsible {
+                cursor: pointer;
+                user-select: none;
+            }
+            .collapsible-content {
+                display: none;
+                overflow: hidden;
+            }
+            button {
+                margin: 10px 10px 10px 10px;
             }
         </style>
-        <rdf-editor class="resizable-content" id="data" format="application/trig"></rdf-editor>
+    </head>
+    <body>
+        <h1>RDF Data Visualization</h1>
+        <div class="section">
+            <div id="rulesLabel" class="collapsible"></div>
+            <div class="collapsible-content">
+            <button id="loadDefaultRules">Use Default Rules</button>
+            <button id="loadBasicRules">Use Basic Rules</button>
+            <div>
+                <label for="rulesInput">Use Custom Rules</label>
+                <input id="rulesInput" type="file" accept=".n3">
+            </div>
+            <p><small>see the <a href="./doc/overview.html">overview</a> for an introduction</small></p>
+            <button id="toggleRules">Show Rules Editor</button>
+            </div>
+        </div>
 
-        <label for="selectRules">Use available rules</label>
-        <select id="selectRules"></select>
-        <br>
-        <label for="rules">or use custom rules</label>
-        <input id="rules" type="file" accept=".n3">
-        
-        <p><small>see the <a href="./doc/overview.html">overview</a> for an introduction</small></p>
-        
+        <label for="fileInput">RDF data</label>
+        <input id="fileInput" type="file" accept=".ttl,.nt,.nq">
+
+        <div class="editor-container">
+            <rdf-editor class="resizable-content" id="data" format="application/trig"></rdf-editor>
+            <rdf-editor class="resizable-content hidden" id="rules" format="text/n3"></rdf-editor>
+        </div>
+
         <button id="show">Show</button>
         <button id="save" disabled>Save</button>
-        <br>
-        <div id="graph" style="text-align: center;"></div>
 
+        <div style="text-align: center;">
+            <rdf2dot-custom id="graph"></rdf2dot-custom>
+        </div>
         <script type="module" src="./index.js"></script>
+        <script>
+            document.querySelectorAll('.collapsible').forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    content.style.display = content.style.display === 'block' ? 'none' : 'block'
+                })
+            })
+        </script>
     </body>
 </html>

@@ -30,7 +30,7 @@
       Blank nodes are empty circles and regular URI nodes have the local name as label and the full URI as tooltip.
       This kind of diagram contains all the information of the dataset, but it is suitable only for very small ones.  
     </p>
-    <div id="basic1"></div>
+    <rdf2dot-basic id="basic1"></rdf2dot-basic>
     
     <h3>default</h3>
     <p>
@@ -38,7 +38,7 @@
       make compact visualizations: only the subjects of some triple become nodes, 
       hence literal values are embedded in the subject node label.
     </p>
-    <div id="default1"></div>
+    <rdf2dot-default id="default1"></rdf2dot-default>
 
     <h2>Domain specific rules</h2>
 
@@ -46,7 +46,7 @@
     <p>
       As a first example of custom rules we can draw a diagram for our own <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>:
     </p>
-    <div id="vocabulary1"></div>
+    <rdf2dot-custom id="vocabulary1"></rdf2dot-custom>
     <p>
       The <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/schema.n3">rules</a> used here may be usable 
       (or at least a good starting point) also to draw other vocabularies, but there are a few assumptions, made for simplicity, 
@@ -68,7 +68,7 @@
       <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/barnard59.n3">custom visualization rules</a> 
       can help understanding them.
     </p>
-    <div id="pipeline1"></div>
+    <rdf2dot-custom id="pipeline1"></rdf2dot-custom>
     <p>
       Pipelines are represented as rectangular nodes, each with a distinct color. The steps of a pipeline are connected by edges 
       with the same color of the pipeline. This helps to follow the workflow even in the presence of steps shared by multiple 

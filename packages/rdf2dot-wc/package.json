@@ -1,15 +1,16 @@
 {
-  "name": "rdf2dot",
-  "type": "module",
+  "name": "rdf2dot-wc",
   "version": "0.1.2",
-  "description": "creates Graphviz diagrams from RDF",
+  "description": "web component for RDF visualization",
+  "type": "module",
   "main": "index.js",
-  "dependencies": {
-    "n3": "^1.17.2"
-  },
-  "devDependencies": {},
+  "module": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@viz-js/viz": "^3.9.0",
+    "eyereasoner": "^16.26.6"
   },
   "repository": {
     "type": "git",
