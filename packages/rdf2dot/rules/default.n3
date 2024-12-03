@@ -42,7 +42,7 @@
         log:uri ?uri ;
         v:text ?text ;
     ] .
-    ('<TR><TD ALIGN="CENTER" COLSPAN="2">%s</TD></TR>' ?text) string:format ?header .
+    ('<TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="/accent3/1:/accent3/3">%s</TD></TR>' ?text) string:format ?header .
 }
 =>
 {
@@ -90,7 +90,7 @@
     (
        { ?joined log:equalTo '' } # blank node without fields
        { 
-        ?shape log:equalTo "box" .
+        ?shape log:equalTo "circle" .
         ?label log:equalTo ''. 
        } 
        { 
@@ -116,7 +116,7 @@
     ?list list:iterate (?i ?item) .
     ?item v:text ?fieldValue .
     ?fieldValue v:escape ?escapedValue .
-    ( '<TR><TD PORT="%s">%s</TD></TR>' ?i ?escapedValue) string:format ?field
+    ( '<TR><TD BGCOLOR="/blues8/1:/blues8/3" ALIGN="LEFT" PORT="%s">• %s</TD></TR>' ?i ?escapedValue) string:format ?field
 }
 => 
 {
@@ -162,5 +162,18 @@
 
 
 { ?node v:text " " } <= { ?node log:rawType [ list:in (log:LabeledBlankNode log:UnlabeledBlankNode)] } .
-{ ?node v:text ?localName } <= { ?node log:rawType log:Other ; log:localName ?localName } .
-{ ?node v:text ?text } <= { ?node log:rawType log:Literal . (?text ?dataType) log:dtlit ?node } .
+{ ?node v:text ?text } <= { 
+    ?node log:rawType log:Other ; 
+    log:localName ?localName .
+    ?localName v:shorten ?text .
+    
+} .
+{ ?node v:text ?text } <= { 
+    ?node log:rawType log:Literal . 
+    (?literalText ?dataType) log:dtlit ?node .
+    ?literalText v:shorten ?text .
+} .
+
+
+{ ?text v:shorten ?text } <= { ?text string:length [ math:notGreaterThan 50 ] } .
+{ ?text v:shorten "..." } <= { ?text string:length [ math:greaterThan 50 ] } . # TODO check string:substring

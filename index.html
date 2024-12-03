@@ -33,17 +33,19 @@
             }
             .section {
                 margin-bottom: 20px;
-                padding: 10px;
                 border: 1px solid #ccc;
                 border-radius: 5px;
             }
             .collapsible {
                 cursor: pointer;
                 user-select: none;
+                /* accent3 in https://graphviz.org/doc/info/colors.html#brewer */
+                background: linear-gradient(90deg, #7fc97f, #beaed4, #fdc086);
             }
             .collapsible-content {
                 display: none;
                 overflow: hidden;
+                background-color:  #f8f8f8;
             }
             button {
                 margin: 10px 10px 10px 10px;
@@ -52,7 +54,7 @@
     </head>
     <body>
         <h1>RDF Data Visualization</h1>
-        <div class="section">
+        <header class="section">
             <div id="rulesLabel" class="collapsible"></div>
             <div class="collapsible-content">
             <button id="loadDefaultRules">Use Default Rules</button>
@@ -64,7 +66,7 @@
             <p><small>see the <a href="./doc/overview.html">overview</a> for an introduction</small></p>
             <button id="toggleRules">Show Rules Editor</button>
             </div>
-        </div>
+        </header>
 
         <label for="fileInput">RDF data</label>
         <input id="fileInput" type="file" accept=".ttl,.nt,.nq">

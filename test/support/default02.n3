@@ -13,8 +13,8 @@
 {
     v:digraph v:hasNode ?list , ?two .
    
-    ?list attr:label '< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD PORT=\"0\">1</TD></TR>\n<TR><TD PORT=\"1\">two</TD></TR>\n<TR><TD PORT=\"2\">three</TD></TR>\n</TABLE> >' .
-    ?two attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD ALIGN=\"CENTER\" COLSPAN=\"2\">two</TD></TR>\n<TR><TD><I>name</I></TD><TD>two</TD></TR>\n</TABLE> >" .
+    ?list attr:label '< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD BGCOLOR=\"/blues8/1:/blues8/3\" ALIGN=\"LEFT\" PORT=\"0\">• 1</TD></TR>\n<TR><TD BGCOLOR=\"/blues8/1:/blues8/3\" ALIGN=\"LEFT\" PORT=\"1\">• two</TD></TR>\n<TR><TD BGCOLOR=\"/blues8/1:/blues8/3\" ALIGN=\"LEFT\" PORT=\"2\">• three</TD></TR>\n</TABLE> >' .
+    ?two attr:label "< <TABLE BORDER=\"0\" CELLBORDER=\"1\" CELLSPACING=\"0\">\n<TR><TD ALIGN=\"CENTER\" COLSPAN=\"2\" BGCOLOR=\"/accent3/1:/accent3/3\">two</TD></TR>\n<TR><TD><I>name</I></TD><TD>two</TD></TR>\n</TABLE> >" .
    
     v:digraph v:hasEdge 
     [

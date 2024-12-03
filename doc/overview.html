@@ -13,12 +13,11 @@
             A generic mapping can turn each triple into a link between a node for the subject and a node for the object. For example:
         </p>
 
-        <table>
-            <tr>
-                <td><pre id="data1"></pre></td>
-                <td><rdf2dot-custom id="graph1" style="text-align: center;"></rdf2dot-custom></td>
-            </tr>
-        </table>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <pre id="data1"></pre>
+            <rdf2dot-custom id="graph1" style="text-align: center;"></rdf2dot-custom>
+        </div>
+
        
         <p>But such diagrams quickly become messy for non-trivial data, unless we can tweak them a little bit.</p>
         <p>
@@ -38,12 +37,10 @@
         </p>       
         <p>With our <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>, based on the <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> language,
             we can describe a more compact version of the above graph:</p>
-        <table>
-            <tr>
-                <td><pre id="diagram2"></pre></td>
-                <td><rdf2dot-custom id="graph2" style="text-align: center;"></rdf2dot-custom></td>
-            </tr>
-        </table>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <pre id="diagram2"></pre>
+            <rdf2dot-custom id="graph2" style="text-align: center;"></rdf2dot-custom>
+        </div>
       
         <p>The label for the <code>ann</code> node is the name instead of the URI. The shape for the city node is rectangular, 
             and its label is the last part of the URI. The label of the edge is also customized, 
