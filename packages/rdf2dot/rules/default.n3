@@ -162,5 +162,18 @@
 
 
 { ?node v:text " " } <= { ?node log:rawType [ list:in (log:LabeledBlankNode log:UnlabeledBlankNode)] } .
-{ ?node v:text ?localName } <= { ?node log:rawType log:Other ; log:localName ?localName } .
-{ ?node v:text ?text } <= { ?node log:rawType log:Literal . (?text ?dataType) log:dtlit ?node } .
+{ ?node v:text ?text } <= { 
+    ?node log:rawType log:Other ; 
+    log:localName ?localName .
+    ?localName v:shorten ?text .
+    
+} .
+{ ?node v:text ?text } <= { 
+    ?node log:rawType log:Literal . 
+    (?literalText ?dataType) log:dtlit ?node .
+    ?literalText v:shorten ?text .
+} .
+
+
+{ ?text v:shorten ?text } <= { ?text string:length [ math:notGreaterThan 50 ] } .
+{ ?text v:shorten "..." } <= { ?text string:length [ math:greaterThan 50 ] } . # TODO check string:substring
