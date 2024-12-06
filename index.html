@@ -9,7 +9,7 @@
             body {
                 font-family: Helvetica Neue,sans-serif;
             }
-            h1 {
+            h1, #rulesLabel {
                 text-align: center;
             }
             rdf-editor {
@@ -46,46 +46,54 @@
                 display: none;
                 overflow: hidden;
                 background-color:  #f8f8f8;
+                /* margin: 10px 10px 10px 10px; */
             }
-            button {
+            button, label, p {
                 margin: 10px 10px 10px 10px;
             }
         </style>
     </head>
     <body>
-        <h1>RDF Data Visualization</h1>
         <header class="section">
-            <div id="rulesLabel" class="collapsible"></div>
+            <h1>RDF Data Visualization</h1>
+            <div class="collapsible"><span class="arrow"></span><span id="rulesLabel"></span></div>
             <div class="collapsible-content">
-            <button id="loadDefaultRules">Use Default Rules</button>
-            <button id="loadBasicRules">Use Basic Rules</button>
-            <div>
-                <label for="rulesInput">Use Custom Rules</label>
-                <input id="rulesInput" type="file" accept=".n3">
-            </div>
-            <p><small>see the <a href="./doc/overview.html">overview</a> for an introduction</small></p>
-            <button id="toggleRules">Show Rules Editor</button>
+                <button id="loadDefaultRules">Use Default Rules</button>
+                <button id="loadBasicRules">Use Basic Rules</button>
+                <div>
+                    <label for="rulesInput">Use Custom Rules</label>
+                    <input id="rulesInput" type="file" accept=".n3">
+                </div>
+                <p><small>see the <a href="./doc/overview.html">overview</a> for an introduction</small></p>
+                <button id="toggleRules">Show Rules Editor</button>
             </div>
         </header>
+        <main>
+            <label for="fileInput">RDF data</label>
+            <input id="fileInput" type="file" accept=".ttl,.nt,.nq">
+    
+            <div class="editor-container">
+                <div>
+                    <rdf-editor class="resizable-content" id="data" format="application/trig"></rdf-editor>
+                    <button id="show">Show</button>
+                    <button id="save" disabled>Save</button>
+                </div>
+                <rdf-editor class="resizable-content hidden" id="rules" format="text/n3"></rdf-editor>
+                <div style="text-align: center;">
+                    <rdf2dot-custom id="graph"></rdf2dot-custom>
+                </div>
+            </div>
 
-        <label for="fileInput">RDF data</label>
-        <input id="fileInput" type="file" accept=".ttl,.nt,.nq">
+        </main>
 
-        <div class="editor-container">
-            <rdf-editor class="resizable-content" id="data" format="application/trig"></rdf-editor>
-            <rdf-editor class="resizable-content hidden" id="rules" format="text/n3"></rdf-editor>
-        </div>
-
-        <button id="show">Show</button>
-        <button id="save" disabled>Save</button>
-
-        <div style="text-align: center;">
-            <rdf2dot-custom id="graph"></rdf2dot-custom>
-        </div>
+       
         <script type="module" src="./index.js"></script>
         <script>
             document.querySelectorAll('.collapsible').forEach(button => {
+                const arrow = button.querySelector('.arrow');
+                arrow.textContent = '▽ ';
                 button.addEventListener('click', () => {
+                    arrow.textContent = arrow.textContent === '▽ ' ? '△ ' : '▽ ';
                     const content = button.nextElementSibling;
                     content.style.display = content.style.display === 'block' ? 'none' : 'block'
                 })
