@@ -7,16 +7,17 @@ import '../packages/rdf2dot-wc/index.js'
 import '../packages/rdf2dot-wc/default.js'
 import '../packages/rdf2dot-wc/basic.js'
 
+document.addEventListener('DOMContentLoaded', () => {
+    const showGraph = async (data, rules, graph) => {
+        const element = document.getElementById(graph)
+        element.rules = rules
+        element.data = data
+    }
 
-const showGraph = async (data, rules, graph) => {
-    const element = document.getElementById(graph)
-    element.rules = rules
-    element.data = data
-}
+    document.getElementById('data1').textContent = data1
+    document.getElementById('basic1').data = data1
+    document.getElementById('default1').data = data1
 
-document.getElementById('data1').textContent = data1
-document.getElementById('basic1').data = data1
-document.getElementById('default1').data = data1
-
-showGraph(vocabulary1, schema, 'vocabulary1')
-showGraph(pipeline1, barnard59, 'pipeline1')
+    showGraph(vocabulary1, schema, 'vocabulary1')
+    showGraph(pipeline1, barnard59, 'pipeline1')
+})
