@@ -68,7 +68,7 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          cd packages/rdf2dot-wc/dist
+          cd dist/rdf2dot-wc
           npm publish --access public
       - name: Publish rdf2dot to npm
         env:
