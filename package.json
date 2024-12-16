@@ -8,7 +8,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vitest run && vite build && cp ./packages/rdf2dot/vocabulary.ttl ./dist/vocabulary.ttl",
+    "build": "vitest run && vite build && npm run build:wcs && cp ./packages/rdf2dot/vocabulary.ttl ./dist/vocabulary.ttl",
+    "build:wcs": "vite build --config packages/rdf2dot-wc/vite.config.js",
     "preview": "vite preview",
     "test": "vitest"
   },

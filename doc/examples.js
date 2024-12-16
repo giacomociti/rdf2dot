@@ -4,8 +4,6 @@ import vocabulary1 from '../packages/rdf2dot/vocabulary.ttl?raw'
 import barnard59 from '../examples/barnard59/barnard59.n3?raw'
 import pipeline1 from '../examples/barnard59/pipeline1.ttl?raw'
 import '../packages/rdf2dot-wc/index.js'
-import '../packages/rdf2dot-wc/default.js'
-import '../packages/rdf2dot-wc/basic.js'
 
 document.addEventListener('DOMContentLoaded', () => {
     const showGraph = async (data, rules, graph) => {
