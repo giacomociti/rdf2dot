@@ -18,5 +18,6 @@ export default defineConfig({
         entryFileNames: 'rdf2dot-wc.js'
       }
     }
-  }
+  },
+  publicDir: false, // Exclude public directory from the build output
 })
