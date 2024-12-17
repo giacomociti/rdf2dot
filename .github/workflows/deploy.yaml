@@ -3,7 +3,7 @@ name: Deploy and Publish
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ['master']
+    branches: ['master', 'test-publish']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -56,23 +56,26 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20.x
           cache: 'npm'
       - name: Install dependencies
         run: npm install
       - name: Build
         run: npm run build
+      - name: Configure npm for publishing
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
       - name: Publish rdf2dot-wc to npm
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd dist/rdf2dot-wc
           npm publish --access public
       - name: Publish rdf2dot to npm
         env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd packages/rdf2dot
           npm publish --access public
