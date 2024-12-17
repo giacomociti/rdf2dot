@@ -1,10 +1,14 @@
-[![NPM Version](https://img.shields.io/npm/v/rdf2dot.svg?style=flat)](https://npm.im/rdf2dot)
-
 A simple RDF visualization tool based on [GraphViz](https://www.graphviz.org/).
+
+| Package         | Latest version     |                  |
+|-----------------|--------------------|------------------|
+| [`rdf2dot`](packages/rdf2dot)  | [![](https://badge.fury.io/js/rdf2dot.svg)](https://npm.im/rdf2dot) | library with vocabulary and rules |
+| [`rdf2dot-wc`](packages/rdf2dot-wc) | [![](https://badge.fury.io/js/rdf2dot-wc.svg)](https://npm.im/rdf2dot-wc) | web components |
+
 
 Diagram descriptions are derived with [N3](https://w3c.github.io/N3/reports/20230703/) rules and converted to [dot](https://www.graphviz.org/doc/info/lang.html) notation.
 
-The default rules make compact visualizations (only the subjects of some triple become nodes):
+The default rules produce compact visualizations (only the subjects of some triple become nodes):
 
 ```ttl
 @prefix dcterms: <http://purl.org/dc/terms/> .
