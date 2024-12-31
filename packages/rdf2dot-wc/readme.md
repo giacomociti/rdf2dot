@@ -29,7 +29,7 @@ Components `rdf2dot-basic` and `rdf2dot-default` require a `data` attribute with
     </rdf2dot-default>
     <script src="https://eyereasoner.github.io/eye-js/16/latest/index.js"></script>
     <script src="https://unpkg.com/@viz-js/viz@3.1.0/lib/viz-standalone.js"></script> 
-    <script src="https://unpkg.com/rdf2dot-wc@0.2.3/rdf2dot-wc.js"></script> 
+    <script src="https://unpkg.com/rdf2dot-wc/rdf2dot-wc.js"></script> 
   </body>
 </html>
 ```

@@ -1,7 +1,7 @@
 {
   "name": "rdf2dot",
   "type": "module",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "creates Graphviz diagrams from RDF",
   "main": "index.js",
   "dependencies": {

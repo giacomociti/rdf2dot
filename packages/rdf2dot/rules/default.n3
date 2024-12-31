@@ -35,7 +35,7 @@
 }
 .
 
-# node header, tooltips and URL
+# node header and URL
 { 
     v:digraph v:hasNode ?n .
     ?n v:term [
@@ -47,7 +47,28 @@
 }
 =>
 {
-    ?n v:header ?header ; attr:URL ?uri ; attr:tooltip ?uri 
+    ?n v:header ?header ; attr:URL ?uri
+}
+.
+
+
+{ 
+    v:digraph v:hasNode ?n .
+    ?n v:term ?term .
+    ?term log:uri ?name .
+   
+    (?x {
+    	?term ?p ?o .
+    	?o string:length [ math:greaterThan 50] .
+    	?p log:localName ?pName .
+    	(?pName ": " ?o) string:concatenation ?x
+    } ?xs) log:collectAllIn [] .
+    ?items list:firstRest (?name ?xs) .
+  	(?items "\n-----------\n") string:join ?tooltip
+}
+=>
+{
+    ?n attr:tooltip ?tooltip
 }
 .
 
