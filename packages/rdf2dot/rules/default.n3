@@ -43,7 +43,8 @@
         log:uri ?uri ;
         v:text ?text ;
     ] .
-    ('<TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="/accent3/1:/accent3/3">%s</TD></TR>' ?text) string:format ?header .
+    ?text v:escape ?escapedText .
+    ('<TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="/accent3/1:/accent3/3">%s</TD></TR>' ?escapedText) string:format ?header .
 }
 =>
 {

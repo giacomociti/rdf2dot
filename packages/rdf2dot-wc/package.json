@@ -1,6 +1,6 @@
 {
   "name": "rdf2dot-wc",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "web component for RDF visualization",
   "type": "module",
   "main": "index.js",
