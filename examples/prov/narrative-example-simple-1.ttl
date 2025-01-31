@@ -15,7 +15,7 @@
    a foaf:Person, prov:Agent;
    foaf:givenName       "Derek";
    foaf:mbox            <mailto:derek@example.org>;
-   prov:actedOnBehalfOf :natonal_newspaper_inc;
+   prov:actedOnBehalfOf :national_newspaper_inc;
 .
 
 :national_newspaper_inc 
