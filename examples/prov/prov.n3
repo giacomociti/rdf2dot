@@ -6,7 +6,7 @@
 @prefix attr: <http://view/dot/attribute/> .
 @prefix prov: <http://www.w3.org/ns/prov#> .
 
-{} => { v:digraph v:graphAttributes [ attr:rankdir "RL" ] } .
+{} => { v:digraph v:graphAttributes [ attr:rankdir "BT" ] } .
 
 # TODO consider deriving facts implied by the ontology
 
