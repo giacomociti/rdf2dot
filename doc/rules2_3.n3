@@ -1,0 +1,17 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
+
+{ 
+    ?s <urn:livesIn> ?o . 
+    <urn:livesIn> log:uri ?tooltip 
+} 
+=>
+{ 
+    v:digraph v:hasEdge [ 
+        v:source ?s ; 
+        v:target ?o ; 
+        attr:label "lives in" ; 
+        attr:tooltip ?tooltip 
+    ] 
+} .

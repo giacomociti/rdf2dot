@@ -1,0 +1,137 @@
+body {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    overflow-x: hidden;
+    /* Prevent horizontal scrollbar */
+}
+
+nav {
+    width: 100%;
+    background-color: #444;
+    /* Neutral background color */
+    padding: 20px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    /* Prevent nav from shrinking */
+    position: relative;
+    /* Default position for small screens */
+    height: auto;
+    /* Default height for small screens */
+    overflow-y: auto;
+    /* Add vertical scrolling if needed */
+}
+
+nav a {
+    display: block;
+    color: #fff;
+    text-align: left;
+    padding: 10px;
+    text-decoration: none;
+    border: 2px solid transparent;
+    /* Initial border */
+    border-image: linear-gradient(90deg, #7fc97f, #beaed4, #fdc086) 1;
+    /* Gradient border */
+    margin-bottom: 10px;
+    /* Space between entries */
+}
+
+nav a:hover {
+    background-color: #ddd;
+    color: black;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul ul {
+    padding-left: 20px;
+    /* Indent sub-categories */
+}
+
+.container {
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
+    max-width: 100%;
+    /* Ensure content fits within the viewport */
+    margin: 0 auto;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    border: 5px solid transparent;
+    /* Initial border */
+    border-image: linear-gradient(90deg, #7fc97f, #beaed4, #fdc086) 1;
+    /* Gradient border */
+    border-radius: 5px;
+    /* Optional: add rounded corners */
+}
+
+h1 {
+    color: #fff;
+    /* Light color for better contrast */
+}
+
+pre {
+    background-color: #fff;
+    padding: 10px;
+    border: 1px solid #ddd;
+    overflow: auto;
+}
+
+.rules-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.rules-container pre {
+    flex: 1;
+    min-width: 200px;
+    /* Adjust the minimum width as needed */
+    max-width: 500px;
+    /* Adjust the maximum width as needed */
+}
+
+.data-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.data-container pre {
+    flex: 1;
+    min-width: 200px;
+    /* Adjust the minimum width as needed */
+    max-width: 500px;
+    /* Adjust the maximum width as needed */
+}
+
+@media (min-width: 768px) {
+    body {
+        flex-direction: row;
+    }
+
+    nav {
+        width: 200px;
+        height: 100vh;
+        position: fixed;
+        /* Fix the navigation bar on larger screens */
+    }
+
+    .container {
+        max-width: calc(100% - 200px);
+        /* Adjust max-width to fit within the viewport */
+        margin-left: 220px;
+        /* Add left margin to account for the fixed nav bar */
+    }
+}

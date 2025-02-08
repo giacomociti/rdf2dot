@@ -1,0 +1,148 @@
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix list: <http://www.w3.org/2000/10/swap/list#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+{} => { v:digraph v:graphAttributes [ attr:rankdir "BT" ] } .
+
+# TODO consider deriving facts implied by the ontology
+
+# Entity, Activity and Agent nodes
+
+{
+  ?entity a prov:Entity
+}
+=>
+{
+	v:digraph v:hasNode ?entity .
+	?entity attr:shape "oval" ;
+    attr:color "#808080" ;
+    attr:style "filled" ;
+    attr:fillcolor "#FFFC87" .
+}
+.
+
+{
+	?activity a prov:Activity
+}
+=>
+{
+    v:digraph v:hasNode ?activity .
+    ?activity attr:shape "rectangular" ;
+    attr:color "blue" ;
+		attr:style "filled" ;
+		attr:fillcolor "#9FB1FC" .
+}
+.
+
+{
+	?agent a prov:Agent
+}
+=>
+{
+	v:digraph v:hasNode ?agent .
+	?agent attr:shape "house" ;
+    attr:color "black" ;
+		attr:style "filled" ;
+		attr:fillcolor "#FED37F" .
+}
+.
+
+# Label and URL for nodes
+
+{ v:digraph v:hasNode ?n . ?n log:uri ?uri } => { ?n attr:URL ?uri } .
+
+{ v:digraph v:hasNode ?n . ?n log:localName ?localName } => { ?n attr:label ?localName } .
+
+# Edges
+{ 
+  v:digraph v:hasNode ?n1, ?n2 .
+  ?n1 ?p ?n2 .
+  ?p log:namespace "http://www.w3.org/ns/prov#"; 
+  	log:uri ?uri ;
+    log:localName ?localName .
+# TODO: consider avoiding links when there is also a corresponding qualified one
+} 
+=> 
+{
+  v:digraph v:hasEdge [ 
+    v:source ?n1; 
+    v:target ?n2 ; 
+    attr:label ?localName ;
+    attr:labelURL ?uri ; 
+    attr:tooltip ?uri
+  ]
+}.
+
+
+
+# TODO: additional attributes in external node with note shape
+
+
+# Qualified usage
+{
+  ?activity prov:qualifiedUsage [ prov:entity ?entity ; prov:hadRole ?role ] .
+  ?role log:localName ?roleName .
+  ("prov:hadRole=\n" ?roleName) string:concatenation ?roleLabel .
+} 
+=> 
+{
+  # emulate edge pointing at edge, see https://gitlab.com/graphviz/graphviz/-/issues/1656
+  _:hidden attr:shape "point"; attr:width "0"; attr:height "0"; attr:xlabel "used" .
+  v:digraph v:hasNode _:hidden . 
+  v:digraph v:hasEdge [ v:source ?activity; v:target _:hidden; attr:dir "none"] .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?entity] .
+  _:role attr:shape "note"; attr:label ?roleLabel .
+  v:digraph v:hasNode _:role .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target _:role; attr:dir "none"; attr:style "dashed"] .
+} .
+
+# Qualified generation
+{
+  ?entity prov:qualifiedGeneration [ prov:activity ?activity ; prov:hadRole ?role ] .
+  ?role log:localName ?roleName .
+  ("prov:hadRole=\n" ?roleName) string:concatenation ?roleLabel .
+} 
+=> 
+{
+  _:hidden attr:shape "point"; attr:width "0"; attr:height "0"; attr:xlabel "wasGeneratedBy" .
+  v:digraph v:hasNode _:hidden .
+  v:digraph v:hasEdge [ v:source ?entity; v:target _:hidden; attr:dir "none" ] .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?activity] .
+  _:role attr:shape "note"; attr:label ?roleLabel .
+  v:digraph v:hasNode _:role .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target _:role; attr:dir "none"; attr:style "dashed" ] .
+} .
+
+# Qualified association
+{
+  ?activity prov:qualifiedAssociation [ prov:agent ?agent ; prov:hadRole ?role ] .
+  ?role log:localName ?roleName .
+  ("prov:hadRole=\n" ?roleName) string:concatenation ?roleLabel .
+} 
+=> 
+{
+  _:hidden attr:shape "point"; attr:width "0"; attr:height "0"; attr:xlabel "wasAssociatedWith" .
+  v:digraph v:hasNode _:hidden .
+  v:digraph v:hasEdge [ v:source ?activity; v:target _:hidden; attr:dir "none" ] .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?agent] .
+  _:role attr:shape "note"; attr:label ?roleLabel .
+  v:digraph v:hasNode _:role .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target _:role; attr:dir "none"; attr:style "dashed" ] .
+} .
+
+{
+  ?activity prov:qualifiedAssociation [ prov:agent ?agent ; prov:hadPlan ?plan ] .
+} 
+=> 
+{
+  _:hidden attr:shape "point"; attr:xlabel "wasAssociatedWith" .
+  v:digraph v:hasNode _:hidden .
+  v:digraph v:hasEdge [ v:source ?activity; v:target _:hidden; attr:dir "none" ] .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?agent] .
+  ?plan a prov:Entity . # implied by ontology?
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?plan; attr:label "hadPlan" ] .
+} .

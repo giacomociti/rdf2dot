@@ -1,41 +1,64 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <title>Rdf Visualization Rules</title>
-    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" href="/rdf_flyer.24" />
-  </head>
-  <body>
-    <h1>Rdf Visualization Rules</h1>
+
+<head>
+  <title>Diagrams for RDF data - Examples</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/rdf_flyer.24" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="../index.html">Playground</a></li>
+      <li><a href="overview.html">Overview</a></li>
+      <li>
+        <a href="examples.html">Examples</a>
+        <ul>
+          <li><a href="prov.html">PROV-O</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <div class="container">
+    <header>
+      <h1>Diagrams for RDF data - Examples</h1>
+    </header>
     <p>
-        This is a brief showcase (work in progress) of visualization rules, with links to their definitions.
-        See the <a href="./overview.html">overview</a> for an introduction.
+      This is a brief showcase (work in progress) of visualization rules, with links to their definitions.
+      See the <a href="./overview.html">overview</a> for an introduction.
     </p>
-    
+
     <h2>General purpose rules</h2>
 
-    <p> Two <a href="../index.html">available</a> general purpose rulesets 
-      are <em>basic</em> and <em>default</em>. 
+    <p> Two <a href="../index.html">available</a> general purpose rulesets
+      are <em>basic</em> and <em>default</em>.
       Let's see how they render the following example dataset:
     </p>
-    <pre id="data1"></pre>
+    <div class="data-container">
+      <pre id="data1"></pre>
+    </div>
+    
 
     <h3>basic</h3>
     <p>
-      With the <a href="https://github.com/giacomociti/rdf2dot/blob/master/packages/rdf2dot/rules/basic.n3">basic</a> rules, 
+      With the <a href="https://github.com/giacomociti/rdf2dot/blob/master/packages/rdf2dot/rules/basic.n3">basic</a>
+      rules,
       every triple is shown as a link between its subject and object.
       The edge label is the local name obtained from the predicate URI, which is available as tooltip.
       Literal nodes have rectangular shape and the tooltip is either the data type or the language tag.
       Blank nodes are empty circles and regular URI nodes have the local name as label and the full URI as tooltip.
-      This kind of diagram contains all the information of the dataset, but it is suitable only for very small ones.  
+      This kind of diagram contains all the information of the dataset, but it is suitable only for very small ones.
     </p>
     <rdf2dot-basic id="basic1"></rdf2dot-basic>
-    
+
     <h3>default</h3>
     <p>
-      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/packages/rdf2dot/rules/default.n3">default</a> rules 
-      make compact visualizations: only the subjects of some triple become nodes, 
+      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/packages/rdf2dot/rules/default.n3">default</a>
+      rules
+      make compact visualizations: only the subjects of some triple become nodes,
       hence literal values are embedded in the subject node label.
     </p>
     <rdf2dot-default id="default1"></rdf2dot-default>
@@ -44,42 +67,55 @@
 
     <h3>Vocabulary</h3>
     <p>
-      As a first example of custom rules we can draw a diagram for our own <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>:
+      As a first example of custom rules we can draw a diagram for our own <a
+        href="/rdf2dot/vocabulary.ttl">vocabulary</a>:
     </p>
     <rdf2dot-custom id="vocabulary1"></rdf2dot-custom>
     <p>
-      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/schema.n3">rules</a> used here may be usable 
-      (or at least a good starting point) also to draw other vocabularies, but there are a few assumptions, made for simplicity, 
+      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/schema.n3">rules</a> used here may be
+      usable
+      (or at least a good starting point) also to draw other vocabularies, but there are a few assumptions, made for
+      simplicity,
       that may not hold in other cases (like the existence of a single label and comment for each class and property).
-      There are excellent ontology visualization tools out there, our modest purpose is to look at custom visualization rules.
-      </p>
-      <p>
-      The focus is on class definitions (that become nodes) and definitions of properties whose domain is one of the classes. 
-      If also the range is one of the classes, the property is shown as an edge between the two classes. If the range is literal,
+      There are excellent ontology visualization tools out there, our modest purpose here is to familiarize with custom visualization
+      rules.
+    </p>
+    <p>
+      The focus is on class definitions (that become nodes) and definitions of properties whose domain is one of the
+      classes.
+      If also the range is one of the classes, the property is shown as an edge between the two classes. If the range is
+      literal,
       the property is embedded in the label of its domain class. This label is created as an
-      <a href="https://graphviz.org/doc/info/shapes.html#html">HTML-like table</a> with the aid 
+      <a href="https://graphviz.org/doc/info/shapes.html#html">HTML-like table</a> with the aid
       of a few <a href="https://github.com/eyereasoner/Notation3-By-Example">N3 built-ins</a>.
     </p>
 
     <h3>Pipelines</h3>
     <p>
       The <a href="https://github.com/zazuko/barnard59">barnard59</a> toolkit allows defining ETL pipelines in RDF.
-      Pipeline definitions can be <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/pipeline1.ttl">complex</a>, and 
-      <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/barnard59.n3">custom visualization rules</a> 
+      Pipeline definitions can be <a
+        href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/pipeline1.ttl">complex</a>, and
+      <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/barnard59/barnard59.n3">custom visualization
+        rules</a>
       can help understanding them.
     </p>
     <rdf2dot-custom id="pipeline1"></rdf2dot-custom>
     <p>
-      Pipelines are represented as rectangular nodes, each with a distinct color. The steps of a pipeline are connected by edges 
-      with the same color of the pipeline. This helps to follow the workflow even in the presence of steps shared by multiple 
-      pipelines, like <em>mergeInputsStep</em> in the example. The tooltip of each step contains implementation details, like 
-      the code module called and its arguments. Some steps have sub-pipelines among their arguments, like <em>mergeInputsStep</em>
-      which takes as input <em>mergeInputsPipeline</em> and, in turn, <em>transformStep</em> which takes as input <em>transformPipeline</em>.
-      In these cases, a strange inverted arrow is used to suggest that the data produced by the sub-pipeline feed the calling step.
+      Pipelines are represented as rectangular nodes, each with a distinct color. The steps of a pipeline are connected
+      by edges
+      with the same color of the pipeline. This helps to follow the workflow even in the presence of steps shared by
+      multiple
+      pipelines, like <em>mergeInputsStep</em> in the example. The tooltip of each step contains implementation details,
+      like
+      the code module called and its arguments. Some steps have sub-pipelines among their arguments, like
+      <em>mergeInputsStep</em>
+      which takes as input <em>mergeInputsPipeline</em> and, in turn, <em>transformStep</em> which takes as input
+      <em>transformPipeline</em>.
+      In these cases, a strange inverted arrow is used to suggest that the data produced by the sub-pipeline feed the
+      calling step.
     </p>
+  </div>
+  <script type="module" src="./examples.js"></script>
+</body>
 
-    
-
-    <script type="module" src="./examples.js"></script>
-  </body>
 </html>

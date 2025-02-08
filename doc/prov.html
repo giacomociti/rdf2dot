@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Diagrams for RDF data - PROV-O</title>
+  <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="/rdf_flyer.24" />
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+  <nav>
+    <ul>
+      <li><a href="../index.html">Playground</a></li>
+      <li><a href="overview.html">Overview</a></li>
+      <li>
+        <a href="examples.html">Examples</a>
+        <ul>
+          <li><a href="prov.html">PROV-O</a></li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+  <div class="container">
+    <header>  
+      <h1>Diagrams for RDF data - PROV-O</h1>
+    </header>
+    
+    <p>
+      The <a href="https://www.w3.org/TR/prov-o/">PROV-O</a> ontology is a standard for representing provenance
+      information.
+      The <a href="https://www.w3.org/TR/2013/NOTE-prov-primer-20130430/">primer</a> contains conventions to visualize
+      provenance graphs.
+    </p>
+
+    <h3>Nodes</h3>
+    <p>
+      The core classes are <code>prov:Entity</code>, <code>prov:Activity</code>, and <code>prov:Agent</code>.
+      Each instance should be rendered as a node with a specific shape and color. This is easily achieved
+      with N3 rules:
+    </p>
+
+    <div class="rules-container">
+      <pre>
+        <code id="rules-entity">
+{
+  ?entity a prov:Entity
+}
+=>
+{
+  v:digraph v:hasNode ?entity .
+  ?entity attr:shape "oval" ;
+    attr:color "#808080" ;
+    attr:style "filled" ;
+    attr:fillcolor "#FFFC87" .
+} .
+        </code>
+      </pre>
+  
+      <pre>
+        <code id="rules-activity">
+{
+  ?activity a prov:Activity
+}
+=>
+{
+    v:digraph v:hasNode ?activity .
+    ?activity attr:shape "box" ;
+    attr:color "blue" ;
+    attr:style "filled" ;
+    attr:fillcolor "#9FB1FC" .
+} .
+        </code>
+      </pre>
+  
+      <pre>
+        <code id="rules-agent">
+{
+  ?agent a prov:Agent
+}
+=>
+{
+  v:digraph v:hasNode ?agent .
+  ?agent attr:shape "house" ;
+    attr:color "black" ;
+    attr:style "filled" ;
+    attr:fillcolor "#FED37F" .
+} .
+        </code>  
+      </pre>
+    
+    </div>
+    <p>Two additional rules provide a short node label (extracted from the URI)
+      and a clickable link for dereferencing the URI:
+    </p>
+    <pre>
+      <code id="rules-label">
+{ v:digraph v:hasNode ?n . ?n log:localName ?localName } => { ?n attr:label ?localName } .
+
+{ v:digraph v:hasNode ?n . ?n log:uri ?uri } => { ?n attr:URL ?uri } .        
+      </code>
+    </pre>
+
+    <p>The following triples:</p>
+    <pre>
+      <code id="data-example-core">
+ex:dataset1 a prov:Entity .
+ex:compose1 a prov:Activity .
+ex:derek a prov:Agent .
+      </code>
+    </pre>
+    <p>produce the following nodes:</p>
+    <rdf2dot-custom id="example-core"></rdf2dot-custom>
+
+
+    <h3>Edges</h3>
+    <p>Edges are created between nodes
+      related by predicates in the PROV-O namespace:
+    </p>
+
+    <pre>
+      <code id="rules-edges">
+{ 
+  v:digraph v:hasNode ?n1, ?n2 .
+  ?n1 ?p ?n2 .
+  ?p log:namespace "http://www.w3.org/ns/prov#"; 
+    log:uri ?uri ;
+    log:localName ?localName .
+} 
+=> 
+{
+  v:digraph v:hasEdge [ 
+    v:source ?n1; 
+    v:target ?n2 ; 
+    attr:label ?localName ;
+    attr:labelURL ?uri ; 
+    attr:tooltip ?uri
+  ]
+} .
+      </code>
+    </pre>
+
+    The convention gives also layout indications, so we can add the following rule
+    to enforce bottom-to-top:
+
+    <pre>
+      <code id="rules-layout">
+{} => { v:digraph v:graphAttributes [ attr:rankdir "BT" ] } .
+      </code>
+    </pre>
+
+    <p>The rendering of this <a href="https://www.w3.org/TR/prov-o/#narrative-example-simple-1">example</a> from the
+      specification
+      looks very similar to the original:</p>
+    </p>
+    <rdf2dot-custom id="example1"></rdf2dot-custom>
+
+    <h3>Qualified properties</h3>
+
+    <p> Some PROV-O relations can be qualified with a role. Instead of a simple <code>prov:used</code> relationship
+      between an activity and an entity,
+      it's possible to have a <code>prov:qualifiedUsage</code> link to a <code>prov:Usage</code> node having a
+      <code>prov:hadRole</code> property:
+    </p>
+    <pre>
+      <code id="data-qualifiedUsage">
+ex:dataset1 a prov:Entity .
+ex:compose1 a prov:Activity . 
+
+ex:compose1 prov:qualifiedUsage [ 
+    a prov:Usage ; 
+    prov:entity ex:dataset1 ; 
+    prov:hadRole ex:dataToCompose 
+] .
+      </code>
+    </pre>
+
+    <p> In the conventional rendering, the activity and the entity are directly connected by an edge with label
+      <code>used</code>,
+      and this edge has an outgoing dashed edge to a note-shaped node labeled with the role.
+      Graphviz does not support <a href="https://gitlab.com/graphviz/graphviz/-/issues/1656">edges pointing at other
+        edges</a>,
+      but we can use a small invisible node to achieve a similar effect:
+    </p>
+    <pre>
+      <code  id="rules-qualifiedUsage">
+{
+  ?activity prov:qualifiedUsage [ prov:entity ?entity ; prov:hadRole ?role ] .
+  ?role log:localName ?roleName .
+  ("prov:hadRole=\n" ?roleName) string:concatenation ?roleLabel .
+} 
+=> 
+{
+  _:hidden attr:shape "point"; attr:width "0"; attr:height "0"; attr:xlabel "used" .
+  v:digraph v:hasNode _:hidden . 
+  v:digraph v:hasEdge [ v:source ?activity; v:target _:hidden; attr:dir "none"] .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?entity] .
+  _:role attr:shape "note"; attr:label ?roleLabel .
+  v:digraph v:hasNode _:role .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target _:role; attr:dir "none"; attr:style "dashed"] .
+} .
+      </code>
+    </pre>
+
+
+    <p>While the hidden intermediate node makes the edge not as smooth as desired, we still obtain a visualization close
+      enough to the original</p>
+    <rdf2dot-custom id="diagram-qualifiedUsage"></rdf2dot-custom>
+    <p>
+      The full set of PROV-O visualization rules is available <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/prov/prov.n3">in the repo</a>.
+      You can load that .n3 file as custom rules in the <a href="../index.html">playground</a> tool to visualize your own PROV-O datasets.
+    </p>
+
+
+    <script type="module" src="./prov.js"></script>
+
+  </div>
+</body>
+
+</html>
