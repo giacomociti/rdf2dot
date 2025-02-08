@@ -3,7 +3,13 @@ import '../packages/rdf2dot-wc/index.js'
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const rulesCore = document.getElementById('rules-core').innerText
+    const rulesEntity = document.getElementById('rules-entity').innerText
+    const rulesActivity = document.getElementById('rules-activity').innerText
+    const rulesAgent = document.getElementById('rules-agent').innerText
+
+    const rulesCore = rulesEntity + rulesActivity + rulesAgent
+
+
     const rulesLabel = document.getElementById('rules-label').innerText
     const rulesEdges = document.getElementById('rules-edges').innerText
     const rulesLayout = document.getElementById('rules-layout').innerText

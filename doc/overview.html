@@ -1,78 +1,119 @@
 <!doctype html>
 <html lang="en">
-    <head>
-        <title>Rdf Visualization - Overview</title>
-        <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="/rdf_flyer.24" />
-    </head>
-    <body>
-        <h1>Diagrams for RDF data</h1>
+
+<head>
+    <title>Diagrams for RDF data - Overview</title>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="/rdf_flyer.24" />
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <nav>
+        <ul>
+            <li><a href="../index.html">Playground</a></li>
+            <li><a href="overview.html">Overview</a></li>
+            <li>
+              <a href="examples.html">Examples</a>
+              <ul>
+                <li><a href="prov.html">PROV-O</a></li>
+              </ul>
+            </li>
+          </ul>
+    </nav>
+    <div class="container">
+        <header>
+            <h1>Diagrams for RDF data - Overview</h1>
+        </header>
+        
         <p>
-            RDF data naturally represent graphs, and visualizing them is straightforward with diagramming tools like <a href="https://www.graphviz.org/">Graphviz</a>.
-            A generic mapping can turn each triple into a link between a node for the subject and a node for the object. For example:
+            RDF data naturally represent graphs, and visualizing them is straightforward with diagramming tools like <a
+                href="https://www.graphviz.org/">Graphviz</a>.
+            A generic mapping can turn each triple into a link between a node for the subject and a node for the object.
+            For example:
         </p>
 
-        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div class="data-container">
             <pre id="data1"></pre>
             <rdf2dot-custom id="graph1"></rdf2dot-custom>
         </div>
 
-       
+
         <p>But such diagrams quickly become messy for non-trivial data, unless we can tweak them a little bit.</p>
         <p>
-            To have decent-looking diagrams, we inevitably have to cope with long URIs, possibly keeping them as tooltips but using something else for labels.
-            To have fewer edges, some properties may be ignored, and others may be embedded in the label for their subject.
-            Edge labels may be omitted and colors may help to at least distinguish those that represent different predicates.
+            To have decent-looking diagrams, we inevitably have to cope with long URIs, possibly keeping them as
+            tooltips but using something else for labels.
+            To have fewer edges, some properties may be ignored, and others may be embedded in the label for their
+            subject.
+            Edge labels may be omitted and colors may help to at least distinguish those that represent different
+            predicates.
             Node shapes and colors may represent the type, some other property, or even a combination.
         </p>
         <p>
-            But even if we can settle on a good default set of visualization rules like these, it is important to be able to cherry pick rules and to add more specific ones on a diagram-by-diagram basis.
-            The approach proposed here (which is <a href="https://www.w3.org/2001/02pd/">not new</a>) provides the needed flexibility to tailor graph diagrams of RDF data.</p>
+            But even if we can settle on a good default set of visualization rules like these, it is important to be
+            able to cherry pick rules and to add more specific ones on a diagram-by-diagram basis.
+            The approach proposed here (which is <a href="https://www.w3.org/2001/02pd/">not new</a>) provides the
+            needed flexibility to tailor graph diagrams of RDF data.</p>
 
         <h3>Diagramming Vocabulary</h3>
         <p>
-            Using a small vocabulary of basic diagramming terms (node, edge, label, shape, color, tooltip...) we can express a diagram in RDF.
+            Using a small vocabulary of basic diagramming terms (node, edge, label, shape, color, tooltip...) we can
+            express a diagram in RDF.
             It's not difficult to convert such diagram descriptions from RDF to some diagramming DSL.
-        </p>       
-        <p>With our <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>, based on the <a href="https://www.graphviz.org/doc/info/lang.html">dot</a> language,
+        </p>
+        <p>With our <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>, based on the <a
+                href="https://www.graphviz.org/doc/info/lang.html">dot</a> language,
             we can describe a more compact version of the above graph:</p>
-        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+        <div class="data-container">
             <pre id="diagram2"></pre>
             <rdf2dot-custom id="graph2"></rdf2dot-custom>
         </div>
-      
-        <p>The label for the <code>ann</code> node is the name instead of the URI. The shape for the city node is rectangular, 
-            and its label is the last part of the URI. The label of the edge is also customized, 
+
+        <p>The label for the <code>&lt;urn:ann&gt;</code> node is the name instead of the URI. The shape for the city node is
+            rectangular,
+            and its label is the last part of the URI. The label of the edge is also customized,
             but the full predicate URI is available as a tooltip over the arrow.
         </p>
         <p>
-            Thus we can construct a customized diagram for our little dataset. But if we were to create the diagram description manually, it would be better to use directly the <em>dot</em> language which is designed for that purpose.
+            Thus we can construct a customized diagram for our little dataset. But if we were to create the diagram
+            description manually, it would be better to use directly the <em>dot</em> language which is designed for
+            that purpose.
         </p>
 
-        <p>The missing step is how to get from the original data to the description of its diagram. 
-        We need rules to tranform RDF data into diagram descriptions. Some rules may be more general (<em>the tooltip of an arrow is the property URI</em>), 
-        others a bit more specific (<em>city nodes are rectangular</em>).
+        <p>The missing step is how to get from the original data to the description of its diagram.
+            We need rules to tranform RDF data into diagram descriptions. Some rules may be more general (<em>the
+                tooltip of an arrow is the predicate URI</em>),
+            others a bit more specific (<em>city nodes are rectangular</em>).
 
         </p>
-        <p>Since it's a matter of transforming an RDF dataset into another RDF dataset, 
-            one option is to use SPARQL and run a CONSTRUCT query to transform the original RDF data into the desired description of its diagram.
+        <p>Since it's a matter of transforming an RDF dataset into another RDF dataset,
+            one option is to use SPARQL and run a CONSTRUCT query to transform the original RDF data into the desired
+            description of its diagram.
         </p>
-        <p>But here, as in the <a href="https://www.w3.org/2001/02pd/">original idea</a>, we leverage <a href="https://w3c.github.io/N3/reports/20230703/">Notation 3</a>
-        and its <a href="https://github.com/eyereasoner"> eye reasoner</a> implementation now available also <a href="https://github.com/eyereasoner/eye-js"></a>in the browser.</p>
-    
+        <p>But here, as in the <a href="https://www.w3.org/2001/02pd/">original idea</a>, we leverage <a
+                href="https://w3c.github.io/N3/reports/20230703/">Notation 3</a>
+            and its <a href="https://github.com/eyereasoner"> eye reasoner</a> implementation now available also <a
+                href="https://github.com/eyereasoner/eye-js"></a>in the browser.</p>
+
         <h3>Notation 3</h3>
         <p>The following N3 rules are used to obtain the last diagram from the initial data:</p>
 
-        <pre id="rules2"></pre>
+        <div class="rules-container">
+            <pre id="rules2_1"></pre>
+            <pre id="rules2_2"></pre>
+            <pre id="rules2_3"></pre>
+        </div>
+
         <p>There are three rules, expressed with the implication symbol =>. </p>
         <li>
             The first one states that for every instance of city, we extract the last part of its URI
-            (using a so-called built-in named <code>log:localName</code>) and derive a node with such a label and having rectangular shape.
+            (using a so-called built-in named <code>log:localName</code>) and derive a node with such a label and having
+            rectangular shape.
         </li>
         <li>
             The next rule handles triples with a string literal value for the <code>urn:name</code> predicate.
-            The subject of such a triple becomes a node labelled with the literal value 
+            The subject of such a triple becomes a node labelled with the literal value
             (the text part of the literal term is parsed by the <code>log:dtlit</code> built-in).
         </li>
         <li>
@@ -82,23 +123,30 @@
         <p>
             The above rules are quite specific and tailored to the vocabulary used in the input data.
             Any additional data not covered by the rules would be ignored.
-            It is possible to create more general rules, such that all input data would somehow be mapped to a diagrammatic
-            representation. In fact the very first diagram was obtained with a simple general-purpose rule:
+            It is possible to create more general rules, such that all input data would somehow be mapped to a
+            diagrammatic
+            representation. In fact, the very first diagram was obtained with a simple general-purpose rule:
         </p>
-        <pre id="rules1"></pre>
+        <div class="rules-container">
+            <pre id="rules1"></pre>
+        </div>
+        <!-- <pre id="rules1"></pre> -->
         <p>
             It is possible to create and compose both general and specific rules.
-            General rules may require extra-care, for example the <code>log:notEqualTo</code> clauses above are needed to
+            General rules may require extra-care, for example the <code>log:notEqualTo</code> clauses above are needed
+            to
             avoid loops (otherwise the rule would be applied also to the derived triples).
             A sufficient understanding of Notation 3 logic is needed, but it allows to create interesting diagrams.
         </p>
         <p>
-            <a href="../index.html">Here</a>, you can create diagrams using default rules, with the option to provide your own.
+            <a href="../index.html">Here</a>, you can create diagrams using default rules, with the option to provide
+            your own.
             See also the <a href="./examples.html">examples</a> page.
         </p>
 
         <script type="module" src="./overview.js"></script>
-    </body>
+
+    </div>
+</body>
+
 </html>
-
-
