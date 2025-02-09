@@ -3,7 +3,7 @@ name: Deploy and Publish
 on:
   # Runs on pushes targeting the default branch
   push:
-    branches: ['master']
+    branches: ['master', 'pages']
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -38,6 +38,8 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
+      - name: List dist directory contents
+        run: ls -la ./dist
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
