@@ -38,15 +38,12 @@ jobs:
         run: npm install
       - name: Build
         run: npm run build
-      - name: List dist directory contents
-        run: ls -la ./dist
       - name: Setup Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload dist repository
-          #name: dist-artifact
           path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
