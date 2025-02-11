@@ -25,6 +25,7 @@
 # all properties connecting two nodes become edges
 {     
     ?s ?p ?o .
+    [] log:notIncludes { [] v:term ?p } . # corner case handled by the next rule
     ?source v:term ?s .
     ?target v:term ?o .
     v:digraph v:hasNode ?source , ?target .
@@ -32,6 +33,25 @@
 =>
 {
     v:digraph v:hasEdge [ v:source ?source ; v:target ?target ; v:term ?p ]
+}
+.
+
+# a property that is also a node is rendered with an intermediate hidden node
+{     
+    ?s ?p ?o .
+    ?prop v:term ?p . 
+    ?source v:term ?s .
+    ?target v:term ?o .
+    v:digraph v:hasNode ?source, ?target, ?prop .
+    ?p log:uri ?uri .
+}
+=>
+{
+  _:hidden attr:shape "point"; attr:width "0"; attr:height "0" .
+  v:digraph v:hasNode _:hidden . 
+  v:digraph v:hasEdge [ v:source ?source ; v:target _:hidden ; attr:dir "none"; attr:color "lawngreen" ] .
+  v:digraph v:hasEdge [ v:source _:hidden ; v:target ?target ; attr:color "lawngreen"; attr:tooltip ?uri ] .
+  v:digraph v:hasEdge [ v:source _:hidden; v:target ?prop ; attr:dir "none"; attr:style "dashed" ]
 }
 .
 
