@@ -68,6 +68,12 @@
                     <rdf-editor id="data" format="application/trig"></rdf-editor>
                     <button id="show">Show</button>
                     <button id="save" disabled>Save</button>
+                    <button id="share">Share</button>
+                    <dialog id="shareDialog">
+                        <label for="shareLink">Share this link</label>
+                        <input id="shareLink" type="text" size="40" readonly>
+                        <button id="shorten">Shorten</button>
+                    </dialog>
                 </div>
                 <rdf-editor class="hidden" id="rules" format="text/n3"></rdf-editor>
                 <div style="text-align: center;">
