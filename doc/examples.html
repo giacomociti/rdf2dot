@@ -59,24 +59,42 @@
       The <a href="https://github.com/giacomociti/rdf2dot/blob/master/packages/rdf2dot/rules/default.n3">default</a>
       rules
       make compact visualizations: only the subjects of some triple become nodes,
-      hence literal values are embedded in the subject node label.
+      hence literal values are embedded in the subject node label, that is created as an
+      <a href="https://graphviz.org/doc/info/shapes.html#html">HTML-like table</a> with the aid
+      of a few <a href="https://github.com/eyereasoner/Notation3-By-Example">N3 built-ins</a>.
     </p>
     <rdf2dot-default id="default1"></rdf2dot-default>
 
+    <h3>schema</h3>
+    <p>
+      To get an idea of which properties and classes are used in a dataset, we can use 
+      <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/schema.n3">schema</a> rules.
+      Instead of visualizing the actual nodes in the dataset, we create a node for each class and a node for each property.
+      The edges are drawn between the properties and the classes in their domain and range. 
+      This is the outcome for the data above:
+    </p>
+    <rdf2dot-custom id="schema1"></rdf2dot-custom>
+    <p>
+      The <em>name</em> predicate has literal values, and it is used on instances of class <em>Person</em> but also with
+      subjects that aren't instances of any class, hence classified as generic resources. 
+      The <em>livesIn</em> predicate connect instances of <em>Person</em> with untyped resources.
+      The <em>containedIn</em> predicate is used with untyped subjects and objects.
+  
+    </p>
+
+    
     <h2>Domain specific rules</h2>
 
     <h3>Vocabulary</h3>
     <p>
-      As a first example of custom rules we can draw a diagram for our own <a
-        href="/rdf2dot/vocabulary.ttl">vocabulary</a>:
+      As a first step towards custom rules, we can draw a diagram for our own <a href="/rdf2dot/vocabulary.ttl">vocabulary</a>:
     </p>
     <rdf2dot-custom id="vocabulary1"></rdf2dot-custom>
     <p>
-      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/schema.n3">rules</a> used here may be
-      usable
-      (or at least a good starting point) also to draw other vocabularies, but there are a few assumptions, made for
-      simplicity,
-      that may not hold in other cases (like the existence of a single label and comment for each class and property).
+      The <a href="https://github.com/giacomociti/rdf2dot/blob/master/examples/vocabulary.n3">rules</a> used here 
+      are still quite generic and may be usable (or at least a good starting point) also to draw other vocabularies, 
+      but there are a few assumptions, made for simplicity, that may not hold in other cases (like the existence of 
+      a single label and comment for each class and property).
       There are excellent ontology visualization tools out there, our modest purpose here is to familiarize with custom visualization
       rules.
     </p>
@@ -84,10 +102,7 @@
       The focus is on class definitions (that become nodes) and definitions of properties whose domain is one of the
       classes.
       If also the range is one of the classes, the property is shown as an edge between the two classes. If the range is
-      literal,
-      the property is embedded in the label of its domain class. This label is created as an
-      <a href="https://graphviz.org/doc/info/shapes.html#html">HTML-like table</a> with the aid
-      of a few <a href="https://github.com/eyereasoner/Notation3-By-Example">N3 built-ins</a>.
+      literal, the property is embedded in the label of its domain class. 
     </p>
 
     <h3>Pipelines</h3>

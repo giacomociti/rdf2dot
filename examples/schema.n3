@@ -1,51 +1,144 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-@prefix string: <http://www.w3.org/2000/10/swap/string#> .
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
-@prefix attr: <http://view/dot/attribute/> .
 @prefix v: <http://view/> .
+@prefix attr: <http://view/dot/attribute/> .
 
 { 
-    ?property a rdf:Property ;
-         rdfs:label ?label ;
-         rdfs:comment ?comment ;
-         rdfs:domain ?domain ;
-         rdfs:range ?range .
-    ?domain a rdfs:Class .
-    ?range a rdfs:Class .
-}
-=>
-{
-    v:digraph v:hasEdge ?property .
-    ?property 
-        attr:label ?label ;
-        attr:labeltooltip ?comment ;   
-        v:source ?domain ;
-        v:target ?range ;
-}
-.
+    [] ?p [] .
+    # exclude rdf:type and the predicates in the visualization vocabulary
+    ?p log:notEqualTo rdf:type, <predicate> , <class> .
+    ?p log:namespace ?ns .
+    v: log:uri [ log:notEqualTo ?ns ] .
+    attr: log:uri [ log:notEqualTo ?ns ] .
+} 
+=> 
+{ 
+    <> <predicate> ?p 
+} .
+
+
+{ [] a ?class } => { <> <class> ?class } .
 
 {
-    ?class a rdfs:Class ;
-        rdfs:label ?classLabel ;
-        rdfs:comment ?comment .
-    ('<TR><TD><B>%s</B></TD></TR>' ?classLabel) string:format ?classRow .
-    (?propertyRow {
-        [] a rdf:Property ;
-            rdfs:label ?propertyLabel ;
-            rdfs:domain ?class ;
-            rdfs:range rdfs:Literal .
-        ('<TR><TD ALIGN="LEFT">%s</TD></TR>' ?propertyLabel) string:format ?propertyRow .
-    } ?propertyRows) log:collectAllIn [] .
-
-    (?propertyRows '\n') string:join ?rows .
-    ('<<TABLE CELLBORDER="0"> %s\n%s </TABLE>>' ?classRow ?rows) string:format ?htmlLabel .
-}
-=>
+	<> <class> ?class .
+ 	?class	log:localName ?label .
+} 
+=> 
 {
-    v:digraph v:hasNode ?class .
-    ?class attr:shape 'plaintext' ;
-        attr:tooltip ?comment ;
-        attr:label ?htmlLabel .
+	v:digraph v:hasNode ?class .
+	?class attr:label ?label; 
+    	attr:URL ?class ; 
+        attr:style "filled" ; 
+        attr:fillcolor "#aaccff" .
+}.
+
+# each predicate is a rectangular node with its color
+{
+    (?p { <> <predicate> ?p } ?predicates) log:collectAllIn [] .
+
+    ?predicates list:iterate (?index ?predicate) .
+  
+    (
+        "red" "green" "blue" "orange" "purple" 
+        "cyan" "magenta" "brown" "pink" "gray" 
+        "darkred" "darkgreen" "darkblue" "darkorange" "darkviolet" 
+        "darkcyan" "darkmagenta" "lime" "navy" "teal" 
+        "olive" "maroon" "aqua" "fuchsia" "gold" 
+        "coral" "indigo" "plum" "salmon" "sienna"
+        "tan" "turquoise" "violet" "wheat" "blueviolet" 
+        "burlywood" "cadetblue" "chartreuse" "chocolate" "cornflowerblue" 
+        "darkgoldenrod" "darkkhaki" "darkolivegreen" "darkorchid" "darksalmon" 
+        "darkseagreen" "darkslateblue" "darkslategray" "darkturquoise" "deeppink" 
+        "deepskyblue" "dimgray" "dodgerblue" "firebrick" "forestgreen" 
+      	"goldenrod" "greenyellow" "hotpink" "indianred" "lightcoral"
+        "lightseagreen" "lightskyblue" "lightslategray" "lightsteelblue" "mediumaquamarine" 
+      	"mediumblue" "mediumorchid" "mediumpurple" "mediumseagreen" "mediumslateblue"
+        "mediumspringgreen" "mediumturquoise" "mediumvioletred" "midnightblue" "olivedrab" 
+        "orangered" "orchid" "palegoldenrod" "palegreen" "paleturquoise" 
+        "palevioletred" "peru" "powderblue" "rosybrown" "royalblue"
+        "saddlebrown" "sandybrown" "seagreen" "skyblue" "slateblue" 
+        "springgreen" "steelblue" "thistle" "tomato" "yellowgreen"
+    ) list:iterate (?index ?color) .
+    
+  	?predicate log:localName ?label .
+} 
+=> 
+{
+    v:digraph v:hasNode ?predicate.
+    ?predicate attr:shape "box" ;
+    	attr:URL ?predicate ;
+     	attr:label ?label ;
+     	attr:fontcolor ?color ;
+     	attr:color ?color .
+}.
+
+# if the subject of a triple is an instance of a class,
+# that class is linked to the predicate of that triple
+{
+  	<> <predicate> ?p .
+	[] ?p [] ; a ?domain .
+	?p attr:color ?color .
+} 
+=> 
+{
+	v:digraph v:hasEdge [ v:source ?domain; v:target ?p ; attr:dir "none" ; attr:color ?color ]
+} .
+
+# if the object of a triple is an instance of a class,
+# that class is linked from the predicate of that triple
+{
+  	<> <predicate> ?p .
+	[] ?p [ a ?range ] . 
+	?p attr:color ?color .
+} 
+=> 
+{
+	v:digraph v:hasEdge [ v:source ?p; v:target ?range ; attr:color ?color ]
+} .
+
+# if the object of a triple is a literal,
+# a new Literal node is linked from the node for the predicate of that triple
+{
+    <> <predicate> ?p .
+	[] ?p [ log:rawType log:Literal ] .
+	?p attr:color ?color .
+} 
+=> 
+{
+	v:digraph v:hasNode _:lit .
+ 	_:lit attr:shape "box"; attr:label "Literal" ; attr:URL rdfs:Literal ; attr:style "filled"; attr:fillcolor "#ffcc33" .
+	v:digraph v:hasEdge [ v:source ?p; v:target _:lit ; attr:color ?color ]
+} .
+
+# if the subject of a triple is not declared as instance of any class,
+# a new Resource node is linked to the node for the predicate of that triple
+{
+    <> <predicate> ?p .
+	?s ?p [] . 
+  	[] log:notIncludes { ?s a [] } .
+  	?p attr:color ?color .
+} 
+=> 
+{
+	v:digraph v:hasNode _:res .
+	_:res attr:label "Resource" ; attr:URL rdfs:Resource ; attr:style "dashed".
+	v:digraph v:hasEdge [ v:source _:res; v:target ?p ; attr:dir "none" ; attr:color ?color ]
+} .
+
+# if the object of a triple is not a literal, and is not declared as instance of any class,
+# a new Resource node is linked from the node for the predicate of that triple
+{
+  	<> <predicate> ?p .
+	[] ?p ?o .
+	?o log:rawType [ log:notEqualTo log:Literal ].
+	[] log:notIncludes { ?o a [] }.
+	?p attr:color ?color .
+} 
+=> 
+{
+	v:digraph v:hasNode _:res .
+	_:res attr:label "Resource" ; attr:URL rdfs:Resource ; attr:style "dashed".
+	v:digraph v:hasEdge [ v:source ?p; v:target _:res ; attr:color ?color ]
 } .
