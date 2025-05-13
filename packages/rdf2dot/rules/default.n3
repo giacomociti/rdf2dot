@@ -130,12 +130,16 @@
 
 
 # lists
-{ ?s ?p ?o . ?o log:rawType rdf:List } => { v:digraph v:hasNode [ v:term ?o ] } .
+
+{ ?x v:type rdf:List } <= { ?x log:rawType rdf:List }.
+{ ?x v:type rdf:List } <= { ?x rdf:rest [] }.
+
+{ ?s ?p ?o . ?o v:type rdf:List } => { v:digraph v:hasNode [ v:term ?o ] } .
 
 {
     v:digraph v:hasNode ?n .
     ?n v:term ?list .
-    ?list log:rawType rdf:List .
+    ?list v:type rdf:List .
     ?list list:iterate (?i ?item) .
     ?item v:text ?fieldValue .
     ?fieldValue v:escape ?escapedValue .
@@ -150,7 +154,7 @@
 {
     v:digraph v:hasNode ?source .
     ?source v:term ?list .
-    ?list log:rawType rdf:List .
+    ?list v:type rdf:List .
     ?list list:iterate (?i ?item) .
     v:digraph v:hasNode ?target .
     ?target v:term ?item .
