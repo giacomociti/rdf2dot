@@ -1,0 +1,20 @@
+PREFIX : <http://view/schema/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> 
+
+CONSTRUCT {
+    ?c a :Class .
+    ?p a :Predicate .
+    ?p :domainIncludes ?domain .
+    ?p :rangeIncludes ?range .
+    ?p :chainedTo ?p2 .
+    ?p2 a :Predicate .
+}
+WHERE {
+    { SELECT DISTINCT ?c WHERE { [] a ?c } }
+    UNION { SELECT DISTINCT ?p ?domain WHERE { [ a ?domain ] ?p [] } } 
+    UNION { SELECT DISTINCT ?p ?domain WHERE { { ?s ?p [] } MINUS { ?s a [] } BIND(rdfs:Resource AS ?domain) }  }
+    UNION { SELECT DISTINCT ?p ?range WHERE { [] ?p [a ?range ] } }
+    UNION { SELECT DISTINCT ?p ?range WHERE { [] ?p ?o . FILTER(isLiteral(?o)) BIND(rdfs:Literal AS ?range) } }
+    UNION { SELECT DISTINCT ?p ?range WHERE { { [] ?p ?o . FILTER(!isLiteral(?o)) } MINUS { ?o a [] } BIND(rdfs:Resource AS ?range) } }
+    UNION { SELECT DISTINCT ?p ?p2 WHERE { { [] ?p ?o . ?o ?p2 [] } MINUS { ?o a [] } } }          
+}

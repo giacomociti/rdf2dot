@@ -4,39 +4,83 @@
 @prefix list: <http://www.w3.org/2000/10/swap/list#> .
 @prefix v: <http://view/> .
 @prefix attr: <http://view/dot/attribute/> .
+@prefix : <http://view/schema/> .
 
-{ 
-    [] ?p [] .
-    # exclude rdf:type and the predicates in the visualization vocabulary
-    ?p log:notEqualTo rdf:type, <predicate> , <class> .
-    ?p log:namespace ?ns .
-    v: log:uri [ log:notEqualTo ?ns ] .
-    attr: log:uri [ log:notEqualTo ?ns ] .
-} 
-=> 
-{ 
-    <> <predicate> ?p 
+### rules to collect metadata (see also schema.sparql)
+
+{
+  : :allows ?x .
+}
+<=
+{
+  ?x log:namespace ?ns .
+  : log:uri [ log:notEqualTo ?ns ] .
+  v: log:uri [ log:notEqualTo ?ns ] .
+  attr: log:uri [ log:notEqualTo ?ns ] .
+} .
+
+{ [] ?p [] . : :allows ?p } => { ?p a :Predicate } .
+
+{ [] a ?class . : :allows ?class } => { ?class a :Class } .
+
+
+{ ?p a :Predicate . [ a ?domain ] ?p [] . : :allows ?domain } => { ?p :domainIncludes ?domain } .
+
+{ ?p a :Predicate . [] ?p [ a ?range ] . : :allows ?range } => { ?p :rangeIncludes ?range } .
+
+{ ?p a :Predicate . [] ?p [ log:rawType log:Literal ] } => { ?p :rangeIncludes rdfs:Literal } .
+
+{
+  ?p a :Predicate .
+	?s ?p [] . 
+  [] log:notIncludes { ?s a [] } .
+}
+=>
+{
+  ?p :domainIncludes rdfs:Resource
+} .
+
+{
+  ?p a :Predicate .
+	[] ?p ?o .
+	?o log:rawType [ log:notEqualTo log:Literal ].
+	[] log:notIncludes { ?o a [] }.
+}
+=>
+{
+  ?p :rangeIncludes rdfs:Resource
+} .
+
+{
+  ?p1 a :Predicate .
+  ?p2 a :Predicate .
+  [] ?p1 ?o .
+  ?o ?p2 [] .
+  [] log:notIncludes { ?o a [] }.
+}
+=>
+{
+  ?p1 :chainedTo ?p2
 } .
 
 
-{ [] a ?class } => { <> <class> ?class } .
+### visualization rules
 
 {
-	<> <class> ?class .
- 	?class	log:localName ?label .
+	?class a :Class ; log:localName ?label
 } 
 => 
 {
 	v:digraph v:hasNode ?class .
 	?class attr:label ?label; 
-    	attr:URL ?class ; 
-        attr:style "filled" ; 
-        attr:fillcolor "#aaccff" .
+    attr:URL ?class ; 
+    attr:style "filled" ; 
+    attr:fillcolor "#aaccff" .
 }.
 
 # each predicate is a rectangular node with its color
 {
-    (?p { <> <predicate> ?p } ?predicates) log:collectAllIn [] .
+    (?p { ?p a :Predicate ; log:notEqualTo rdf:type } ?predicates) log:collectAllIn [] .
 
     ?predicates list:iterate (?index ?predicate) .
   
@@ -74,23 +118,19 @@
      	attr:color ?color .
 }.
 
-# if the subject of a triple is an instance of a class,
-# that class is linked to the predicate of that triple
 {
-  	<> <predicate> ?p .
-	[] ?p [] ; a ?domain .
+  ?p :domainIncludes ?domain .
+  ?domain log:notEqualTo rdfs:Resource .
 	?p attr:color ?color .
 } 
 => 
 {
-	v:digraph v:hasEdge [ v:source ?domain; v:target ?p ; attr:dir "none" ; attr:color ?color ]
+	v:digraph v:hasEdge [ v:source ?domain; v:target ?p ; attr:color ?color ; attr:dir "none" ]
 } .
 
-# if the object of a triple is an instance of a class,
-# that class is linked from the predicate of that triple
 {
-  	<> <predicate> ?p .
-	[] ?p [ a ?range ] . 
+  ?p :rangeIncludes ?range .
+  ?range log:notEqualTo rdfs:Literal, rdfs:Resource .
 	?p attr:color ?color .
 } 
 => 
@@ -98,26 +138,22 @@
 	v:digraph v:hasEdge [ v:source ?p; v:target ?range ; attr:color ?color ]
 } .
 
-# if the object of a triple is a literal,
-# a new Literal node is linked from the node for the predicate of that triple
 {
-    <> <predicate> ?p .
-	[] ?p [ log:rawType log:Literal ] .
+  ?p :rangeIncludes rdfs:Literal .
 	?p attr:color ?color .
 } 
 => 
 {
 	v:digraph v:hasNode _:lit .
- 	_:lit attr:shape "box"; attr:label "Literal" ; attr:URL rdfs:Literal ; attr:style "filled"; attr:fillcolor "#ffcc33" .
+ 	_:lit attr:shape "box"; attr:label "Literal" ; attr:URL rdfs:Literal ; attr:style "filled, dashed"; attr:fillcolor "#ffcc33" .
 	v:digraph v:hasEdge [ v:source ?p; v:target _:lit ; attr:color ?color ]
 } .
 
-# if the subject of a triple is not declared as instance of any class,
-# a new Resource node is linked to the node for the predicate of that triple
+# add a Resource source, unless chained from another predicate
+# because in this case there is already an incoming link
 {
-    <> <predicate> ?p .
-	?s ?p [] . 
-  	[] log:notIncludes { ?s a [] } .
+    ?p :domainIncludes rdfs:Resource .
+    [] log:notIncludes { [] :chainedTo ?p } .
   	?p attr:color ?color .
 } 
 => 
@@ -127,18 +163,25 @@
 	v:digraph v:hasEdge [ v:source _:res; v:target ?p ; attr:dir "none" ; attr:color ?color ]
 } .
 
-# if the object of a triple is not a literal, and is not declared as instance of any class,
-# a new Resource node is linked from the node for the predicate of that triple
+# add a Resource target, keeping track of the predicate
 {
-  	<> <predicate> ?p .
-	[] ?p ?o .
-	?o log:rawType [ log:notEqualTo log:Literal ].
-	[] log:notIncludes { ?o a [] }.
+  ?p :rangeIncludes rdfs:Resource .
 	?p attr:color ?color .
 } 
 => 
 {
 	v:digraph v:hasNode _:res .
-	_:res attr:label "Resource" ; attr:URL rdfs:Resource ; attr:style "dashed".
+	_:res attr:label "Resource" ; attr:URL rdfs:Resource ; attr:style "dashed" ; v:resourceRangeOf ?p .
 	v:digraph v:hasEdge [ v:source ?p; v:target _:res ; attr:color ?color ]
 } .
+
+# add the edge only if ?p1 has a resource range
+{
+  ?p1 :chainedTo ?p2 .
+  ?n1 v:resourceRangeOf ?p1 .
+  ?n2 attr:URL ?p2 .
+} 
+=> 
+{
+  v:digraph v:hasEdge [ v:source ?n1; v:target ?n2 ; attr:style "dashed" ; attr:dir "none"]
+}.

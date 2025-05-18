@@ -1,5 +1,5 @@
 import data1 from './data2.ttl?raw'
-import schema from '../examples/schema.n3?raw'
+import schema from '../examples/schema/schema.n3?raw'
 import vocabulary from '../examples/vocabulary.n3?raw'
 import vocabulary1 from '../packages/rdf2dot/vocabulary.ttl?raw'
 import barnard59 from '../examples/barnard59/barnard59.n3?raw'
