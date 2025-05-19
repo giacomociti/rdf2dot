@@ -8,6 +8,9 @@
 @prefix v: <http://view/> .
 @prefix attr: <http://view/dot/attribute/> .
 
+v:config 
+    v:maxListLength 20 .
+
 # all the subjects of some triple become nodes
 {
     ?s ?p ?o .
@@ -140,10 +143,28 @@
     v:digraph v:hasNode ?n .
     ?n v:term ?list .
     ?list v:type rdf:List .
+    ?list list:length ?length .
+    v:config v:maxListLength ?max .
     ?list list:iterate (?i ?item) .
+    ?i math:notGreaterThan ?max .
     ?item v:text ?fieldValue .
     ?fieldValue v:escape ?escapedValue .
     ( '<TR><TD BGCOLOR="/blues8/1:/blues8/3" ALIGN="LEFT" PORT="%s">• %s</TD></TR>' ?i ?escapedValue) string:format ?field
+}
+=> 
+{
+    ?n v:field ?field
+}
+.
+
+{
+    v:digraph v:hasNode ?n .
+    ?n v:term ?list .
+    ?list v:type rdf:List .
+    ?list list:length ?length .
+    v:config v:maxListLength ?max .
+    ?length math:greaterThan ?max .
+    ('<TR><TD BGCOLOR="/blues8/1:/blues8/3" ALIGN="LEFT" >... %s items</TD></TR>' ?length) string:format ?field
 }
 => 
 {
