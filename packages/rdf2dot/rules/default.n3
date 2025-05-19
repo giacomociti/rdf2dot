@@ -8,6 +8,13 @@
 @prefix v: <http://view/> .
 @prefix attr: <http://view/dot/attribute/> .
 
+v:config 
+    v:bgColorNode "/accent3/1:/accent3/3" ;
+    v:bgColorList "/blues8/1:/blues8/3" ;
+    v:maxTextLength 50 ;
+    v:maxTextPrefix 25 ;
+    v:maxListLength 20 .
+
 # all the subjects of some triple become nodes
 {
     ?s ?p ?o .
@@ -44,7 +51,8 @@
         v:text ?text ;
     ] .
     ?text v:escape ?escapedText .
-    ('<TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="/accent3/1:/accent3/3">%s</TD></TR>' ?escapedText) string:format ?header .
+    v:config v:bgColorNode ?bgColorNode .
+    ('<TR><TD ALIGN="CENTER" COLSPAN="2" BGCOLOR="%s">%s</TD></TR>' ?bgColorNode ?escapedText) string:format ?header .
 }
 =>
 {
@@ -60,7 +68,7 @@
    
     (?x {
     	?term ?p ?o .
-    	?o string:length [ math:greaterThan 50] .
+        ?o v:textSize v:long .
     	?p log:localName ?pName .
     	(?pName ": " ?o) string:concatenation ?x
     } ?xs) log:collectAllIn [] .
@@ -140,10 +148,30 @@
     v:digraph v:hasNode ?n .
     ?n v:term ?list .
     ?list v:type rdf:List .
+    ?list list:length ?length .
+    v:config v:maxListLength ?max .
     ?list list:iterate (?i ?item) .
+    ?i math:notGreaterThan ?max .
     ?item v:text ?fieldValue .
     ?fieldValue v:escape ?escapedValue .
-    ( '<TR><TD BGCOLOR="/blues8/1:/blues8/3" ALIGN="LEFT" PORT="%s">• %s</TD></TR>' ?i ?escapedValue) string:format ?field
+    v:config v:bgColorList ?bgColorList .
+    ( '<TR><TD BGCOLOR="%s" ALIGN="LEFT" PORT="%s">• %s</TD></TR>' ?bgColorList ?i ?escapedValue) string:format ?field
+}
+=> 
+{
+    ?n v:field ?field
+}
+.
+
+{
+    v:digraph v:hasNode ?n .
+    ?n v:term ?list .
+    ?list v:type rdf:List .
+    ?list list:length ?length .
+    v:config v:maxListLength ?max .
+    ?length math:greaterThan ?max .
+    v:config v:bgColorList ?bgColorList .
+    ('<TR><TD BGCOLOR="%s" ALIGN="LEFT" >... %s items</TD></TR>' ?bgColorList ?length) string:format ?field
 }
 => 
 {
@@ -202,10 +230,23 @@
 } .
 
 
-{ ?text v:shorten ?text } <= { ?text string:length [ math:notGreaterThan 50 ] } .
+{ ?text v:shorten ?text } <= { ?text v:textSize v:short } .
 
 { ?text v:shorten ?shortened } <= { 
-  ?text string:length [ math:greaterThan 50 ] .
-  (?text 0 25) func:substring ?substring .
+  ?text v:textSize v:long .
+  v:config v:maxTextPrefix ?prefix .
+  (?text 0 ?prefix) func:substring ?substring .
   (?substring "...") string:concatenation ?shortened .
 } . # TODO check string:substring
+
+{ ?text v:textSize v:long }  <= { 
+    ?text string:length ?length .
+    v:config v:maxTextLength ?max .
+    ?length math:greaterThan ?max .
+} .
+
+{ ?text v:textSize v:short }  <= { 
+    ?text string:length ?length .
+    v:config v:maxTextLength ?max .
+    ?length math:notGreaterThan ?max .
+} .
