@@ -23,13 +23,17 @@ const rulesLabel = document.getElementById("rulesLabel")
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchParams = new URL(window.location.href).searchParams
-    if(searchParams.has("data") && searchParams.has("rules")) {
-        data.value = searchParams.get("data")
-        rules.value = searchParams.get("rules")
-        showButton.click()
-    } else {
+
+    if (searchParams.has("rules")) {
+        rules.value = searchParams.get("rules") 
+    } 
+    else {
         rules.value = rulesDefault
         rulesLabel.textContent = "Using Default Rules"
+    }
+    if (searchParams.has("data")) {
+        data.value = searchParams.get("data")
+        showButton.click()
     }
 })
 
@@ -67,10 +71,13 @@ saveButton.addEventListener("click", () => {
 })
 
 shareButton.addEventListener("click", () => {
+    // rules are added only if they differ from default (to avoid URI too long errors)
+    const rulesParameter = rulesLabel.textContent === "Using Default Rules" && rules.value === rulesDefault ? "" : "&rules=" + encodeURIComponent(rules.value)
+
     const url = new URL(window.location.href).origin 
         + window.location.pathname 
         + "?data=" + encodeURIComponent(data.value) 
-        + "&rules=" + encodeURIComponent(rules.value)
+        + rulesParameter
     shareLink.value = url
     shareLink.select()
     shortenButton.removeAttribute("disabled")
