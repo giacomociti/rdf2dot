@@ -55,25 +55,49 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
           cache: 'npm'
+
       - name: Install dependencies
         run: npm install
+
       - name: Build
         run: npm run build
+
+      - name: Get local version (rdf2dot)
+        id: local_version_rdf2dot
+        run: echo "version=$(jq -r .version packages/rdf2dot/package.json)" >> $GITHUB_OUTPUT
+
+      - name: Get published version (rdf2dot)
+        id: published_version_rdf2dot
+        run: echo "version=$(npm view rdf2dot version || echo 0.0.0)" >> $GITHUB_OUTPUT
+
+      - name: Get local version (rdf2dot-wc)
+        id: local_version_rdf2dot_wc
+        run: echo "version=$(jq -r .version packages/rdf2dot-wc/package.json)" >> $GITHUB_OUTPUT
+
+      - name: Get published version (rdf2dot-wc)
+        id: published_version_rdf2dot_wc
+        run: echo "version=$(npm view rdf2dot-wc version || echo 0.0.0)" >> $GITHUB_OUTPUT
+
       - name: Configure npm for publishing
         run: |
           echo "//registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}" > ~/.npmrc
+
       - name: Publish rdf2dot-wc to npm
+        if: steps.local_version.outputs.version != steps.published_version.outputs.version
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           cd dist/rdf2dot-wc
           npm publish --access public
+
       - name: Publish rdf2dot to npm
+        if: steps.local_version.outputs.version != steps.published_version.outputs.version
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
